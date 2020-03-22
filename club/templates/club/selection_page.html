@@ -1,0 +1,12 @@
+
+{% block title %}My clubs{% endblock %}
+{% block content %}
+    {% for r_club in reading_clubs %}
+    <p>Reading club: <a href="{{ r_club.get_absolute_url }}">{{ r_club }}</a></p>
+    {% endfor %}
+
+    {% for d_club in discussion_clubs %}
+        <p>Discussion club: <a href="{{ d_club.get_absolute_url }}">{{ d_club }}</a> </p>
+
+    {% endfor %}
+{% endblock %}

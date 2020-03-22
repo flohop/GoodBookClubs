@@ -18,7 +18,7 @@
                     <a href="#">My books</a>
                 </li>
                 <li {% if section == 'people' %}class="selected"{% endif %}>
-                    <a href="#">Clubs</a>
+                    <a href="{% url 'club:club_selection' %}">Clubs</a>
                 </li>
             </ul>
         {% endif %}
