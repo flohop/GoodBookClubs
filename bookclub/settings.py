@@ -23,8 +23,8 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = '%hiton36@&j93m$pf(7ifw6$cagbfj=1x-&s$s#e(08r#s!&$7'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-# DEBUG = True
-DEBUG = int(os.environ.get('DEBUG', default=1))
+DEBUG = True
+# DEBUG = int(os.environ.get('DEBUG', default=1))
 ALLOWED_HOSTS = []
 
 
@@ -35,6 +35,9 @@ LOGOUT_URL = 'logout'
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 # Application definition
+
+MEDIA_URL = '/images/'
+MEDIA_ROOT = os.path.join(BASE_DIR, '')  # not images, because i take the from the outer folder
 
 INSTALLED_APPS = [
     'account',
@@ -47,6 +50,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django_extensions',
+    'sorl.thumbnail',
 
 
 ]

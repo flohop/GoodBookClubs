@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block title %}Create group{% endblock %}
+
+{% block content %}
+    {% if new_group %}
+
+    {% else %}
+    <form method="post">
+        {% csrf_token %}
+        {{ group_form.as_p }}
+        <label for="group_type">Group Type: </label>
+        <select id="group_type" name="group_type">
+            <option value="reading_club">Reading Club</option>
+            <option value="discussion_club">Discussion Club</option>
+        </select>
+        <button type="submit">Submit</button>
+    </form>
+    {% endif %}
+{% endblock %}

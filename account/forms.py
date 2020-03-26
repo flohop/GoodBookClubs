@@ -1,6 +1,7 @@
 from django import forms
 from django.contrib.auth.models import User
-from club.models import Profile
+from account.models import Profile
+
 
 class LoginForm(forms.Form):
     username = forms.CharField()

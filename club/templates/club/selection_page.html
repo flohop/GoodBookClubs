@@ -1,12 +1,30 @@
-
+{% extends "base.html" %}
 {% block title %}My clubs{% endblock %}
 {% block content %}
+    <a href="{% url 'club:create_group' %}">Create new Club</a>
+
+    <div class="reading member">
     {% for r_club in reading_clubs %}
-    <p>Reading club: <a href="{{ r_club.get_absolute_url }}">{{ r_club }}</a></p>
+    <p>Reading club:<a href="{{ r_club.get_absolute_url }}">{{ r_club }}</a></p>
     {% endfor %}
+    </div>
 
+    <div class="reading admin">
+        {% for r_club in reading_clubs_admin %}
+        <p>Admin reading club: <a href="{{ r_club.get_absolute_url }}">{{ r_club }}</a> ID: {{ r_club.id }}</p>
+        {% endfor %}
+    </div>
+
+    <div class="discussion member">
     {% for d_club in discussion_clubs %}
-        <p>Discussion club: <a href="{{ d_club.get_absolute_url }}">{{ d_club }}</a> </p>
-
+        <p>Discussion club: <a href="{{ d_club.get_absolute_url }}">{{ d_club }}</a> ID: {{ d_club.id }} </p>
     {% endfor %}
+    </div>
+
+    <div class="discussion admin">
+        {% for d_club in discussion_clubs_admin %}
+            <p>Admin discussion club: <a href="{{ d_club.get_absolute_url }}">{{ d_club }}</a> ID: {{ d_club.id }}</p>
+        {% endfor %}
+    </div>
+
 {% endblock %}

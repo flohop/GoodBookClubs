@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block  title %}My books{% endblock %}
+
+{% block content %}
+
+    <p>Finished books:</p>
+    {% for book in read_books %}
+        <p><a href="{{ book.get_absolute_url }}">{{ book}}</a></p>
+    {% endfor %}
+
+    <br />
+    <p>Current books:</p>
+    {% for book in current_books %}
+        <p>{{ book }}</p>
+    {% empty %}
+        <p>No books here yet</p>
+    {% endfor %}
+
+    <br />
+    <p>Want to read books:</p>
+    {% for book in want_to_read_books %}
+        <p>{{ book }}</p>
+
+    {% empty %}
+        <p>No books here yet</p>
+    {% endfor %}
+{% endblock %}

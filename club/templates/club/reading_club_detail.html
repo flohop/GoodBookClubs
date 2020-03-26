@@ -1,1 +1,92 @@
-<p>Please read with us: {{ club.group_name }}</p>
+{% extends "base.html" %}
+<!-- Beta java script code !-->
+{% block title %}{{ club.group_name }}{% endblock %}
+
+{% block content %}
+
+        <script>
+            if (window.history.replaceState) {
+                window.history.replaceState( null, null, window.location.href );
+                }
+        </script>
+
+        <p>Please read with us: {{ club.group_name }}</p>
+        {% load thumbnail %}
+        {% thumbnail club.current_book.book_cover_image  "300" as im %}
+            <a href="{{ club.current_book.get_absolute_url }}">
+                <img src="{{ im.url }}" class="image-detail">
+            </a>
+        {% endthumbnail %}
+
+        <div class="likes">
+            <span class="count">
+                <span class="total">{{ like_balance }}</span>
+                like{{ like_balance | pluralize }}
+            </span>
+            <a href="#" data-id="{{ book.id }}" data-action="{% if  user_liked_book %}un{% endif %}like"
+               class="like button">
+                {% if not user_liked_book %}
+                    Like
+                {% else %}
+                    Unlike
+                {% endif %}
+            </a>
+        </div>
+
+        <div class="card-body">
+            {% if  new_comment %}
+
+            {% else %}
+                <h4>Add comment</h4>
+                <form method="post">
+                    {{ comment_form.as_p }}
+                    {% csrf_token %}
+                    <button type="submit" class="btn">Submit</button>
+                </form>
+            {% endif %}
+            </div>
+
+
+        <h4>Comments:</h4>
+        {% for comment in comments %}
+            <div class="comments" style="padding: 10px;">
+                <p>{{ comment.name }}</p>
+                <p>{{ comment.created_on }}</p>
+                <p>{{ comment.body }}</p>
+            </div>
+        {% endfor %}
+
+{% endblock %}
+
+{% block domready %}
+    $('a.like').click(function(e){
+    e.preventDefault();
+    $('p.test').text("Updated value");
+
+    $.post('{% url "book:like" %}',
+        {
+            id: $(this).data('id'),
+            action: $(this).data('action')
+        },
+        function(data){
+        if (data['status'] == 'ok')
+            {
+                var previous_action = $('a.like').data('action');
+
+                // toggle data-action
+                $('a.like').data('action', previous_action == 'like' ?
+                'unlike': 'like');
+                // toggle link text
+                $('a.like').text(previous_action == 'like' ? 'Unlike':
+                'Like');
+
+                // update total_likes
+                var previous_likes = parseInt($('span.count .total').text());
+
+                $('span.count .total').text(previous_action == 'like' ?
+                previous_likes + 1 : previous_likes - 1);
+            }
+        }
+        );
+    });
+{% endblock %}
