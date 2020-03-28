@@ -45,7 +45,7 @@ class Book(models.Model):
     book_release_year = models.IntegerField(blank=True, null=True,
                                             validators=[MinValueValidator(0), MaxValueValidator(now.year)])
     book_language = models.CharField(max_length=25, blank=True, null=True)
-    book_genre = models.ForeignKey(Genre, on_delete=models.SET_NULL, null=True, blank=True)
+    book_categories = models.CharField(max_length=30, null=True, blank=True)
     book_cover_image = models.ImageField(upload_to='images/book_covers/',
                                          default='images/book_covers/no_cover.png')
     book_isbn_number = models.CharField(max_length=17)

@@ -17,5 +17,5 @@ class DiscussionCommentForm(forms.ModelForm):
 class GroupForm(forms.ModelForm):
     class Meta:
         model = ReadingGroup
-        fields = ('group_name', 'is_private_group', 'group_image', 'group_description', 'current_book')
+        fields = ('group_name', 'is_private_group', 'group_image', 'group_description',)
 

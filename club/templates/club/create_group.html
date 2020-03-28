@@ -1,11 +1,12 @@
 {% extends "base.html" %}
+{% load static %}
 {% block title %}Create group{% endblock %}
 
 {% block content %}
     {% if new_group %}
 
     {% else %}
-    <form method="post">
+    <form method="post" name="club-form" onsubmit="return validateForm()" id="club-form">
         {% csrf_token %}
         {{ group_form.as_p }}
         <label for="group_type">Group Type: </label>
@@ -13,7 +14,59 @@
             <option value="reading_club">Reading Club</option>
             <option value="discussion_club">Discussion Club</option>
         </select>
-        <button type="submit">Submit</button>
+        <br />
+
+        <label for="search">Current Book: </label>
+        <input type="text" placeholder="Book" id="search" />
+        <button type="button" id="button">Search</button>
+        <br />
+
+        <div id="results"></div>
+        <table id="results-table" class="invisible">
+        <thead>
+            <tr>
+                <th scope="col">Book name</th>
+                <th scope="col">Book author</th>
+            </tr>
+        </thead>
+        <tbody class="table body">
+
+        </tbody>
+        </table>
+
+        <button type="button" id="submit">Submit</button>
     </form>
     {% endif %}
+ <script>
+   
+ </script>   
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.1/dist/jquery.validate.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
+<script src="{% static 'book/book_search.js' %}"></script>
+{% endblock %}
+
+
+{% block domready %}
+<!--$('#results-table').on("click", '.title', function(e) {-->
+<!--    target = e.target;-->
+<!--    console.log(items[e.target.parentNode.rowIndex-1].volumeInfo.title);-->
+<!--    document.getElementById("results-table").className = "visible";-->
+<!--    $.ajax({-->
+<!--        type: 'POST',-->
+<!--        dataType: 'json',-->
+<!--        contentType: 'application/json; charset=utf-8',-->
+<!--        url: 'response/',-->
+<!--        data: JSON.stringify({-->
+<!--            'book': items[e.target.parentNode.rowIndex-1],-->
+<!--            }),-->
+<!--        success: function() {-->
+<!--            console.log("SUCCESS");-->
+<!--            $('tr.data-row').hide();-->
+<!--            $(target.parentNode).show();-->
+
+<!--        }-->
+<!--    });-->
+});
+
 {% endblock %}

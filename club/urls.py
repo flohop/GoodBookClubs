@@ -8,6 +8,7 @@ urlpatterns = [
     path('d/<int:id>/<slug:category_slug>/', views.discussion_club_detail, name='discussion_club_detail'),
     path('create/', views.create_group, name='create_group'),
     path('list-view/', views.club_list_view, name='list_view'),
+    path('create/response/', views.receive_json_data, name="receive_json"),
     path('toggle/', views.toggle, name="toggle"),
     path('my_clubs/', views.my_clubs, name="club_selection"),
 

@@ -37,7 +37,7 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 # Application definition
 
 MEDIA_URL = '/images/'
-MEDIA_ROOT = os.path.join(BASE_DIR, '')  # not images, because i take the from the outer folder
+MEDIA_ROOT = os.path.join(BASE_DIR, '')  # not images, because i take that from the outer folder
 
 INSTALLED_APPS = [
     'account',

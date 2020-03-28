@@ -1,11 +1,15 @@
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 from django.shortcuts import render, get_object_or_404, redirect
 from .models import ReadingGroup, DiscussionGroup
 from itertools import chain
 from .forms import DiscussionCommentForm, ReadingCommentForm, GroupForm
+import urllib.request
+import json
+from bookclub.settings import MEDIA_ROOT
+from book.models import Book
 
 from account.models import Profile
 
@@ -203,6 +207,80 @@ def toggle(request):
 
     print("KO")
     return JsonResponse({'status': 'ko'})
+
+
+def receive_json_data(request):
+    data = json.loads(request.body.decode('utf-8'))
+
+    current_user = User.objects.get(id=request.user.id)
+    # extract data from group
+    group_name = data.get("name")
+    group_description = data.get("description")
+    if data.get("is_private") == "on":
+        group_is_private = False
+    else:
+        group_is_private = True
+
+    group_image = data.get("image")
+    group_type = data.get("type")
+    group_book = data.get("book").get("volumeInfo")
+
+    # extract data from the book
+    book_title = group_book.get("title")
+    book_author = group_book.get("authors")[0]
+    book_release_year = group_book.get("publishedDate")[:4]
+    book_description = group_book.get("description")
+    book_isbn = group_book.get("industryIdentifiers")[0].get("identifier")
+
+    book_page_count = group_book.get("pageCount")
+    book_cover_url = group_book.get("imageLinks").get("thumbnail")
+    book_language_code = group_book.get("language")
+    book_categories = group_book.get("categories")  # a list of all the categories this book belongs to
+
+    # create the book model, but first, see if this book already exists, and if yes, don't save it, but instead use
+    # the old book model instance
+    try:
+        book_instance = Book.objects.get(book_name=book_title, book_author=book_author)
+    except:
+        # if book does not exist
+        # download the cover url, and store the path
+        # TODO: stop the SuspiciousFileOperation from being raised, so the images download peacefully, and the
+        # TODO: page can get redirected
+        image_path = str(MEDIA_ROOT + "images/book_covers/" + str(book_title).lower().replace(" ", "_") +\
+                         "_" + str(book_author).lower().replace(" ", "_") + ".jpeg")
+        urllib.request.urlretrieve(book_cover_url, image_path)
+
+        # if not old instance exists, create a new book instance
+        book_instance = Book.objects.create(book_name=book_title,
+                                            book_author=book_author,
+                                            book_description=book_description,
+                                            book_release_year=book_release_year,
+                                            book_isbn_number=book_isbn,
+                                            book_page_number=book_page_count,
+                                            book_cover_image=image_path,
+                                            book_language=book_language_code,
+                                            book_categories=" ".join(str(category) for category in book_categories))
+
+    # create the group and assign the book to it
+    # first, check what kind of group to create, and then create that group
+    if group_type == "reading_club":
+        group_instance = ReadingGroup.objects.create(group_name=group_name,
+                                                     is_private_group=group_is_private,
+                                                     group_image=group_image,
+                                                     group_description=group_description,
+                                                     group_creator=current_user,
+                                                     current_book=book_instance)
+    else:
+        group_instance = DiscussionGroup.objects.create(group_name=group_name,
+                                                        is_private_group=group_is_private,
+                                                        group_image=group_image,
+                                                        group_description=group_description,
+                                                        group_creator=current_user,
+                                                        current_book=book_instance)
+
+    # redirect user to newly created page, by get the absolute url of the group_instance
+    print("Created new objects, will now redirect")
+    return redirect(group_instance.get_absolute_url())
 
 
 

@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Search books{% endblock %}
+
+ {% block content %}
+<form id="search-field" action="#">
+    <label for="search">Search:</label>
+    <input type="text" id="search" name="book-search" placeholder="Title"/>
+    <button id="button" type="button">Search</button>
+</form>
+<div id="results"></div>
+    <table id="results-table">
+    <thead>
+        <tr>
+            <th scope="col">Book name</th>
+            <th scope="col">Book author</th>
+        </tr>
+    </thead>
+    <tbody class="table body">
+        
+    </tbody>
+    </table>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="{% static 'book/book_search.js' %}"></script>    
+{% endblock %}
+
+{% block domready %}
+
+$('#results-table').on("click", '.title', function(e) {
+    var target = e.target;
+    console.log(items[e.target.parentNode.rowIndex-1].volumeInfo.title);
+    $.ajax({
+        type: 'POST',
+        dataType: 'json',
+        contentType: 'application/json; charset=utf-8',
+        url: 'response/',
+        data: JSON.stringify({
+            'book': items[e.target.parentNode.rowIndex-1],
+            }),
+        success: function() {
+            console.log("Send data to django successfully");
+        }
+    });
+});
+
+{% endblock %}

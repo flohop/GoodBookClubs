@@ -4,6 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.views.decorators.http import require_POST
 from .models import Book
+import json
 from account.views import Profile
 
 
@@ -47,3 +48,16 @@ def book_like(request):
             except:
                 pass
         return JsonResponse({'status': 'ko'})
+
+
+# test view
+def book_search(request):
+
+    return render(request, 'book/search_book.html', {})
+
+
+def receive_json_data(request):
+    # receive the data from the ajax post, for when the user chooses a book to base is group upon
+    data = json.loads(request.body.decode('utf-8'))
+    print(data)
+
