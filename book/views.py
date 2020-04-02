@@ -111,38 +111,35 @@ def receive_json_data(request):
 
 
 def change_book_status(request):
-    # receive AJAX call with json data, with the id of the changed element and the new status
+    # receive AJAX call with the id of the changed book relationship and the new value
     print("i got called")
-    data = json.loads(request.POST.get("data"))
+    id = request.POST.get("id")
+    status = request.POST.get("value")
     user = request.user
     profile = Profile.objects.get(user=user)
-    print(json.loads(request.POST.get("data")))
-    x = 0  # iter variable
-    counter = len(data)
-    for key in data:
-        # get the DOM of this book by the id
-        try:
-            book = Book.objects.get(id=data[str(key)]["id"])
-            status = data[str(key)]["value"]
 
-            # remove the user from the old M2M relationship
-            if profile in book.people_read_book.all():
-                book.people_read_book.remove(profile)
-            elif profile in book.people_want_to_read_book.all():
-                book.people_want_to_read_book.remove(profile)
-            elif profile in book.people_reading_book.all():
-                book.people_reading_book.remove(profile)
+    # get the DOM of this book by the id
+    try:
+        book = Book.objects.get(id=id)
+
+        # remove the user from the old M2M relationship
+        if profile in book.people_read_book.all():
+            book.people_read_book.remove(profile)
+        elif profile in book.people_want_to_read_book.all():
+            book.people_want_to_read_book.remove(profile)
+        elif profile in book.people_reading_book.all():
+            book.people_reading_book.remove(profile)
 
             # determine the new group of the user and then add it to him
-            if status == "read":
-                book.people_read_book.add(profile)
-            elif status == "reading":
-                book.people_reading_book.add(profile)
-            elif status == "want-to-read":
-                book.people_want_to_read_book.add(profile)
-        except KeyError:
-            print("Jumped over book with id: ",  x)
-            pass
+        if status == "read":
+            book.people_read_book.add(profile)
+        elif status == "reading":
+            book.people_reading_book.add(profile)
+        elif status == "want-to-read":
+            book.people_want_to_read_book.add(profile)
+    except KeyError as e:
+        print("Internal error, key not found: ",  e.with_traceback())
+        pass
     response = {'status': "OK"}
     return HttpResponse(json.dumps(response), content_type="application/json")
 

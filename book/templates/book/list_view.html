@@ -4,10 +4,10 @@
 {% block title %}All books{% endblock %}
 {% block content %}
 
-<ul class="all-books">
+<ul class="all-books" id="book-list">
     {% for book in books %}
     <div class="book {{ book.book_name | class_like }}">
-        <li id="options" class="item" data-index="{{ book.index }}"> <a href="{{ book.get_absolute_url }}">{{ book.book_name }}</a> | {{ book.book_author }}
+        <li id="options" class="item" data-index="{{ book.index }}" data-id="{{ book.id }}"> <a href="{{ book.get_absolute_url }}">{{ book.book_name }}</a> | {{ book.book_author }}
             | Like: {{ book.like_balance }}
             <a href="#" data-id="{{ book.id }}" data-action="{% if book.user_liked_book %}un{% endif %}like"
                class="like button">
@@ -18,7 +18,7 @@
                 {% endif %}
             </a>
 
-            <select id="book-status">
+            <select id="book-status" class="book-status">
             <option value="reading" class="status">Currently reading</option>
             <option value="read" class="status">Read</option>
             <option value="want-to-read" class="status">Want to read</option>
@@ -28,9 +28,6 @@
     </div>
     {% endfor %}
 </ul>
-<button id="send-ajax">Send ajax</button>
-
-
 
 {% endblock  %}
 
@@ -69,37 +66,28 @@
     }())
 
 
-    $("ul.all-books").click(function(e){
-        e.preventDefault();
-        var target = e.target;
-        console.log(target.tagName);
-        var selectedValue = target.value;
-        if(target.tagName == "OPTION") {
-            var outerLiIndex = $(target).parent().parent().data("index");
 
-            changedStatusBooks[outerLiIndex] = {"id": books[outerLiIndex].id, "value": selectedValue}
-            console.log(changedStatusBooks);
+    function sendValuesToServer(e) {
+        target = e.target;
+        if($(target).hasClass("book-status")){
+            value = target.value;
+            id = $(target).parent().data("id");
 
-        }
-    });
-
-    function sendValuesToServer() {
-        console.log("Send ajax with: " + JSON.stringify(changedStatusBooks));
-
-        $.post('{% url "book:change_status" %}',
-        {
-            'data': JSON.stringify(changedStatusBooks),
-        },
-
+            $.post('{% url "book:change_status" %}',
+            {
+                    id : id,
+                    value: value
+            },
+            function(data){
+            if (data['status'] == 'OK')
+                {
+                console.log("Changed the value");
+                }
+            }
         );
-        return null;
+        }
     }
 
-    $('#send-ajax').click(sendValuesToServer);
-
-
-
-
-
+    document.getElementById("book-list").addEventListener("change", sendValuesToServer, false);
 
 {% endblock %}
