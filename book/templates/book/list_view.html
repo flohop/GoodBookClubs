@@ -1,0 +1,105 @@
+{% extends "base.html" %}
+{% load js %}
+{% load static %}
+{% block title %}All books{% endblock %}
+{% block content %}
+
+<ul class="all-books">
+    {% for book in books %}
+    <div class="book {{ book.book_name | class_like }}">
+        <li id="options" class="item" data-index="{{ book.index }}"> <a href="{{ book.get_absolute_url }}">{{ book.book_name }}</a> | {{ book.book_author }}
+            | Like: {{ book.like_balance }}
+            <a href="#" data-id="{{ book.id }}" data-action="{% if book.user_liked_book %}un{% endif %}like"
+               class="like button">
+                {% if not book.user_liked_book %}
+                    Like
+                {% else %}
+                    Unlike
+                {% endif %}
+            </a>
+
+            <select id="book-status">
+            <option value="reading" class="status">Currently reading</option>
+            <option value="read" class="status">Read</option>
+            <option value="want-to-read" class="status">Want to read</option>
+            <option value="blank" selected="selected"></option>
+             </select>
+        </li>
+    </div>
+    {% endfor %}
+</ul>
+<button id="send-ajax">Send ajax</button>
+
+
+
+{% endblock  %}
+
+{% block domready %}
+
+    window.onunload = sendValuesToServer;
+
+
+
+    var changedStatusBooks;
+    var books = {{  book_data | js }};
+    // first, set the drop down value based on the users library
+    (function (){
+        changedStatusBooks = {};
+        var counter = {{ books.count }}
+        for(i=0; i < counter; i++) {
+            var currentBook = books[i];
+            console.log("Current book: " +currentBook.name);
+
+            if(currentBook.status == "read"){
+                console.log("READ: " + currentBook.name);
+                $("." + currentBook.name).find("#book-status").val("read");
+            }
+            else if(currentBook.status == "reading"){
+                console.log(currentBook.name);
+                $("." + currentBook.name).find('#book-status').val("reading");
+            }
+            else if(currentBook.status == "want-to-read"){
+                $("." + currentBook.name).find("li").val("want-to-read");
+            }
+            else {
+                $("." + currentBook.name).find("#book-status").val("blank");
+            }
+
+        }   // end for loop
+    }())
+
+
+    $("ul.all-books").click(function(e){
+        e.preventDefault();
+        var target = e.target;
+        console.log(target.tagName);
+        var selectedValue = target.value;
+        if(target.tagName == "OPTION") {
+            var outerLiIndex = $(target).parent().parent().data("index");
+
+            changedStatusBooks[outerLiIndex] = {"id": books[outerLiIndex].id, "value": selectedValue}
+            console.log(changedStatusBooks);
+
+        }
+    });
+
+    function sendValuesToServer() {
+        console.log("Send ajax with: " + JSON.stringify(changedStatusBooks));
+
+        $.post('{% url "book:change_status" %}',
+        {
+            'data': JSON.stringify(changedStatusBooks),
+        },
+
+        );
+        return null;
+    }
+
+    $('#send-ajax').click(sendValuesToServer);
+
+
+
+
+
+
+{% endblock %}

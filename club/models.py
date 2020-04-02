@@ -1,12 +1,14 @@
 from django.db import models
+from django.db.models.signals import post_delete
 from django.template.defaultfilters import slugify
 from django.urls import reverse
 from django.contrib.auth.models import User
 from book.models import Book
+from book.utils import file_cleanup
 
 
 class BasicGroup(models.Model):
-    group_name = models.CharField(max_length=100)
+    group_name = models.CharField(max_length=100, unique=True)
     is_private_group = models.BooleanField(default=False)  # False=group is public, True=group is private
     group_image = models.ImageField(upload_to='images/group_pictures/',
                                     default='images/group_pictures/no_img.png')
@@ -24,6 +26,8 @@ class BasicGroup(models.Model):
     class Meta:
         abstract = True
         ordering = ['group_name']
+
+    post_delete.connect(file_cleanup, sender=group_image, dispatch_uid="club.image.clean_up")
 
 
 class ReadingGroup(BasicGroup):

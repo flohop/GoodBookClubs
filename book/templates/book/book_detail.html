@@ -5,6 +5,11 @@
 {% block content %}
     <p>Author: {{ book.book_author }}</p>
     <p>Description: {{ book.book_description }}</p>
-    <img src="{{ book.book_cover_image.url }}" alt="cover" />
+         {% load thumbnail %}
+        {% thumbnail book.get_absolute_url  "300" as im %}
+            <a href="{{ book.get_absolute_url }}">
+                <img src="{{ im.url }}" class="image-detail">
+            </a>
+        {% endthumbnail %}
 
 {% endblock %}

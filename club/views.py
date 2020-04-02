@@ -244,10 +244,10 @@ def receive_json_data(request):
     except:
         # if book does not exist
         # download the cover url, and store the path
-        # TODO: stop the SuspiciousFileOperation from being raised, so the images download peacefully, and the
-        # TODO: page can get redirected
-        image_path = str(MEDIA_ROOT + "images/book_covers/" + str(book_title).lower().replace(" ", "_") +\
-                         "_" + str(book_author).lower().replace(" ", "_") + ".jpeg")
+        image_path = "/home/flohop/PycharmProjects/bookclub_project/images/book_covers/" +\
+                    str(book_title).lower().replace(" ", "_") +\
+                     "_" + str(book_author).lower().replace(" ", "_") + ".jpeg"
+
         urllib.request.urlretrieve(book_cover_url, image_path)
 
         # if not old instance exists, create a new book instance
@@ -280,7 +280,8 @@ def receive_json_data(request):
 
     # redirect user to newly created page, by get the absolute url of the group_instance
     print("Created new objects, will now redirect")
-    return redirect(group_instance.get_absolute_url())
+    response = {'url': group_instance.get_absolute_url()}
+    return HttpResponse(json.dumps(response), content_type='application/json')
 
 
 

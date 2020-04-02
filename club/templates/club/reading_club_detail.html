@@ -21,7 +21,7 @@
         <div class="likes">
             <span class="count">
                 <span class="total">{{ like_balance }}</span>
-                like{{ like_balance | pluralize }}
+                like{{ like_balance|pluralize }}
             </span>
             <a href="#" data-id="{{ book.id }}" data-action="{% if  user_liked_book %}un{% endif %}like"
                class="like button">

@@ -4,6 +4,8 @@ from django.core.validators import MaxValueValidator, MinValueValidator
 from django.urls import reverse
 from account.models import Profile
 from django.contrib.auth.models import User
+from .utils import file_cleanup
+from django.db.models.signals import post_delete
 import datetime
 
 
@@ -71,3 +73,5 @@ class Book(models.Model):
 
     class Meta:
         ordering = ['book_name']
+
+    post_delete.connect(file_cleanup, sender=book_cover_image, dispatch_uid="book.image.file_cleanup")
