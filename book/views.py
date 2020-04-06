@@ -7,6 +7,7 @@ from .models import Book
 import json
 import urllib.request
 from account.views import Profile
+from django.views.decorators.clickjacking import xframe_options_sameorigin
 
 
 @login_required
@@ -59,6 +60,7 @@ def book_search(request):
     return render(request, 'book/search_book.html', {})
 
 
+@xframe_options_sameorigin
 def list_view(request):
     books = Book.objects.all()
 

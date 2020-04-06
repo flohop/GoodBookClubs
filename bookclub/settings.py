@@ -91,8 +91,12 @@ WSGI_APPLICATION = 'bookclub.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'bookclubdb',
+        'USER': 'flohop',
+        'PASSWORD': 'f1415926535',  # note: change to file when going into production
+        'HOST': 'localhost',
+        'PORT': '',  # default value: 5432
     }
 }
 

@@ -65,7 +65,7 @@ function sendValuesToServer(e) {
         id = $(target).parent().data("id");
         console.log("Send data with id: " + id + " value: " + value)
 
-        $.post(,
+        $.post(book_change_status_url,
         {
                 id : id,
                 value: value
@@ -85,6 +85,41 @@ function sendValuesToServer(e) {
         }
     );
     }
+}
+
+function likeBook(e, myId, myAction) {
+    $.post(book_like_url,
+        {
+            id: myId,
+            action: myAction
+        },
+        function(data) {
+            if(data['status'] == 'ok'){
+
+                // TODO: find correct Link to Like, so it can change depending on the action
+
+                var bookId = data['id'];
+                var prevAction = data['prev_action']
+                console.log("Added like for id: " + bookId + " with prevAction: " + prevAction);
+
+
+                 var $clickedElement = $('a').find("[data-id='" + bookId + "']");
+
+
+                // toggle action
+                $clickedElement.attr('data-action', prevAction == 'like' ?
+                                    'unlike': 'like');
+                // toggle link text
+                $clickedElement.find("a.like").text(prevAction == 'like' ? 'Unlike' : 'Like');
+
+                // update total likes
+                var prevLikes = parseInt($($clickedElement.prev().find(".total")).text());
+
+                $($clickedElement.prev().find(".total")).text(prevAction == 'like' ?
+                prevLikes + 1 : prevLikes - 1);
+            }
+        }
+    );
 }
 
 function onRowClicked(e) {
@@ -122,7 +157,6 @@ function onRowClicked(e) {
             var id = data['id'];
             var author = data['author'];
             var url = data['url'];
-            var likes = 0;
 
             // create div element
             var bookDiv = document.createElement("DIV");
@@ -151,11 +185,17 @@ function onRowClicked(e) {
             // create the link to like
             likeLinkEl = document.createElement("a");
             likeLinkEl.href = "#";
-            $(likeLinkEl).data('action', 'like');
-            $(likeLinkEl).data('id', id);
+            var action = "like"
+            likeLinkEl.setAttribute("data-action", action);
+            likeLinkEl.setAttribute("data-id", id);
             likeLinkEl.classList.add("like");
             likeLinkEl.classList.add("button");
+            likeLinkEl.classList.add("hide"); // hide like option for as long as user isnt reading the book
             likeLinkEl.innerHTML = "Like";
+
+            likeLinkEl.addEventListener("click", function(e) {
+                    likeBook(e, id, action);
+            }, false);
 
             // create the select element
             var selectEl = document.createElement("SELECT");
@@ -202,8 +242,10 @@ function onRowClicked(e) {
             // add like event listener
             // TODO: make the like click function a named function, register the newly created <a> element to it, so that newly
             // created elements can get liked. Make the dashboard pretty and remove value from search field after user selects book
-
+            
+            // when form changes, update value in database
             document.getElementById("book-list").addEventListener("change", sendValuesToServer, false);
+
 
 
         }
@@ -213,6 +255,8 @@ function onRowClicked(e) {
        }
     });
     }
+
+
 
 
 document.getElementById("button").addEventListener("click", bookSearch, false);

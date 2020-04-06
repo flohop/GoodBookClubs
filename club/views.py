@@ -8,7 +8,7 @@ from itertools import chain
 from .forms import DiscussionCommentForm, ReadingCommentForm, GroupForm
 import urllib.request
 import json
-from bookclub.settings import MEDIA_ROOT
+from django.views.decorators.clickjacking import xframe_options_sameorigin
 from book.models import Book
 
 from account.models import Profile
@@ -149,6 +149,7 @@ def create_group(request):
                                                       'group_form': group_form})
 
 
+@xframe_options_sameorigin
 def club_list_view(request):
     # show a list of all clubs, and let the user filter them to find one he want to join
     reading_clubs = ReadingGroup.objects.all()

@@ -63,16 +63,15 @@
     </div>
     {% endfor %}
 </ul>
-<!-- load a variable for the external JavaScript file -->
+<!-- load variables for the external JavaScript file -->
 <script>
     var book_change_status_url = '{% url "book:change_status" %}';
+    var book_like_url = '{% url "book:like" %}';
 </script>
 {% endblock  %}
 
 
 {% block domready %}
-
-    window.onunload = sendValuesToServer;
 
     var changedStatusBooks;
     var books = {{  book_data | js }};
@@ -83,13 +82,16 @@
         for(i=0; i < counter; i++) {
             var currentBook = books[i];
             if(currentBook.status == "read"){
+                console.log("Read: " + currentBook.name);
                 $("." + currentBook.name).find("#book-status").val("read");
             }
             else if(currentBook.status == "reading"){
+                console.log("Reading: " + currentBook.name);
                 $("." + currentBook.name).find('#book-status').val("reading");
             }
             else if(currentBook.status == "want-to-read"){
-                $("." + currentBook.name).find("li").val("want-to-read");
+                console.log("Want to read: " + currentBook.name);
+                $("." + currentBook.name).find("#book-status").val("want-to-read");
             }
             else {
                 $("." + currentBook.name).find("#book-status").val("blank");

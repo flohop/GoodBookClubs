@@ -10,11 +10,11 @@ import datetime
 
 
 class Genre(models.Model):
-    genre_name = models.CharField(max_length=50)
+    genre_name = models.CharField(max_length=100)
 
     # genres related or similar to this one
     related_genres = models.ForeignKey('self', null=True, blank=True,  on_delete=models.SET_NULL)
-    slug = models.SlugField(blank=True)
+    slug = models.SlugField(blank=True, max_length=255)
 
     def __str__(self):
         return self.genre_name
@@ -31,11 +31,11 @@ class Genre(models.Model):
 
 class Book(models.Model):
     # the model for all the book
-    book_name = models.CharField(max_length=50)
-    book_author = models.CharField(max_length=50)
-    book_description = models.TextField(max_length=1000, blank=True, null=True)
+    book_name = models.CharField(max_length=255)
+    book_author = models.CharField(max_length=255)
+    book_description = models.TextField(max_length=10000, blank=True, null=True)
 
-    slug = models.SlugField(blank=True)
+    slug = models.SlugField(blank=True, max_length=255)
 
     # who has read the book, are reading the book and want to read the book
     people_read_book = models.ManyToManyField(Profile, related_name="people_read_book", blank=True)
@@ -46,10 +46,10 @@ class Book(models.Model):
     now = datetime.datetime.now()
     book_release_year = models.IntegerField(blank=True, null=True,
                                             validators=[MinValueValidator(0), MaxValueValidator(now.year)])
-    book_language = models.CharField(max_length=25, blank=True, null=True)
-    book_categories = models.CharField(max_length=30, null=True, blank=True)
+    book_language = models.CharField(max_length=50, blank=True, null=True)
+    book_categories = models.CharField(max_length=50, null=True, blank=True)
     book_cover_image = models.ImageField(upload_to='images/book_covers/',
-                                         default='images/book_covers/no_cover.png')
+                                         default='images/book_covers/no_cover.png', max_length=500)
     book_isbn_number = models.CharField(max_length=17)
 
     book_page_number = models.IntegerField(blank=True, null=True)  # the number of pages in the book

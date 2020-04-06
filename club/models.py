@@ -13,7 +13,7 @@ class BasicGroup(models.Model):
     group_image = models.ImageField(upload_to='images/group_pictures/',
                                     default='images/group_pictures/no_img.png')
     group_description = models.CharField(max_length=500)  # describes the reason for the group
-    slug = models.SlugField(blank=True)
+    slug = models.SlugField(blank=True, max_length=255)
 
     def __str__(self):
         return str(self.group_name)
