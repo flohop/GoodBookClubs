@@ -9,6 +9,7 @@ urlpatterns = [
     path('my-books/', views.all_books_view, name="all_books_view"),
     path('search/', views.book_search, name='book_search'),
     path("list-view/", views.list_view, name='list_view'),
+    path("list-view/add-book/", views.add_book, name='add_book'),
     path('change-status/', views.change_book_status, name="change_status"),
     path('search/response/', views.receive_json_data, name="book_response"),
     path('like/', views.book_like, name="like"),

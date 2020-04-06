@@ -1,16 +1,51 @@
-{% extends "base.html" %}
+{% extends "base_slim.html" %}
 {% load js %}
 {% load static %}
 {% block title %}All books{% endblock %}
+{% block css %}
+<style>
+    .hide {
+        visibility:hidden;
+    }
+    .remove {
+        visibility: hidden;
+        display: none;
+
+    }
+</style>
+
+{% endblock %}
 {% block content %}
+
+<label for="search">New Book: </label>
+        <input type="text" placeholder="Book" id="search" />
+        <button type="button" id="button">Search</button>
+        <br />
+
+        <div id="results"></div>
+        <table id="results-table" class="hide">
+        <thead>
+            <tr>
+                <th scope="col">Book name</th>
+                <th scope="col">Book author</th>
+            </tr>
+        </thead>
+        <tbody class="table body">
+
+        </tbody>
+        </table>
 
 <ul class="all-books" id="book-list">
     {% for book in books %}
     <div class="book {{ book.book_name | class_like }}">
         <li id="options" class="item" data-index="{{ book.index }}" data-id="{{ book.id }}"> <a href="{{ book.get_absolute_url }}">{{ book.book_name }}</a> | {{ book.book_author }}
-            | Like: {{ book.like_balance }}
+            |<span class="count">
+                <span class="total">{{ book.like_balance }}</span>
+                like{{ book.like_balance|pluralize }}
+                </span>
+
             <a href="#" data-id="{{ book.id }}" data-action="{% if book.user_liked_book %}un{% endif %}like"
-               class="like button">
+               class="like button {% if book.can_like %}{% else %}hide{%endif%}">
                 {% if not book.user_liked_book %}
                     Like
                 {% else %}
@@ -28,8 +63,9 @@
     </div>
     {% endfor %}
 </ul>
-
 {% endblock  %}
+
+
 
 {% block domready %}
 
@@ -81,13 +117,56 @@
             function(data){
             if (data['status'] == 'OK')
                 {
-                console.log("Changed the value");
+                if(data['can_like'] == "True") {
+                    var bookId = data['id'];
+                    $('li').find("[data-id='" + bookId + "']").removeClass("hide")
+                }
+                else {
+                    var bookId = data['id'];
+                    $('li').find("[data-id='" + bookId + "']").addClass("hide")
+                }
                 }
             }
         );
         }
     }
 
+
+    // register like button, so that it changes the like amount and the text
+    $('a.like').click(function(e){
+    e.preventDefault();
+    console.log("user clicked like");
+    $.post('{% url "book:like" %}',
+        {
+            id: $(this).data('id'),
+            action: $(this).data('action')
+        },
+        function(data){
+        if (data['status'] == 'ok')
+            {
+                var bookId = data['id'];
+                var prevAction = data['prev_action']
+                var $clickedElement = $("[data-id=" + bookId + "]");
+
+                // toggle action
+                $clickedElement.data('action', prevAction == 'like' ?
+                                    'unlike': 'like');
+                // toggle link text
+                $clickedElement.find("a.like").text(prevAction == 'like' ? 'Unlike' : 'Like');
+
+                // update total likes
+                var prevLikes = parseInt($($clickedElement.prev().find(".total")).text());
+
+                $($clickedElement.prev().find(".total")).text(prevAction == 'like' ?
+                prevLikes + 1 : prevLikes - 1);
+            }
+        }
+        );
+    });
     document.getElementById("book-list").addEventListener("change", sendValuesToServer, false);
 
+{% endblock %}
+
+{% block javascript %}
+<script src="{% static 'book/book_search_add_list.js' %}"></script>
 {% endblock %}
