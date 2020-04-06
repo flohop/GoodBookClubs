@@ -95,8 +95,6 @@ def list_view(request):
             else:
                 status = "blank"
 
-            print(book.book_name, " can like is: ", can_like)
-
             book.can_like = can_like
             book.status = status
             book.index = counter
@@ -175,15 +173,21 @@ def add_book(request):
     book_isbn = group_book.get("industryIdentifiers")[0].get("identifier")
 
     book_page_count = group_book.get("pageCount")
-    book_cover_url = group_book.get("imageLinks").get("thumbnail")
     book_language_code = group_book.get("language")
 
-    # if categories exist:
+    # check if the values exist, and if not, set blank for them
+
+    # check if categories exist:
     if group_book.get("categories"):
         book_categories = group_book.get("categories")   # a list of all the categories this book belongs to
     else:
         book_categories = [""]
 
+    try:
+        book_cover_url = group_book.get("imageLinks").get("thumbnail")
+    except AttributeError:
+        # set the default book cover image
+        book_cover_url = None
     # create the book model, but first, see if this book already exists, and if yes, don't save it, but instead use
     # the old book model instance
     try:
@@ -192,11 +196,14 @@ def add_book(request):
     except:
         # if book does not exist
         # download the cover url, and store the path
-        image_path = "/home/flohop/PycharmProjects/bookclub_project/images/book_covers/" + \
-                     str(book_title).lower().replace(" ", "_") + \
-                     "_" + str(book_author).lower().replace(" ", "_") + ".jpeg"
+        try:
+            image_path = "/home/flohop/PycharmProjects/bookclub_project/images/book_covers/" + \
+                         str(book_title).lower().replace(" ", "_") + \
+                         "_" + str(book_author).lower().replace(" ", "_") + ".jpeg"
 
-        urllib.request.urlretrieve(book_cover_url, image_path)
+            urllib.request.urlretrieve(book_cover_url, image_path)
+        except:
+            image_path = None
 
         # if not old instance exists, create a new book instance
         book_instance = Book.objects.create(book_name=book_title,
@@ -209,11 +216,14 @@ def add_book(request):
                                             book_language=book_language_code,
                                             book_categories=" ".join(str(category) for category in book_categories))
 
+        # for TESTING, remove book from database immediately
+
         return_book_json = {
             'status': 'new_book',
             'title': str(book_instance.book_name),
             'id': str(book_instance.id),
             'url': str(book_instance.get_absolute_url()),
             'author': str(book_instance.book_author),
-            }
+        }
+
         return JsonResponse(return_book_json)

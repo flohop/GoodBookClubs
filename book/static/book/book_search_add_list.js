@@ -57,6 +57,36 @@ function bookSearch() {
     });
 }
 
+function sendValuesToServer(e) {
+    // send the changed value for the list to the server
+    target = e.target;
+    if($(target).hasClass("book-status")){
+        value = target.value;
+        id = $(target).parent().data("id");
+        console.log("Send data with id: " + id + " value: " + value)
+
+        $.post(,
+        {
+                id : id,
+                value: value
+        },
+        function(data){
+        if (data['status'] == 'OK')
+            {
+            if(data['can_like'] == "True") {
+                var bookId = data['id'];
+                $('li').find("[data-id='" + bookId + "']").removeClass("hide")
+            }
+            else {
+                var bookId = data['id'];
+                $('li').find("[data-id='" + bookId + "']").addClass("hide")
+            }
+            }
+        }
+    );
+    }
+}
+
 function onRowClicked(e) {
 
     rowItemIndex = $(e.currentTarget).index();
@@ -79,6 +109,7 @@ function onRowClicked(e) {
     url: 'add-book/',
     data: JSON.stringify(current_book_json),
 
+    // create the new row, append it to the list and add event listeners
     success: function(data) {
         // add new book to list
         if(data['status'] == 'new_book'){
@@ -93,14 +124,17 @@ function onRowClicked(e) {
             var url = data['url'];
             var likes = 0;
 
+            // create div element
+            var bookDiv = document.createElement("DIV");
+
             // create li element
-            var bookLi = document.createElement("LI")
+            var bookLi = document.createElement("LI");
 
             var bookLinkEl = document.createElement("a");
             bookLinkEl.href = url;
             bookLinkEl.innerHTML = title;
             bookLi.innerHTML = " | " + author + " | ";
-            bookLi.setAttribute('data', 'id: ' + id)
+            bookLi.setAttribute('data-id', id);
 
             bookLi.insertBefore(bookLinkEl, bookLi.childNodes[0]);
 
@@ -108,32 +142,70 @@ function onRowClicked(e) {
             countEl.classList.add("count");
 
             var innerCounterEl = document.createElement("SPAN");
-            innerCounterEl.classList.add("total")
+            innerCounterEl.classList.add("total");
             innerCounterEl.innerHTML = "0 ";
 
             countEl.appendChild(innerCounterEl);
             countEl.appendChild(document.createTextNode("likes "));
 
             // create the link to like
-            var likeLinkEl = document.createElement("a");
-            likeLinkEl.href = "#"
+            likeLinkEl = document.createElement("a");
+            likeLinkEl.href = "#";
             $(likeLinkEl).data('action', 'like');
             $(likeLinkEl).data('id', id);
             likeLinkEl.classList.add("like");
             likeLinkEl.classList.add("button");
             likeLinkEl.innerHTML = "Like";
 
+            // create the select element
+            var selectEl = document.createElement("SELECT");
+            selectEl.id = "book-status";
+            selectEl.classList.add("book-status");
+
+            // create the options
+            var optEl1 = document.createElement("OPTION");
+            optEl1.value = "reading";
+            optEl1.classList.add("status");
+            optEl1.innerHTML = "Currently reading";
+
+            var optEl2 = document.createElement("OPTION");
+            optEl2.value = "read";
+            optEl2.classList.add("status");
+            optEl2.innerHTML = "Read";
+
+            var optEl3 = document.createElement("OPTION");
+            optEl3.value = "want-to-read";
+            optEl3.classList.add("status");
+            optEl3.innerHTML = "Want to read";
+
+            var optEl4 = document.createElement("OPTION");
+            optEl4.value = "blank";
+            optEl4.classList.add("status");
+            optEl4.innerHTML = "";
+            optEl4.setAttribute("selected", "selected");
+
+            // append <option>'s to <select>
+            selectEl.appendChild(optEl1);
+            selectEl.appendChild(optEl2);
+            selectEl.appendChild(optEl3);
+            selectEl.appendChild(optEl4);
+
             // append all elements
             bookLi.appendChild(countEl);
             bookLi.appendChild(likeLinkEl);
+            bookLi.appendChild(selectEl);
+            bookDiv.appendChild(bookLi);
 
-            // append new <li> to <ul>
-            document.getElementById("book-list").appendChild(bookLi);
+            // append new <div> to <ul>
+            document.getElementById("book-list").appendChild(bookDiv);
             
             // add like event listener
             // TODO: make the like click function a named function, register the newly created <a> element to it, so that newly
             // created elements can get liked. Make the dashboard pretty and remove value from search field after user selects book
-            likeLinkEl.addEventListener("click",)
+
+            document.getElementById("book-list").addEventListener("change", sendValuesToServer, false);
+
+
         }
         else if(data['status'] == 'already_exists') {
                 console.log("Book already exists");

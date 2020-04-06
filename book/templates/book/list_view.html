@@ -63,15 +63,16 @@
     </div>
     {% endfor %}
 </ul>
+<!-- load a variable for the external JavaScript file -->
+<script>
+    var book_change_status_url = '{% url "book:change_status" %}';
+</script>
 {% endblock  %}
-
 
 
 {% block domready %}
 
     window.onunload = sendValuesToServer;
-
-
 
     var changedStatusBooks;
     var books = {{  book_data | js }};
@@ -81,14 +82,10 @@
         var counter = {{ books.count }}
         for(i=0; i < counter; i++) {
             var currentBook = books[i];
-            console.log("Current book: " +currentBook.name);
-
             if(currentBook.status == "read"){
-                console.log("READ: " + currentBook.name);
                 $("." + currentBook.name).find("#book-status").val("read");
             }
             else if(currentBook.status == "reading"){
-                console.log(currentBook.name);
                 $("." + currentBook.name).find('#book-status').val("reading");
             }
             else if(currentBook.status == "want-to-read"){
@@ -131,11 +128,9 @@
         }
     }
 
-
     // register like button, so that it changes the like amount and the text
     $('a.like').click(function(e){
     e.preventDefault();
-    console.log("user clicked like");
     $.post('{% url "book:like" %}',
         {
             id: $(this).data('id'),
@@ -170,3 +165,4 @@
 {% block javascript %}
 <script src="{% static 'book/book_search_add_list.js' %}"></script>
 {% endblock %}
+

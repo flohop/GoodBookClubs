@@ -52,7 +52,7 @@ class Book(models.Model):
                                          default='images/book_covers/no_cover.png')
     book_isbn_number = models.CharField(max_length=17)
 
-    book_page_number = models.IntegerField()  # the number of pages in the book
+    book_page_number = models.IntegerField(blank=True, null=True)  # the number of pages in the book
     book_read_pages = models.IntegerField(blank=True, null=True)  # indicates how far one has read the book
 
     # likes disliked of the book expressed in two ManyTwoMany Relationships
