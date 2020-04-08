@@ -97,26 +97,12 @@ function likeBook(e, myId, myAction) {
             if(data['status'] == 'ok'){
 
                 // TODO: find correct Link to Like, so it can change depending on the action
+                // TODO: atm, i can't get it to work, user can't add new book and like it instantly,
+                // TODO: he has to reload the page to make it work, FIX LATER!
 
                 var bookId = data['id'];
-                var prevAction = data['prev_action']
-                console.log("Added like for id: " + bookId + " with prevAction: " + prevAction);
-
-
-                 var $clickedElement = $('a').find("[data-id='" + bookId + "']");
-
-
-                // toggle action
-                $clickedElement.attr('data-action', prevAction == 'like' ?
-                                    'unlike': 'like');
-                // toggle link text
-                $clickedElement.find("a.like").text(prevAction == 'like' ? 'Unlike' : 'Like');
-
-                // update total likes
-                var prevLikes = parseInt($($clickedElement.prev().find(".total")).text());
-
-                $($clickedElement.prev().find(".total")).text(prevAction == 'like' ?
-                prevLikes + 1 : prevLikes - 1);
+                var prevAction = data['prev_action'];
+                console.log("Likes to added books will be implemented later");
             }
         }
     );
@@ -149,7 +135,7 @@ function onRowClicked(e) {
         // add new book to list
         if(data['status'] == 'new_book'){
             // add new book to top of the list
-            console.log("Success, added book to library")
+            console.log("Success, added book to library");
 
 
             // extract data from response
@@ -185,6 +171,7 @@ function onRowClicked(e) {
             // create the link to like
             likeLinkEl = document.createElement("a");
             likeLinkEl.href = "#";
+            likeLinkEl.id = "like-link-id";
             var action = "like"
             likeLinkEl.setAttribute("data-action", action);
             likeLinkEl.setAttribute("data-id", id);

@@ -17,5 +17,7 @@ class DiscussionCommentForm(forms.ModelForm):
 class GroupForm(forms.ModelForm):
     class Meta:
         model = ReadingGroup
-        fields = ('group_name', 'is_private_group', 'group_image', 'group_description',)
+        fields = ('group_name', 'group_image', 'group_description', 'id')
+        widget = {'id': forms.HiddenInput()}
+
 

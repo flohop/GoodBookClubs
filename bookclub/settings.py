@@ -29,8 +29,8 @@ ALLOWED_HOSTS = []
 
 
 LOGIN_REDIRECT_URL = 'dashboard'
-LOGIN_URL = 'login'
-LOGOUT_URL = 'logout'
+LOGIN_URL = 'account:login'
+LOGOUT_URL = 'account:logout'
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
@@ -40,8 +40,9 @@ MEDIA_URL = '/images/'
 MEDIA_ROOT = os.path.join(BASE_DIR, '')  # not images, because i take that from the outer folder
 
 INSTALLED_APPS = [
-    'account',
     'book',
+    'landing',
+    'account',
     'club',
     'django.contrib.admin',
     'django.contrib.auth',

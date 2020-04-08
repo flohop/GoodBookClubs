@@ -8,6 +8,8 @@ from itertools import chain
 from .forms import DiscussionCommentForm, ReadingCommentForm, GroupForm
 import urllib.request
 import json
+from django.templatetags.static import static
+from django.urls import reverse
 from django.views.decorators.clickjacking import xframe_options_sameorigin
 from book.models import Book
 
@@ -58,6 +60,15 @@ def reading_club_detail(request, id, category_slug):
     if user in club.current_book.likes.all():
         user_liked_book = True
 
+    # add how many members the club has
+    club.member_count = club.group_members.all().count()
+
+    # add info, is the current user the group admin
+    if club in request.user.reading_group_creator.all():
+        club.is_admin = True
+    else:
+        club.is_admin = False
+
     new_comment = None
     # Comment posted
     if request.method == "POST":
@@ -90,12 +101,32 @@ def discussion_club_detail(request, id, category_slug):
     comments = club.discussion_comments.filter(disabled=False)
     book = club.current_book
     new_comment = None
-    like_balance = club.current_book.likes.all().count()
     user_liked = False
 
-    # check if the user liked the current discussion book
-    if request.user in club.current_book.likes.all():
-        user_liked = True
+    # add additional information to the book object
+    if book:
+        like_balance = club.current_book.likes.all().count()
+
+        # check if the user liked the current discussion book
+        if request.user in club.current_book.likes.all():
+            user_liked = True
+    else:
+        like_balance = 0
+
+    # add how many members the club has
+    club.member_count = club.group_members.all().count()
+
+    # add additional information to the club object
+    if request.user in club.group_members.all():
+        club.is_member = True
+    else:
+        club.is_member = False
+
+    # add info, is the current user the group admin
+    if club in request.user.discussion_group_creator.all():
+        club.is_admin = True
+    else:
+        club.is_admin = False
 
     # when comment is posted
     if request.method == 'POST':
@@ -120,14 +151,15 @@ def discussion_club_detail(request, id, category_slug):
 
 
 @login_required
+@xframe_options_sameorigin
 def create_group(request):
     user = request.user
     new_group = None
     if request.method == 'POST':
         group_form = GroupForm(data=request.POST)
         if group_form.is_valid() and request.POST.get('group_type'):
+            cd = group_form.cleaned_data
             if request.POST.get('group_type') == "reading_club":
-                cd = group_form.cleaned_data
                 # create and save reading club objects
                 new_reading_group = ReadingGroup()
                 new_reading_group.group_name = cd['group_name']
@@ -136,11 +168,28 @@ def create_group(request):
                 new_reading_group.group_description = cd['group_description']
                 new_reading_group.current_book = cd['current_book']
                 new_reading_group.group_creator = user
+                new_reading_group.group_members.add(user)
                 new_reading_group.save()
 
                 print("Redirecting user to newly created group")
                 # redirect user to their newly created group
                 return redirect(new_reading_group)
+            elif request.POST.get('group_type') == 'discussion_club':
+                new_discussion_group = DiscussionGroup()
+                new_discussion_group.group_name = cd['group_name']
+                new_discussion_group.is_private_group = cd['is_private_group']
+                new_discussion_group.group_image = cd['group_image']
+                new_discussion_group.group_description = cd['group_description']
+
+                if cd['current_book'] is not "None":
+                    new_discussion_group.current_book = cd['current_book']
+
+                new_discussion_group.group_creator = user
+                new_discussion_group.group_members.add(user)
+                new_discussion_group.save()
+
+                # redirect user to their newly created group
+                return redirect(new_discussion_group)
 
     else:
         group_form = GroupForm()
@@ -166,13 +215,14 @@ def club_list_view(request):
         try:
             club.group_members.get(id=user.id)
             club.member = True
+            club.abs_url = club.get_absolute_url()
         except ObjectDoesNotExist:
             pass
 
     return render(request, 'club/list_view.html', {'all_clubs': all_clubs,
                                                    'user': user})
 
-
+@login_required
 def toggle(request):
     print("Toggle button activated")
     user_id = request.user.id
@@ -205,11 +255,11 @@ def toggle(request):
     except Exception as e:
         print("ERROR:" + str(e))
 
-
     print("KO")
     return JsonResponse({'status': 'ko'})
 
 
+@login_required
 def receive_json_data(request):
     data = json.loads(request.body.decode('utf-8'))
 
@@ -224,43 +274,45 @@ def receive_json_data(request):
 
     group_image = data.get("image")
     group_type = data.get("type")
-    group_book = data.get("book").get("volumeInfo")
+    try:
+        group_book = data.get("book").get("volumeInfo")
+        # extract data from the book
+        book_title = group_book.get("title")
+        book_author = group_book.get("authors")[0]
+        book_release_year = group_book.get("publishedDate")[:4]
+        book_description = group_book.get("description")
+        book_isbn = group_book.get("industryIdentifiers")[0].get("identifier")
 
-    # extract data from the book
-    book_title = group_book.get("title")
-    book_author = group_book.get("authors")[0]
-    book_release_year = group_book.get("publishedDate")[:4]
-    book_description = group_book.get("description")
-    book_isbn = group_book.get("industryIdentifiers")[0].get("identifier")
-
-    book_page_count = group_book.get("pageCount")
-    book_cover_url = group_book.get("imageLinks").get("thumbnail")
-    book_language_code = group_book.get("language")
-    book_categories = group_book.get("categories")  # a list of all the categories this book belongs to
+        book_page_count = group_book.get("pageCount")
+        book_cover_url = group_book.get("imageLinks").get("thumbnail")
+        book_language_code = group_book.get("language")
+        book_categories = group_book.get("categories")  # a list of all the categories this book belongs to
 
     # create the book model, but first, see if this book already exists, and if yes, don't save it, but instead use
     # the old book model instance
-    try:
-        book_instance = Book.objects.get(book_name=book_title, book_author=book_author)
-    except:
-        # if book does not exist
-        # download the cover url, and store the path
-        image_path = "/home/flohop/PycharmProjects/bookclub_project/images/book_covers/" +\
-                    str(book_title).lower().replace(" ", "_") +\
-                     "_" + str(book_author).lower().replace(" ", "_") + ".jpeg"
+        try:
+            book_instance = Book.objects.get(book_name=book_title, book_author=book_author)
+        except:
+            # if book does not exist
+            # download the cover url, and store the path
+            image_path = "/home/flohop/PycharmProjects/bookclub_project/images/book_covers/" +\
+                        str(book_title).lower().replace(" ", "_") +\
+                         "_" + str(book_author).lower().replace(" ", "_") + ".jpeg"
 
-        urllib.request.urlretrieve(book_cover_url, image_path)
+            urllib.request.urlretrieve(book_cover_url, image_path)
 
-        # if not old instance exists, create a new book instance
-        book_instance = Book.objects.create(book_name=book_title,
-                                            book_author=book_author,
-                                            book_description=book_description,
-                                            book_release_year=book_release_year,
-                                            book_isbn_number=book_isbn,
-                                            book_page_number=book_page_count,
-                                            book_cover_image=image_path,
-                                            book_language=book_language_code,
-                                            book_categories=" ".join(str(category) for category in book_categories))
+            # if not old instance exists, create a new book instance
+            book_instance = Book.objects.create(book_name=book_title,
+                                                book_author=book_author,
+                                                book_description=book_description,
+                                                book_release_year=book_release_year,
+                                                book_isbn_number=book_isbn,
+                                                book_page_number=book_page_count,
+                                                book_cover_image=image_path,
+                                                book_language=book_language_code,
+                                                book_categories=" ".join(str(category) for category in book_categories))
+    except AttributeError:
+        pass
 
     # create the group and assign the book to it
     # first, check what kind of group to create, and then create that group
@@ -272,12 +324,20 @@ def receive_json_data(request):
                                                      group_creator=current_user,
                                                      current_book=book_instance)
     else:
-        group_instance = DiscussionGroup.objects.create(group_name=group_name,
-                                                        is_private_group=group_is_private,
-                                                        group_image=group_image,
-                                                        group_description=group_description,
-                                                        group_creator=current_user,
-                                                        current_book=book_instance)
+        try:
+            group_instance = DiscussionGroup.objects.create(group_name=group_name,
+                                                            is_private_group=group_is_private,
+                                                            group_image=group_image,
+                                                            group_description=group_description,
+                                                            group_creator=current_user,
+                                                            current_book=book_instance)
+        except UnboundLocalError:
+            # if no book was assigned, create the group without a current book
+            group_instance = DiscussionGroup.objects.create(group_name=group_name,
+                                                            is_private_group=group_is_private,
+                                                            group_image=group_image,
+                                                            group_description=group_description,
+                                                            group_creator=current_user)
 
     # redirect user to newly created page, by get the absolute url of the group_instance
     print("Created new objects, will now redirect")
@@ -285,4 +345,288 @@ def receive_json_data(request):
     return HttpResponse(json.dumps(response), content_type='application/json')
 
 
+@login_required
+def edit_reading_club(request, id):
+    reading_club = get_object_or_404(ReadingGroup, id=id)
+    user = User(id=request.user.id)
+    name = reading_club.group_name
+    description = reading_club.group_description
+    image = reading_club.group_image
+    current_book = reading_club.current_book.book_name
+    id = reading_club.id
 
+    # check if the caller is the admin of the group
+    if reading_club in user.reading_group_creator.all():
+        if request.POST:
+            pass
+        else:
+            # populate the form with the data from the group instance
+            form = GroupForm(initial={'group_name': name,
+                                      'group_description': description,
+                                      'group_image': image,
+                                      'current_book': current_book,
+                                      'id': id})
+
+        return render(request, 'club/edit_club.html', {'form': form,
+                                                       'current_book': current_book,
+                                                       'club_id': id})
+    else:
+        return HttpResponse("You are not the admin of the group, so you can't edit the group")
+
+
+@login_required
+def edit_discussion_club(request, id):
+    discussion_club = get_object_or_404(DiscussionGroup, id=id)
+    user = User(id=request.user.id)
+    name = discussion_club.group_name
+    description = discussion_club.group_description
+    image = discussion_club.group_image
+    try:
+        current_book = discussion_club.current_book.book_name
+    except AttributeError:
+        current_book = None
+    id = discussion_club.id
+
+    # check if the caller is the admin of the group
+    if discussion_club in user.discussion_group_creator.all():
+        if request.POST:
+            pass
+        else:
+            # populate the form with the data from the group instance
+            form = GroupForm(initial={'group_name': name,
+                                      'group_description': description,
+                                      'group_image': image,
+                                      'current_book': current_book,
+                                      'id': id})
+
+        return render(request, 'club/edit_club.html', {'form': form,
+                                                       'current_book': current_book,
+                                                       'club_id': id})
+    else:
+        return HttpResponse("You are not the admin of the group, so you can't edit the group")
+
+@login_required
+def receive_json_update_r_group(request, id):
+    if request.method == 'POST':
+        # extract the data from the ajax request
+        user = User.objects.get(id=request.user.id)
+        data = json.loads(request.body.decode('utf-8'))
+
+        # get the group data
+        old_id = id
+        group_instance = get_object_or_404(ReadingGroup, id=id)
+
+        # only change the group image, if a new image was given
+        if data.get("image"):
+            new_group_data = {
+                'group_image': data.get("image"),
+                'group_description': data.get("description"),
+                'group_name': data.get("name")
+            }
+        else:
+            new_group_data = {
+                'group_description': data.get("description"),
+                'group_name': data.get("name")}
+
+        # check if the user is the admin of the group
+        if group_instance in user.reading_group_creator.all():
+            try:
+                # warp field that may not be there up in try except block to make sure,
+                # if data is missing a default value is set in
+                if data.get("book") != 'None':
+                    group_book = data.get("book").get("volumeInfo")
+                    # extract data from the book
+
+                    book_title = group_book.get("title")
+                    book_author = group_book.get("authors")[0]
+                    try:
+                        book_release_year = group_book.get("publishedDate")[:4]
+                    except:
+                        book_release_year = None
+
+                    book_description = group_book.get("description")
+                    try:
+                        book_isbn = group_book.get("industryIdentifiers")[0].get("identifier")
+                    except:
+                        None
+
+                    book_page_count = group_book.get("pageCount")
+                    try:
+                        book_cover_url = group_book.get("imageLinks").get("thumbnail")
+                    except:
+                        book_cover_url = static("images/book_covers/no_cover.png")
+                    book_language_code = group_book.get("language")
+                    book_categories = group_book.get("categories")  # a list of all the categories this book belongs to
+
+                    # get or create the book instance
+                    try:
+                        book_instance = Book.objects.get(book_name=book_title, book_author=book_author)
+                    except:
+                        # if book does not exist
+                        # download the cover url, and store the path, change, when deploying to server
+                        image_path = "/home/flohop/PycharmProjects/bookclub_project/images/book_covers/" + \
+                                     str(book_title).lower().replace(" ", "_") + \
+                                     "_" + str(book_author).lower().replace(" ", "_") + ".jpeg"
+
+                        urllib.request.urlretrieve(book_cover_url, image_path)
+                        if book_categories:
+                            book_categories = " ".join(str(category) for category in book_categories)
+
+                        # if not old instance exists, create a new book instance
+                        book_instance = Book.objects.create(book_name=book_title,
+                                                            book_author=book_author,
+                                                            book_description=book_description,
+                                                            book_release_year=book_release_year,
+                                                            book_isbn_number=book_isbn,
+                                                            book_page_number=book_page_count,
+                                                            book_cover_image=image_path,
+                                                            book_language=book_language_code,
+                                                            book_categories=book_categories)
+
+                        # update the instance
+                        new_group_data["current_book"] = book_instance
+
+                for attr, value in new_group_data.items():
+                    setattr(group_instance, attr, value)
+                group_instance.save()
+
+                print("Everything worked")
+                response = {'status': 'ok', 'url': group_instance.get_absolute_url()}
+                return HttpResponse(json.dumps(response), content_type='application/json')
+            except:
+                print("Something went wrong")
+                response = {'status': 'ko'}
+                return HttpResponse(json.dumps(response), content_type='application/json')
+        else:
+            return HttpResponse("You cant edit this group, you are not the admin")
+
+
+@login_required()
+def delete_r_group(request, id):
+    # check that the user is the admin of the group
+    group_instance = get_object_or_404(ReadingGroup, id=id)
+    user = User.objects.get(id=request.user.id)
+    if group_instance in user.reading_group_creator.all():
+        try:
+            group_instance.delete()
+            print("Now going to dashboard")
+            return redirect(reverse('dashboard'))
+        except:
+            response = {'status': 'ko'}
+            return HttpResponse(response, content_type="application/json")
+    else:
+        return HttpResponse("You can't delete this group")
+
+
+# the same but for discussion group
+@login_required
+def receive_json_update_d_group(request, id):
+    if request.method == 'POST':
+        # extract the data from the ajax request
+        user = User.objects.get(id=request.user.id)
+        data = json.loads(request.body.decode('utf-8'))
+
+        # get the group data
+        old_id = id
+        group_instance = get_object_or_404(DiscussionGroup, id=id)
+
+        # only change the group image, if a new image was given
+        if data.get("image"):
+            new_group_data = {
+                'group_image': data.get("image"),
+                'group_description': data.get("description"),
+                'group_name': data.get("name")
+            }
+        else:
+            new_group_data = {
+                'group_description': data.get("description"),
+                'group_name': data.get("name")}
+
+        # check if the user is the admin of the group
+        if group_instance in user.discussion_group_creator.all():
+            try:
+                # warp field that may not be there up in try except block to make sure,
+                # if data is missing a default value is set in
+                if data.get("book") != 'None':
+                    group_book = data.get("book").get("volumeInfo")
+                    # extract data from the book
+
+                    book_title = group_book.get("title")
+                    book_author = group_book.get("authors")[0]
+                    try:
+                        book_release_year = group_book.get("publishedDate")[:4]
+                    except:
+                        book_release_year = None
+
+                    book_description = group_book.get("description")
+                    try:
+                        book_isbn = group_book.get("industryIdentifiers")[0].get("identifier")
+                    except:
+                        None
+
+                    book_page_count = group_book.get("pageCount")
+                    try:
+                        book_cover_url = group_book.get("imageLinks").get("thumbnail")
+                    except:
+                        book_cover_url = static("images/book_covers/no_cover.png")
+                    book_language_code = group_book.get("language")
+                    book_categories = group_book.get("categories")  # a list of all the categories this book belongs to
+
+                    # get or create the book instance
+                    try:
+                        book_instance = Book.objects.get(book_name=book_title, book_author=book_author)
+                    except:
+                        # if book does not exist
+                        # download the cover url, and store the path, change, when deploying to server
+                        image_path = "/home/flohop/PycharmProjects/bookclub_project/images/book_covers/" + \
+                                     str(book_title).lower().replace(" ", "_") + \
+                                     "_" + str(book_author).lower().replace(" ", "_") + ".jpeg"
+
+                        urllib.request.urlretrieve(book_cover_url, image_path)
+                        if book_categories:
+                            book_categories = " ".join(str(category) for category in book_categories)
+
+                        # if not old instance exists, create a new book instance
+                        book_instance = Book.objects.create(book_name=book_title,
+                                                            book_author=book_author,
+                                                            book_description=book_description,
+                                                            book_release_year=book_release_year,
+                                                            book_isbn_number=book_isbn,
+                                                            book_page_number=book_page_count,
+                                                            book_cover_image=image_path,
+                                                            book_language=book_language_code,
+                                                            book_categories=book_categories)
+
+                        # update the instance
+                        new_group_data["current_book"] = book_instance
+
+                for attr, value in new_group_data.items():
+                    setattr(group_instance, attr, value)
+                group_instance.save()
+
+                print("Everything worked")
+                response = {'status': 'ok', 'url': group_instance.get_absolute_url()}
+                return HttpResponse(json.dumps(response), content_type='application/json')
+            except:
+                print("Something went wrong")
+                response = {'status': 'ko'}
+                return HttpResponse(json.dumps(response), content_type='application/json')
+        else:
+            return HttpResponse("You cant edit this group, you are not the admin")
+
+
+@login_required()
+def delete_d_group(request, id):
+    # check that the user is the admin of the group
+    print("i got called")
+    group_instance = get_object_or_404(DiscussionGroup, id=id)
+    user = User.objects.get(id=request.user.id)
+    if group_instance in user.discussion_group_creator.all():
+        try:
+            group_instance.delete()
+            return reverse('dashboard')
+        except:
+            response = {'status': 'ko'}
+            return reverse('account:dashboard')
+    else:
+        return HttpResponse("You can't delete this group")

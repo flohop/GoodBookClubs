@@ -5,9 +5,10 @@
 
 {% block content %}
     <h1>Dashboard</h1>
-    <p>Welcome to your dashboard</p>
+    <p id="welcome">Welcome to your dashboard</p>
 
-    <iframe src="{% url 'book:list_view' %}" style="border: none;" width="1920" height="600"></iframe>
-    <iframe src="{% url 'club:list_view' %}" style="border: none;" width="1920" height="600"></iframe>
+
+    <iframe src="{% url 'book:list_view' %}" style="border: none;" width="1920" height="600" id="book-list-frame" name="book-list-frame"></iframe>
+    <iframe src="{% url 'club:list_view' %}" style="border: none;" width="1920" height="600" id="club-list-frame" name="club-list-frame"></iframe>
 
 {% endblock %}

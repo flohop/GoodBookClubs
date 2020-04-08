@@ -1,14 +1,20 @@
 {% extends "base_slim.html" %}
+{% load static %}
 {% block title %}All clubs{% endblock %}
 {% block content %}
+
+<div class="add-club">
+    <a href="{% url 'club:create_group'%}">Add Group</a>
+</div>
 
 <ul class="all-clubs">
     {% for club in all_clubs %}
     <div class="club">
         <li {% if club.is_reading_club %}class="reading club" {% else %}class="discussion club"{% endif %}>
-            {{ club.group_name }} {% if club.current_book %}| {{ club.current_book }}{% endif %} | Members: <span class="count">{{ club.group_members.count }}</span>
+
+            <a href="{{ club.get_absolute_url }}"/>{{ club.group_name }}</a> | {% if club.current_book %}
+            {{ club.current_book }}{% else %}No current book{% endif %} | Members: <span class="count">{{ club.group_members.count }}</span>
             {% if club.is_reading_club %} | Reading Group {% else %}| Discussion Group{% endif %}
-            <a href="{{ club.get_absolute_url }}" class="view button">View</a>
 
             <a href="#" data-id="{{ club.id }}" data-action="{% if club.member %}leave{% else %}join{% endif %}"
                data-group_type="{% if club.is_reading_club %}reading{% else %}discussion{% endif %}"
@@ -23,15 +29,17 @@
     </div>
     {% endfor %}
 </ul>
+
 {% endblock %}
 
 {% block domready %}
-    $('div.club').click(function(e){
+    $('div.club a.toggle').click(function(e){
         e.preventDefault();
         var target = e.target;
         console.log(target);
 
-        var member_counter = target.parentNode.firstElementChild;
+        var member_counter = $(target.parentNode).find("span.count");
+
 
         $.post('{% url "club:toggle" %}',
         {

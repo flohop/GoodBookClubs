@@ -31,6 +31,16 @@ def all_books_view(request):
 def book_detail_view(request, id, slug):
     book = Book.objects.get(id=id)
 
+    # add info, if user has liked the book
+    has_liked = False
+    if request.user in book.likes.all():
+        has_liked = True
+    book.has_liked = has_liked
+
+    # add the info, what groups are currently reading this book
+    book.reading_clubs = book.reading_group_book.all()
+    book.discussion_clubs = book.discussion_group_book.all()
+
     return render(request, 'book/book_detail.html', {'book': book})
 
 

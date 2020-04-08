@@ -1,22 +1,18 @@
 {% extends "base.html" %}
 {% load static %}
-{% block title %}Create group{% endblock %}
+{% block title %}Edit Club{% endblock %}
 
 {% block content %}
+<h3>Edit your Club: {{ club_id }}</h3>
     {% if new_group %}
 
     {% else %}
     <form method="post" name="club-form" onsubmit="return validateForm()" id="club-form">
         {% csrf_token %}
-        {{ group_form.as_p }}
-        <label for="group_type">Group Type: </label>
-        <select id="group_type" name="group_type">
-            <option value="reading_club">Reading Club</option>
-            <option value="discussion_club">Discussion Club</option>
-        </select>
-        <br />
+        {{ form.as_p }}
 
-        <label for="search">Current Book: </label>
+        <p>Current book: {{ current_book }}</p>
+        <label for="search">New Book: </label>
         <input type="text" placeholder="Book" id="search" />
         <button type="button" id="button">Search</button>
         <br />
@@ -34,19 +30,23 @@
         </tbody>
         </table>
 
-        <button type="button" id="submit">Submit</button>
+        <button type="button" id="submit-change">Submit</button>
+        <button type="button" id="delete" data-id="{{ club_id }}">Delete club</button>
     </form>
     {% endif %}
  <script>
-   
- </script>   
+ </script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.1/dist/jquery.validate.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
-<script src="{% static 'book/book_search.js' %}"></script>
+<script src="{% static 'club/change_club.js' %}"></script>
+<script src="{% static 'club/delete_club.js' %}"></script>
 {% endblock %}
 
 
 {% block domready %}
+
+
+
 
 {% endblock %}

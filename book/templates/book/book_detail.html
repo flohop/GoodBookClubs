@@ -1,15 +1,51 @@
 {% extends "base.html" %}
-
+{% load static %}
 {% block title %}{{ book.book_name }}{% endblock %}
 
 {% block content %}
+    <p>Title: {{ book.book_name }}</p>
     <p>Author: {{ book.book_author }}</p>
     <p>Description: {{ book.book_description }}</p>
-         {% load thumbnail %}
-        {% thumbnail book.get_absolute_url  "300" as im %}
-            <a href="{{ book.get_absolute_url }}">
-                <img src="{{ im.url }}" class="image-detail">
-            </a>
-        {% endthumbnail %}
+    <p>Language: {{ book.book_language }}</p>
+    <p>Categories: {{ book.book_categories }}</p>
+    <p>ISBN Number: {{ book.book_isbn_number }}</p>
+    <p>Number of pages: {{ book.book_page_number }}</p>
+    <p>Likes: <span class="total likes">{{ book.likes.all.count }}</span>
+    <a href="#" data-id="{{ book.id }}" data-action="{% if book.has_liked %}un{% endif %}like"
+       class="like toggle button">
+        {% if book.has_liked %}Unlike
+        {% else %}Like
+        {% endif %}</a>
+    </p>
 
+    {% load thumbnail %}
+    {% thumbnail book.book_cover_image "300" as im %}
+    <img src="{{ im.url }}" class="image-detail">
+    {% endthumbnail %}
+
+
+    <div class="clubs">
+        <div class="reading-clubs">
+        {%  for r_club in book.reading_clubs %}
+            <p>Book is in: <a href="{{ r_club.get_absolute_url }}">{{ r_club }}</a></p>
+        {% empty %}
+        <p>No one reads this book</p>
+        {% endfor %}
+        </div>
+
+
+        <div class="discussion-clubs">
+        {% for d_club in book.discussion_clubs %}
+            <p>Book is in: <a href="{{ d_club.get_absolute_url }}">{{ d_club.group_name }}</a></p>
+        {% empty %}
+            <p>No one discusses this book</p>
+        {% endfor %}
+        </div>
+    </div>
+
+<script>var like_toggle_url = "{% url 'book:like' %}"</script>
 {% endblock %}
+
+{% block javascript %}
+<script src="{% static 'book/toggle_like.js' %}"></script>
+{% endblock  %}

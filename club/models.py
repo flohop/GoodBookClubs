@@ -8,7 +8,7 @@ from book.utils import file_cleanup
 
 
 class BasicGroup(models.Model):
-    group_name = models.CharField(max_length=100, unique=True)
+    group_name = models.CharField(max_length=100, unique=False)
     is_private_group = models.BooleanField(default=False)  # False=group is public, True=group is private
     group_image = models.ImageField(upload_to='images/group_pictures/',
                                     default='images/group_pictures/no_img.png')
@@ -52,7 +52,8 @@ class ReadingGroup(BasicGroup):
 
 
 class DiscussionGroup(BasicGroup):
-    current_book = models.ForeignKey(Book, on_delete=models.SET_NULL, null=True, blank=True)
+    current_book = models.ForeignKey(Book, on_delete=models.SET_NULL, null=True, blank=True,
+                                     related_name='discussion_group_book')
 
     # group creator
     group_creator = models.ForeignKey(User, on_delete=models.SET_NULL, null=True,
