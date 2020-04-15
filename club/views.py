@@ -279,9 +279,15 @@ def receive_json_data(request):
         # extract data from the book
         book_title = group_book.get("title")
         book_author = group_book.get("authors")[0]
-        book_release_year = group_book.get("publishedDate")[:4]
+        try:
+            book_release_year = group_book.get("publishedDate")[:4]
+        except TypeError:
+            book_release_year = None
         book_description = group_book.get("description")
-        book_isbn = group_book.get("industryIdentifiers")[0].get("identifier")
+        try:
+            book_isbn = group_book.get("industryIdentifiers")[0].get("identifier")
+        except TypeError:
+            book_isbn = None
 
         book_page_count = group_book.get("pageCount")
         book_cover_url = group_book.get("imageLinks").get("thumbnail")

@@ -4,13 +4,15 @@
 <head>
     <meta charset="UTF-8">
     <title>{% block title %}{% endblock %}</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/base.css' %}"/>
 {% block css %}{% endblock %}
 </head>
 <body>
+     <ul class="menu">
     <div id="header">
         <span class="logo">BookClub</span>
         {% if request.user.is_authenticated %}
-            <ul class="menu">
+           
                 <li {% if section == 'dashboard' %}class="selected"{% endif %}>
                     <a href="{% url 'account:dashboard' %}">My dashboard</a>
                 </li>
@@ -23,9 +25,9 @@
                 <li {% if section == 'profile' %}class="selected"{% endif %}>
                     <a href="{% url 'account:edit' %}">My Profile</a>
                 </li>
-            </ul>
+            
         {% endif %}
-
+        <li
         <span class="user">
             {% if request.user.is_authenticated %}
                 Hello {{ request.user }},
@@ -39,7 +41,8 @@
         {% block content %}
         {% endblock %}
     </div>
-
+    </li>
+    </ul>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.1/dist/jquery.validate.js"></script>

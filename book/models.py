@@ -50,7 +50,7 @@ class Book(models.Model):
     book_categories = models.CharField(max_length=50, null=True, blank=True)
     book_cover_image = models.ImageField(upload_to='images/book_covers/',
                                          default='images/book_covers/no_cover.png', max_length=500)
-    book_isbn_number = models.CharField(max_length=17)
+    book_isbn_number = models.CharField(max_length=17, null=True)
 
     book_page_number = models.IntegerField(blank=True, null=True)  # the number of pages in the book
     book_read_pages = models.IntegerField(blank=True, null=True)  # indicates how far one has read the book

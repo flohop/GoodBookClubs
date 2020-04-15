@@ -14,7 +14,9 @@ def js(obj):
 
 @register.filter(is_safe=True)
 def class_like(string):
-    new_string = str(string).replace(" ", "-")
+    new_string = str(string).replace(" ", "-").replace("(", "").replace(")", "")\
+                            .replace(",", "").replace('"', "").replace(".", "")\
+                            .replace("?", "").replace("!", "").replace('"', "")
     return mark_safe(new_string)
 
 

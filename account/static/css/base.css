@@ -1,0 +1,19 @@
+body {
+    width: 90%;
+    margin: 0 auto;
+}
+
+.logo {
+    background-color: red;
+}
+
+.user {
+    position: absolute;
+    right: 5%;
+
+}
+
+li {
+    display: inline;
+    padding: 0.5em
+}

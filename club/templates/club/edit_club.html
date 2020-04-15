@@ -2,7 +2,22 @@
 {% load static %}
 {% block title %}Edit Club{% endblock %}
 
+{% block css %}
+<style>
+    .hide {
+        visibility:hidden;
+    }
+    .remove {
+        visibility: hidden;
+        display: none;
+
+    }
+</style>
+
+{% endblock %}
+
 {% block content %}
+<div id="form-content">
 <h3>Edit your Club: {{ club_id }}</h3>
     {% if new_group %}
 
@@ -33,6 +48,12 @@
         <button type="button" id="submit-change">Submit</button>
         <button type="button" id="delete" data-id="{{ club_id }}">Delete club</button>
     </form>
+</div>
+
+    <div class="return remove" id="return">
+        <p>Club got deleted</p>
+        <a href="{% url 'account:dashboard' %}">Return to your dashboard</a>
+    </div>
     {% endif %}
  <script>
  </script>

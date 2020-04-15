@@ -1,27 +1,249 @@
 {% extends "base.html" %}
+{% load static %}
+{% load js %}
+{% block css %}
+<style>
+    .hide {
+        visibility:hidden;
+    }
+    .remove {
+        visibility: hidden;
+        display: none;
+
+    }
+</style>
+
+{% endblock %}
 {% block  title %}My books{% endblock %}
 
 {% block content %}
+    <form id="search-field" action="#">
+        <label for="search">Add:</label>
+        <input type="text" id="search" name="book-search" placeholder="Title"/>
+        <button id="button" type="button">Search</button>
+    </form>
+    <div id="results"></div>
+        <table id="results-table">
+        <thead>
+            <tr>
+                <th scope="col" class="remove">Book name</th>
+                <th scope="col" class="remove">Book author</th>
+            </tr>
+        </thead>
+        <tbody class="table body">
+
+        </tbody>
+        </table>
 
     <p>Finished books:</p>
+    <ul class="all-books" id="finished-books-list">
     {% for book in read_books %}
-        <p><a href="{{ book.get_absolute_url }}">{{ book}}</a></p>
+        <div class="book {{ book.book_name | class_like }}">
+        <li id="options-1" class="item" data-index="{{ book.index }}" data-id="{{ book.id }}"> <a href="{{ book.get_absolute_url }}">{{ book.book_name }}</a> | {{ book.book_author }}
+            |<span class="count">
+                <span class="total">{{ book.like_balance }}</span>
+                like{{ book.like_balance|pluralize }}
+                </span>
+
+            <a href="#" data-id="{{ book.id }}" data-action="{% if book.user_liked_book %}un{% endif %}like"
+               class="like button {% if book.can_like %}{% else %}hide{%endif%}">
+                {% if not book.user_liked_book %}
+                    Like
+                {% else %}
+                    Unlike
+                {% endif %}
+            </a>
+
+            <select id="book-status-1" class="book-status">
+            <option value="reading" class="status">Currently reading</option>
+            <option value="read" class="status">Read</option>
+            <option value="want-to-read" class="status">Want to read</option>
+            <option value="blank" selected="selected"></option>
+             </select>
+        </li>
+        </div>
+    {% empty %}
+        <p>No books finished yet</p>
     {% endfor %}
+        </ul>
+
 
     <br />
     <p>Current books:</p>
+    <ul class="all-books" id="current-books-list">
     {% for book in current_books %}
-        <p>{{ book }}</p>
+        <div class="book {{ book.book_name | class_like }}">
+         <li id="options-2" class="item" data-index="{{ book.index }}" data-id="{{ book.id }}"> <a href="{{ book.get_absolute_url }}">{{ book.book_name }}</a> | {{ book.book_author }}
+            |<span class="count">
+                <span class="total">{{ book.like_balance }}</span>
+                like{{ book.like_balance|pluralize }}
+                </span>
+
+            <a href="#" data-id="{{ book.id }}" data-action="{% if book.user_liked_book %}un{% endif %}like"
+               class="like button {% if book.can_like %}{% else %}hide{%endif%}">
+                {% if not book.user_liked_book %}
+                    Like
+                {% else %}
+                    Unlike
+                {% endif %}
+            </a>
+
+            <select id="book-status-2" class="book-status">
+            <option value="reading" class="status">Currently reading</option>
+            <option value="read" class="status">Read</option>
+            <option value="want-to-read" class="status">Want to read</option>
+            <option value="blank" selected="selected"></option>
+             </select>
+        </li>
+        </div>
+
     {% empty %}
         <p>No books here yet</p>
     {% endfor %}
+    </ul>
 
     <br />
     <p>Want to read books:</p>
+    <ul class="all-books" id="want-to-read-books-list">
     {% for book in want_to_read_books %}
-        <p>{{ book }}</p>
+        <div class="book {{ book.book_name | class_like }}">
+         <li id="options-3" class="item" data-index="{{ book.index }}" data-id="{{ book.id }}"> <a href="{{ book.get_absolute_url }}">{{ book.book_name }}</a> | {{ book.book_author }}
+            |<span class="count">
+                <span class="total">{{ book.like_balance }}</span>
+                like{{ book.like_balance|pluralize }}
+                </span>
 
+            <a href="#" data-id="{{ book.id }}" data-action="{% if book.user_liked_book %}un{% endif %}like"
+               class="like button {% if book.can_like %}{% else %}hide{%endif%}">
+                {% if not book.user_liked_book %}
+                    Like
+                {% else %}
+                    Unlike
+                {% endif %}
+            </a>
+
+            <select id="book-status-3" class="book-status">
+            <option value="reading" class="status">Currently reading</option>
+            <option value="read" class="status">Read</option>
+            <option value="want-to-read" class="status">Want to read</option>
+            <option value="blank" selected="selected"></option>
+             </select>
+        </li>
+        </div>
     {% empty %}
         <p>No books here yet</p>
     {% endfor %}
+    </ul>
+
+    <p class="remove" id="added-books">Added books:</p>
+    <ul class="all-books" id="book-list">
+
+    </ul>
+
+<script src="{% static 'book/book_search_add_list.js' %}"></script>
+
+<!-- load variables for the external JavaScript file -->
+<script>
+    var book_change_status_url = '{% url "book:change_status" %}';
+    var book_like_url = '{% url "book:like" %}';
+</script>
 {% endblock %}
+
+{% block domready %}
+
+    var changedStatusBooks;
+    var books = {{  book_data | js }};
+    // first, set the drop down value based on the users library
+    (function (){
+
+        changedStatusBooks = {};
+        var counter = Number({{ read_books.count }}) + Number({{ current_books.count }}) + Number({{ want_to_read_books.count }})
+        for(i=0; i < counter; i++) {
+            var currentBook = books[i];
+            if(currentBook.status == "read"){
+                console.log("Read: " + currentBook.name);
+                $("." + currentBook.name).find(".book-status").val("read");
+            }
+            else if(currentBook.status == "reading"){
+                console.log("Reading: " + currentBook.name);
+                $("." + {{ currentBook.name | class_like }}).find('.book-status').val("reading");
+            }
+            else if(currentBook.status == "want-to-read"){
+                console.log("Want to read: " + currentBook.name);
+                $("." + {{ currentBook.name | class_like }}).find(".book-status").val("want-to-read");
+            }
+            else {
+                $("." + {{ currentBook.name | class_like }}).find("#book-status").val("blank");
+            }
+
+        }   // end for loop
+    }())
+
+
+
+    function sendValuesToServer(e) {
+        target = e.target;
+        if($(target).hasClass("book-status")){
+            value = target.value;
+            id = $(target).parent().data("id");
+
+            $.post('{% url "book:change_status" %}',
+            {
+                    id : id,
+                    value: value
+            },
+            function(data){
+            if (data['status'] == 'OK')
+                {
+                if(data['can_like'] == "True") {
+                    var bookId = data['id'];
+                    $('li').find("[data-id='" + bookId + "']").removeClass("hide")
+                }
+                else {
+                    var bookId = data['id'];
+                    $('li').find("[data-id='" + bookId + "']").addClass("hide")
+                }
+                }
+            }
+        );
+        }
+    }
+
+    // register like button, so that it changes the like amount and the text
+    $('a.like').click(function(e){
+    e.preventDefault();
+    $.post('{% url "book:like" %}',
+        {
+            id: $(this).data('id'),
+            action: $(this).data('action')
+        },
+        function(data){
+        if (data['status'] == 'ok')
+            {
+                var bookId = data['id'];
+                var prevAction = data['prev_action']
+                var $clickedElement = $("[data-id=" + bookId + "]");
+
+                // toggle action
+                $clickedElement.data('action', prevAction == 'like' ?
+                                    'unlike': 'like');
+                // toggle link text
+                $clickedElement.find("a.like").text(prevAction == 'like' ? 'Unlike' : 'Like');
+
+                // update total likes
+                var prevLikes = parseInt($($clickedElement.prev().find(".total")).text());
+
+                $($clickedElement.prev().find(".total")).text(prevAction == 'like' ?
+                prevLikes + 1 : prevLikes - 1);
+            }
+        }
+        );
+    });
+    document.getElementById("finished-books-list").addEventListener("change", sendValuesToServer, false);
+    document.getElementById("current-books-list").addEventListener("change", sendValuesToServer, false);
+    document.getElementById("want-to-read-books-list").addEventListener("change", sendValuesToServer, false);
+
+
+{% endblock %}
+
+

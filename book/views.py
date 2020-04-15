@@ -5,6 +5,7 @@ from django.http import JsonResponse, HttpResponse
 from django.views.decorators.http import require_POST
 from .models import Book
 import json
+from itertools import chain
 import urllib.request
 from account.views import Profile
 from django.views.decorators.clickjacking import xframe_options_sameorigin
@@ -20,12 +21,50 @@ def all_books_view(request):
     read_books = profile.people_read_book.all()
     current_books = profile.people_reading_book.all()
     want_to_read_books = profile.people_want_to_read_book.all()
+    books = read_books | current_books | want_to_read_books
+    # add attributes to all books
+    all_books = [read_books, current_books, want_to_read_books]
+    book_data = {}
+    counter = 0
+    for books in all_books:
+        for book in books:
 
-    print("User id: " + str(profile.user.id))
+            # add number of likes the book has
+            like_balance = book.likes.all().count()
+            user_liked_book = False
 
+            # if user has read the book or is currently reading the book, let user like book
+            can_like = False
+
+            # add if the user likes this book
+            if user in book.likes.all():
+                user_liked_book = True
+
+            if book in profile.people_read_book.all():
+                status = "read"
+                can_like = True
+            elif book in profile.people_reading_book.all():
+                status = "reading"
+                can_like = True
+            elif book in profile.people_want_to_read_book.all():
+                status = "want-to-read"
+            else:
+                status = "blank"
+
+            book.can_like = can_like
+            book.status = status
+            book.index = counter
+            book.like_balance = like_balance
+            book.user_liked_book = user_liked_book
+            # replace " " with "-", so that i can use it to search by class name in html, because html classes are
+            # separated by space
+            book_data[counter] = {'name': str(book.book_name).replace(" ", "-"), 'status': book.status, 'id': book.id}
+            counter += 1
     return render(request, 'book/all_books_showcase.html', {'read_books': read_books,
                                                             'current_books': current_books,
-                                                            'want_to_read_books': want_to_read_books})
+                                                            'want_to_read_books': want_to_read_books,
+                                                            'books': books,
+                                                            'book_data': book_data})
 
 
 def book_detail_view(request, id, slug):
@@ -203,7 +242,8 @@ def add_book(request):
     # create the book model, but first, see if this book already exists, and if yes, don't save it, but instead use
     # the old book model instance
     try:
-        book_instance = Book.objects.get(book_name=book_title, book_author=book_author)
+        book_instance = Book.objects.get(book_name=book_title, book_author=book_author) or \
+                        Book.objects.get(book_name=str(book_title).lower(), book_author=book_author)
         return JsonResponse({'status': 'already_exists', 'id': book_instance.id})
     except:
         # if book does not exist
@@ -218,6 +258,9 @@ def add_book(request):
             image_path = None
 
         # if not old instance exists, create a new book instance
+
+        # book titles that contain " don't work atm, fix later
+        book_title = str(book_title).replace('"', "").replace("'", "")
         book_instance = Book.objects.create(book_name=book_title,
                                             book_author=book_author,
                                             book_description=book_description,
@@ -232,7 +275,7 @@ def add_book(request):
 
         return_book_json = {
             'status': 'new_book',
-            'title': str(book_instance.book_name),
+            'title': str(book_instance.book_name).replace(" ", "-").replace("(", "").replace(")", ""),
             'id': str(book_instance.id),
             'url': str(book_instance.get_absolute_url()),
             'author': str(book_instance.book_author),

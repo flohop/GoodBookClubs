@@ -17,6 +17,8 @@ function bookSearch() {
 
         success: function(data) {
             items = data.items;
+            $("#results-table").removeClass("remove");
+            $("th .remove").removeClass("remove");
             for(i=0; i< data.items.length; i++) {
                 var newRow = tableBody.insertRow();
                 newRow.className = "data-row"
@@ -122,7 +124,6 @@ function onRowClicked(e) {
     var current_book_json = items[chosenBookIndex];
     // hide all rows hide the select button, add the chosen item to the database and add it to the list
     $('#results-table').addClass("remove");
-
     $.ajax({
     type: 'POST',
     dataType: 'json',
@@ -225,7 +226,7 @@ function onRowClicked(e) {
 
             // append new <div> to <ul>
             document.getElementById("book-list").appendChild(bookDiv);
-            
+            $("#added-books").removeClass("remove");
             // add like event listener
             // TODO: make the like click function a named function, register the newly created <a> element to it, so that newly
             // created elements can get liked. Make the dashboard pretty and remove value from search field after user selects book
