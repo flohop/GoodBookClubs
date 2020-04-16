@@ -19,7 +19,7 @@ class Migration(migrations.Migration):
             name='Profile',
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('profile_picture', models.ImageField(default='images/profile_pictures/no_img.png', upload_to='images/profile_pictures/')),
+                ('profile_picture', models.ImageField(default='images/profile_pictures/no_img.jpg', upload_to='images/profile_pictures/')),
                 ('profile_description', models.TextField(blank=True, max_length=500)),
                 ('current_books', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='current_books', to='club.Book')),
                 ('discussion_groups_created', models.ForeignKey(blank=True, null=True, on_delete=models.SET('User deleted'), related_name='discussion_groups_created', to='club.DiscussionGroup')),

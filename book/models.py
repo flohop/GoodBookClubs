@@ -10,7 +10,7 @@ import datetime
 
 
 class Genre(models.Model):
-    genre_name = models.CharField(max_length=100)
+    genre_name = models.CharField(max_length=150)
 
     # genres related or similar to this one
     related_genres = models.ForeignKey('self', null=True, blank=True,  on_delete=models.SET_NULL)
@@ -49,7 +49,7 @@ class Book(models.Model):
     book_language = models.CharField(max_length=50, blank=True, null=True)
     book_categories = models.CharField(max_length=50, null=True, blank=True)
     book_cover_image = models.ImageField(upload_to='images/book_covers/',
-                                         default='images/book_covers/no_cover.png', max_length=500)
+                                         default='images/book_covers/no_cover.png', max_length=1000)
     book_isbn_number = models.CharField(max_length=17, null=True)
 
     book_page_number = models.IntegerField(blank=True, null=True)  # the number of pages in the book

@@ -1,5 +1,6 @@
 {% extends "base_slim.html" %}
 {% load static %}
+{% load thumbnail %}
 {% block title %}All clubs{% endblock %}
 {% block content %}
 
@@ -9,14 +10,35 @@
 
 <ul class="all-clubs">
     {% for club in all_clubs %}
-    <div class="club">
+    <div class="club container {% if club.is_reading_club %}reading{% else %}
+                discussion{% endif %}" id="container">
         <li {% if club.is_reading_club %}class="reading club" {% else %}class="discussion club"{% endif %}>
+            {% thumbnail club.group_image "125x125" as im %}
+                <img src="{{ im.url }}" class="club-image">
+            {% endthumbnail %}
 
-            <a href="{{ club.get_absolute_url }}"/>{{ club.group_name }}</a> | {% if club.current_book %}
-            {{ club.current_book }}{% else %}No current book{% endif %} | Members: <span class="count">{{ club.group_members.count }}</span>
-            {% if club.is_reading_club %} | Reading Group {% else %}| Discussion Group{% endif %}
+            <ul class="inner-ul">
+                <li class="inner-li">
+                     <a class="club-name" href="{{ club.get_absolute_url }}">{{ club.group_name }}</a>
+                </li>
 
-            <a href="#" data-id="{{ club.id }}" data-action="{% if club.member %}leave{% else %}join{% endif %}"
+                <li class="inner-li">
+                     {% if club.current_book %}
+                    <span class="current-book">{{ club.current_book }}</span>
+                    {% else %}
+                    <span class="current-book">No current book</span>
+                    {% endif %}
+                </li>
+
+                <li class="inner-li">
+                    <span class="count">
+                        <span class="total">{{ club.group_members.count }}
+                            member{{ club.group_members.count | pluralize }}</span>
+                    </span>
+                </li>
+
+                <li class="inner-li">
+                     <a href="#" data-id="{{ club.id }}" data-action="{% if club.member %}leave{% else %}join{% endif %}"
                data-group_type="{% if club.is_reading_club %}reading{% else %}discussion{% endif %}"
                class="{% if club.member %}leave{% else %}join{% endif %} button toggle">
                 {% if club.member %}
@@ -24,7 +46,12 @@
                 {% else %}
                     Join
                 {% endif %}
-            </a>
+                    </a>
+                </li>
+            </ul>
+
+
+
         </li>
     </div>
     {% endfor %}

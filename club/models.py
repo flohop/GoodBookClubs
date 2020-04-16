@@ -9,11 +9,11 @@ from book.utils import file_cleanup
 
 class BasicGroup(models.Model):
     group_name = models.CharField(max_length=100, unique=False)
-    is_private_group = models.BooleanField(default=False)  # False=group is public, True=group is private
+    is_private_group = models.BooleanField(default=False, max_length=255)  # False=group is public, True=group is private
     group_image = models.ImageField(upload_to='images/group_pictures/',
-                                    default='images/group_pictures/no_img.png')
+                                    default='images/group_pictures/no_img.jpg', max_length=1000)
     group_description = models.CharField(max_length=500)  # describes the reason for the group
-    slug = models.SlugField(blank=True, max_length=255)
+    slug = models.SlugField(blank=True, max_length=500)
 
     def __str__(self):
         return str(self.group_name)

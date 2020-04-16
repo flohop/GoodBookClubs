@@ -1,9 +1,8 @@
 {% extends "base_slim.html" %}
 {% load js %}
-{% load static %}
 {% load thumbnail %}
-{% block title %}All books
-{% endblock %}
+{% load static %}
+{% block title %}All books{% endblock %}
 {% block css %}
 <style>
     .hide {
@@ -51,7 +50,6 @@
             <a href="{{ book.get_absolute_url }}" class="book-title">{{ book.book_name }}</a> 
             </li>
 
-           
 
             <li class="inner-li">
             <span class="author">{{ book.book_author }} </span>
@@ -60,16 +58,19 @@
             <li class="inner-li">
                 <span class="count">
                     <span class="total">{{ book.like_balance }}</span>
-                    like{{ book.like_balance|pluralize }}
-                    </span>
                 
+                    <span class="can-not-like{% if book.can_like %} remove{% else %}{% endif %}"><i class="far fa-heart"></i></span>
+
+
                 <a href="#" data-id="{{ book.id }}" data-action="{% if book.user_liked_book %}un{% endif %}like"
-                class="like button{% if book.can_like %}{% else %} hide{%endif%}">
+                class="like button{% if book.can_like %}{% else %} remove{%endif%}">
+                    <span class="like-icon">
                     {% if not book.user_liked_book %}
-                        Like
+                        <i class="far fa-heart"></i>
                     {% else %}
-                        Unlike
+                        <i class="fas fa-heart"></i>
                     {% endif %}
+                     </span>
                 </a>
             </li>
 
@@ -137,7 +138,7 @@
         target = e.target;
         if($(target).hasClass("book-status")){
             value = target.value;
-            id = $(target).parent().data("id");
+            id = $(target).parent().prev().find("a").data("id")
 
             $.post('{% url "book:change_status" %}',
             {
@@ -149,11 +150,13 @@
                 {
                 if(data['can_like'] == "True") {
                     var bookId = data['id'];
-                    $('li').find("[data-id='" + bookId + "']").removeClass("hide")
+                    $('li').find("[data-id='" + bookId + "']").prev().addClass("remove")
+                    $('li').find("[data-id='" + bookId + "']").removeClass("remove")
                 }
                 else {
                     var bookId = data['id'];
-                    $('li').find("[data-id='" + bookId + "']").addClass("hide")
+                    $('li').find("[data-id='" + bookId + "']").prev().removeClass("remove")
+                    $('li').find("[data-id='" + bookId + "']").addClass("remove")
                 }
                 }
             }
@@ -180,12 +183,16 @@
                 $clickedElement.data('action', prevAction == 'like' ?
                                     'unlike': 'like');
                 // toggle link text
-                $clickedElement.find("a.like").text(prevAction == 'like' ? 'Unlike' : 'Like');
-
+                if(prevAction == 'like') {
+                    $($clickedElement.find("a.like").find("span.like-icon")).replaceWith('<span class="like-icon"><i class="fas fa-heart"></i></span>')
+                }
+                else {
+                    $($clickedElement.find("a.like").find("span.like-icon")).replaceWith('<span class="like-icon"><i class="far fa-heart"></i></span>')
                 // update total likes
-                var prevLikes = parseInt($($clickedElement.prev().find(".total")).text());
-
-                $($clickedElement.prev().find(".total")).text(prevAction == 'like' ?
+                }
+        
+                var prevLikes = parseInt($($clickedElement.prev().prev()).text());
+                $($clickedElement.prev().prev()).text(prevAction == 'like' ?
                 prevLikes + 1 : prevLikes - 1);
             }
         }
