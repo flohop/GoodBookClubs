@@ -14,7 +14,7 @@
 
     }
 </style>
-<link rel="stylesheet" type="text/css" href="{% static 'css/list_view.css' %}"/>
+<link rel="stylesheet" type="text/css" href="{% static 'book/css/list_view.css' %}"/>
 {% endblock %}
 {% block content %}
 
@@ -52,7 +52,7 @@
 
 
             <li class="inner-li">
-            <span class="author">{{ book.book_author }} </span>
+            <span class="author">{{ book.book_author }}</span>
             </li>
 
             <li class="inner-li">
@@ -113,6 +113,7 @@
                                               .split("?").join("")).split("!").join(""))
                                               .split("(").join("")).split(")").join(""))
                                               .split(",").join("");
+
             if(currentBook.status == "read"){
                 console.log("Read: " + bookName);
                 $("." + bookName).find("#book-status").val("read");
@@ -133,9 +134,9 @@
     }())
 
 
-
     function sendValuesToServer(e) {
         target = e.target;
+        debugger;
         if($(target).hasClass("book-status")){
             value = target.value;
             id = $(target).parent().prev().find("a").data("id")
@@ -148,6 +149,7 @@
             function(data){
             if (data['status'] == 'OK')
                 {
+                console.log("Changed state of select element from html page");
                 if(data['can_like'] == "True") {
                     var bookId = data['id'];
                     $('li').find("[data-id='" + bookId + "']").prev().addClass("remove")
@@ -166,6 +168,7 @@
 
     // register like button, so that it changes the like amount and the text
     $('a.like').click(function(e){
+    console.log("Like got clicked");
     e.preventDefault();
     $.post('{% url "book:like" %}',
         {

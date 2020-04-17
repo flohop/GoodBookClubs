@@ -11,7 +11,7 @@ class BasicGroup(models.Model):
     group_name = models.CharField(max_length=100, unique=False)
     is_private_group = models.BooleanField(default=False, max_length=255)  # False=group is public, True=group is private
     group_image = models.ImageField(upload_to='images/group_pictures/',
-                                    default='images/group_pictures/no_img.jpg', max_length=1000)
+                                    default='images/group_pictures/no_img.jpg', max_length=10000)
     group_description = models.CharField(max_length=500)  # describes the reason for the group
     slug = models.SlugField(blank=True, max_length=500)
 
@@ -26,8 +26,6 @@ class BasicGroup(models.Model):
     class Meta:
         abstract = True
         ordering = ['group_name']
-
-    post_delete.connect(file_cleanup, sender=group_image, dispatch_uid="club.image.clean_up")
 
 
 class ReadingGroup(BasicGroup):
@@ -46,6 +44,12 @@ class ReadingGroup(BasicGroup):
 
     # group members
     group_members = models.ManyToManyField(User, related_name="reading_group_members", blank=True)
+
+    # page count
+    current_book_page_count = models.IntegerField(null=True, blank=True)
+
+    # current page
+    current_book_current_page = models.IntegerField(null=True, blank=True, default=0)
 
     def get_absolute_url(self):
         return reverse('club:reading_club_detail', args=[self.id, self.slug])

@@ -3,6 +3,8 @@ from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import JsonResponse, HttpResponse
 from django.shortcuts import render, get_object_or_404, redirect
+from django.utils.safestring import mark_safe
+
 from .models import ReadingGroup, DiscussionGroup
 from itertools import chain
 from .forms import DiscussionCommentForm, ReadingCommentForm, GroupForm
@@ -52,6 +54,7 @@ def reading_club_detail(request, id, category_slug):
                              id=id,)
     book = club.current_book
     user = request.user
+    profile = Profile.objects.get(user=user)
     comments = club.reading_comments.filter(disabled=False)
     like_balance = club.current_book.likes.all().count()
     user_liked_book = False
@@ -69,13 +72,25 @@ def reading_club_detail(request, id, category_slug):
     else:
         club.is_admin = False
 
+    can_like = False
+    if book in profile.people_read_book.all():
+        status = '"read"'
+        can_like = True
+    elif book in profile.people_reading_book.all():
+        status = '"reading"'
+        can_like = True
+    elif book in profile.people_want_to_read_book.all():
+        status = '"want-to-read"'
+    else:
+        status = '"blank"'
+    book.status = status
+
     new_comment = None
     # Comment posted
     if request.method == "POST":
         comment_form = ReadingCommentForm(data=request.POST)
         if comment_form.is_valid():
             # check if the user already posted the same comment
-            print("This is a new comment")
             new_comment = comment_form.save(commit=False)
             # assign values that the user doesnt input by himself
             new_comment.club = club
@@ -92,7 +107,8 @@ def reading_club_detail(request, id, category_slug):
                                                              'comment_form': comment_form,
                                                              'like_balance': like_balance,
                                                              'user_liked_book': user_liked_book,
-                                                             'book': book})
+                                                             'book': book,
+                                                             'can_like': can_like})
 
 
 def discussion_club_detail(request, id, category_slug):
@@ -166,6 +182,8 @@ def create_group(request):
                 new_reading_group.is_private_group = cd['is_private_group']
                 new_reading_group.group_image = cd['group_image']
                 new_reading_group.group_description = cd['group_description']
+
+                breakpoint()
                 new_reading_group.current_book = cd['current_book']
                 new_reading_group.group_creator = user
                 new_reading_group.group_members.add(user)
@@ -307,6 +325,11 @@ def receive_json_data(request):
 
             urllib.request.urlretrieve(book_cover_url, image_path)
 
+            try:
+                my_categories = " ".join(str(category) for category in book_categories)
+            except TypeError:
+                my_categories = None
+
             # if not old instance exists, create a new book instance
             book_instance = Book.objects.create(book_name=book_title,
                                                 book_author=book_author,
@@ -316,7 +339,7 @@ def receive_json_data(request):
                                                 book_page_number=book_page_count,
                                                 book_cover_image=image_path,
                                                 book_language=book_language_code,
-                                                book_categories=" ".join(str(category) for category in book_categories))
+                                                book_categories=my_categories)
     except AttributeError:
         pass
 
@@ -328,7 +351,8 @@ def receive_json_data(request):
                                                      group_image=group_image,
                                                      group_description=group_description,
                                                      group_creator=current_user,
-                                                     current_book=book_instance)
+                                                     current_book=book_instance,
+                                                     current_book_page_count=book_instance.book_page_number)
     else:
         try:
             group_instance = DiscussionGroup.objects.create(group_name=group_name,
@@ -636,3 +660,17 @@ def delete_d_group(request, id):
             return reverse('account:dashboard')
     else:
         return HttpResponse("You can't delete this group")
+
+
+def update_page(request, id, category_slug):
+    group = ReadingGroup.objects.get(id=id)
+
+    try:
+        data = json.loads(request.body.decode('utf-8'))
+
+        group.current_book_current_page = data['page_count']
+        group.save()
+
+        return JsonResponse({"status": "ok"})
+    except:
+        return JsonResponse({"status": "ko"})

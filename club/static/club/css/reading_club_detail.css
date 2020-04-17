@@ -1,0 +1,98 @@
+
+
+.slidecontainer {
+    width: 100%;
+}
+
+.slider {
+    appearance: none;
+    width: 80%;
+    height: 25px;
+    background: #d3d3d3;
+    outline: none;
+    opacity: 0.7;
+    -webkit-transition: .2s;
+    transition: opcity .2s;
+}
+
+.slider:hover {
+    opacity: 1;
+}
+
+ul.book.info {
+    list-style: square;
+}
+
+/* The slider handle */
+.slider::-webkit-slider-thumb {
+    appearance: none;
+    width: 25px;
+    height: 25px;
+    background: #4CAF50;
+    cursor: pointer;
+}
+
+.slider::-moz-range-thumb {
+    width: 25px;
+    height: 25px;
+    background: #4CAF50;
+    cursor: pointer;
+}
+
+img.image-detail {
+    float: left;
+}
+
+li.title {
+    margin-top: 8px;
+    font-size: 2em;
+    font-weight: bold;
+    
+}
+
+li.author {
+    margin-top: 8px;
+    font-size: 1.3em;
+    font-style: italic;
+}
+
+li.description {
+    margin-top: 8px;
+    font-size: 1.25em;
+    
+}
+
+ul.book-info {
+    float:left;
+    list-style-position: inside;
+    line-height: 25px;
+    height: fit-content;
+    list-style-type: none;
+    padding: 5px 5px 5px 5px;
+    margin-left: 10p;
+    margin-right: 10px;
+    width: 50%;
+    background-color: seagreen;
+}
+
+span.admin-edit {
+    background-color: greenyellow;
+}
+
+div.book-settings {
+    background-color: yellow;
+    display: inline-block;
+    width: 100%;
+    margin-top: 10px;
+}
+
+span.like-icon {
+    font-size: 1.5em;
+    color: red;
+    vertical-align: middle;
+}
+
+span.can-not-like {
+    font-size: 1.5em;
+    color: darkblue;
+}

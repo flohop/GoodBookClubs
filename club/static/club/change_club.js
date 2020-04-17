@@ -79,7 +79,8 @@ function submitChangeForm(e) {
         // get all the data from the form
         var groupName = document.forms['club-form']['group_name'].value;
         var groupDescription = document.forms['club-form']['group_description'].value;
-        var groupImage = document.forms['club-form']['group_image'].value;
+        var groupImage = document.getElementById("club-form")forms['club-form']['group_image'].files[0].name;
+        groupImage = groupImage.replace("C:\\fakepath\\", "");
         try {
             var current_book_json = items[chosenBookIndex];
             console.log("Current book: " + current_book_json);
@@ -91,6 +92,7 @@ function submitChangeForm(e) {
 
 
         // save all values in a json object which will be send to the view via ajax
+        debugger;
         var allData = {"name": groupName,
                         'description': groupDescription,
                         'image': groupImage,

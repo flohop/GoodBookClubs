@@ -59,55 +59,38 @@ function bookSearch() {
     });
 }
 
-function sendValuesToServer(e) {
-    // send the changed value for the list to the server
-    target = e.target;
-    if($(target).hasClass("book-status")){
-        value = target.value;
-        id = $(target).parent().data("id");
-        console.log("Send data with id: " + id + " value: " + value)
-
-        $.post(book_change_status_url,
-        {
-                id : id,
-                value: value
-        },
-        function(data){
-        if (data['status'] == 'OK')
-            {
-            if(data['can_like'] == "True") {
-                var bookId = data['id'];
-                $('li').find("[data-id='" + bookId + "']").removeClass("hide")
-            }
-            else {
-                var bookId = data['id'];
-                $('li').find("[data-id='" + bookId + "']").addClass("hide")
-            }
-            }
-        }
-    );
-    }
-}
-
-function likeBook(e, myId, myAction) {
+function likeBook(e) {
+    e.preventDefault()
     $.post(book_like_url,
         {
-            id: myId,
-            action: myAction
+            id: $(this).data('id'),
+            action: $(this).data('action')
         },
-        function(data) {
-            if(data['status'] == 'ok'){
-
-                // TODO: find correct Link to Like, so it can change depending on the action
-                // TODO: atm, i can't get it to work, user can't add new book and like it instantly,
-                // TODO: he has to reload the page to make it work, FIX LATER!
-
-                var bookId = data['id'];
-                var prevAction = data['prev_action'];
-                console.log("Likes to added books will be implemented later");
+        function(data){
+            if (data['status'] == 'ok')
+                {
+                    var bookId = data['id'];
+                    var prevAction = data['prev_action']
+                    var $clickedElement = $("[data-id=" + bookId + "]");
+    
+                    // toggle action
+                    $clickedElement.data('action', prevAction == 'like' ?
+                                        'unlike': 'like');
+                    // toggle link text
+                    if(prevAction == 'like') {
+                        $($clickedElement.find("a.like").find("span.like-icon")).replaceWith('<span class="like-icon"><i class="fas fa-heart"></i></span>')
+                    }
+                    else {
+                        $($clickedElement.find("a.like").find("span.like-icon")).replaceWith('<span class="like-icon"><i class="far fa-heart"></i></span>')
+                    // update total likes
+                    }
+            
+                    var prevLikes = parseInt($($clickedElement.prev().prev()).text());
+                    $($clickedElement.prev().prev()).text(prevAction == 'like' ?
+                    prevLikes + 1 : prevLikes - 1);
+                }
             }
-        }
-    );
+            );
 }
 
 function onRowClicked(e) {
@@ -144,47 +127,100 @@ function onRowClicked(e) {
             var id = data['id'];
             var author = data['author'];
             var url = data['url'];
+            var cover = data['cover'];
 
-            // create div element
+            // create container div element
+            var containerDiv = document.createElement("DIV");
+            containerDiv.classList.add("container");
+            containerDiv.id = "container";
+            
+            // create book div
             var bookDiv = document.createElement("DIV");
+            bookDiv.classList.add(title);
+
 
             // create li element
             var bookLi = document.createElement("LI");
+            bookLi.id = "options";
+            bookLi.classList.add("item");
+            // TODO: bookLi.setAttribute("data-index")
+            bookLi.setAttribute("data-id", id);
+            
 
-            var bookLinkEl = document.createElement("a");
-            bookLinkEl.href = url;
-            bookLinkEl.innerHTML = title;
-            bookLi.innerHTML = " | " + author + " | ";
-            bookLi.setAttribute('data-id', id);
 
-            bookLi.insertBefore(bookLinkEl, bookLi.childNodes[0]);
+            // create img element
+            var imgEl = document.createElement("img");
+            imgEl.classList.add("book-cover");
+            $(imgEl).attr("src", cover);
 
-            var countEl = document.createElement("SPAN");
-            countEl.classList.add("count");
+            // create inner ul
+            var innerUlEl = document.createElement("ul");
+            innerUlEl.classList.add("inner-ul");
 
-            var innerCounterEl = document.createElement("SPAN");
-            innerCounterEl.classList.add("total");
-            innerCounterEl.innerHTML = "0 ";
+            // create inner li elements and append them to inner ul
+            var inLi1 = document.createElement("li");
+            inLi1.classList.add("inner-li");
+            var inAEl = document.createElement("a");
+            inAEl.classList.add("book-title");
+            inAEl.setAttribute("href", url);
+            inAEl.innerText = title;
+            inLi1.append(inAEl);
 
-            countEl.appendChild(innerCounterEl);
-            countEl.appendChild(document.createTextNode("likes "));
+            var inLi2 = document.createElement("li");
+            inLi2.classList.add("inner-li");
+            var inSpanEl2 = document.createElement("span");
+            inSpanEl2.classList.add("author");
+            inSpanEl2.innerText = author;
+            inLi2.append(inSpanEl2);
 
-            // create the link to like
-            likeLinkEl = document.createElement("a");
-            likeLinkEl.href = "#";
-            likeLinkEl.id = "like-link-id";
-            var action = "like"
-            likeLinkEl.setAttribute("data-action", action);
-            likeLinkEl.setAttribute("data-id", id);
-            likeLinkEl.classList.add("like");
-            likeLinkEl.classList.add("button");
-            likeLinkEl.classList.add("hide"); // hide like option for as long as user isnt reading the book
-            likeLinkEl.innerHTML = "Like";
+            var inLi3 = document.createElement("li");
+            inLi3.classList.add("inner-li");
 
-            likeLinkEl.addEventListener("click", function(e) {
-                    likeBook(e, id, action);
-            }, false);
+            var countSpanEl = document.createElement("span");
+            countSpanEl.classList.add("count");
 
+            var totalSpanEl = document.createElement("span");
+            totalSpanEl.classList.add("total");
+            totalSpanEl.innerText = "0";
+
+            var canNotLikeSpanEl = document.createElement("span");
+            canNotLikeSpanEl.classList.add("can-not-like");
+
+            var heartIEl = document.createElement("i");
+            heartIEl.classList.add("far");
+            heartIEl.classList.add("fa-heart");
+
+            canNotLikeSpanEl.appendChild(heartIEl);
+            countSpanEl.appendChild(canNotLikeSpanEl);
+
+            var likeAEl = document.createElement("a");
+            likeAEl.classList.add("like");
+            likeAEl.classList.add("button");
+            likeAEl.classList.add("remove");
+            likeAEl.setAttribute("href", "#");
+            likeAEl.setAttribute("data-id", id);
+            likeAEl.setAttribute("data-action", "like");
+
+            // register event listener
+            likeAEl.addEventListener("click", likeBook, false);
+
+            var likeSpanEl = document.createElement("span");
+            likeSpanEl.classList.add("like-icon");
+
+            var heartIEl2 = document.createElement("i");
+            heartIEl2.classList.add("far");
+            heartIEl2.classList.add("fa-heart");
+
+            likeSpanEl.appendChild(heartIEl2);
+            likeAEl.appendChild(likeSpanEl)
+            
+            // put it all together
+            countSpanEl.appendChild(totalSpanEl);
+            countSpanEl.appendChild(canNotLikeSpanEl);
+            countSpanEl.appendChild(likeAEl);
+            inLi3.appendChild(countSpanEl);
+
+            var inLi4 = document.createElement("li");
             // create the select element
             var selectEl = document.createElement("SELECT");
             selectEl.id = "book-status";
@@ -218,21 +254,34 @@ function onRowClicked(e) {
             selectEl.appendChild(optEl3);
             selectEl.appendChild(optEl4);
 
-            // append all elements
-            bookLi.appendChild(countEl);
-            bookLi.appendChild(likeLinkEl);
-            bookLi.appendChild(selectEl);
-            bookDiv.appendChild(bookLi);
+            // append select to li
+            inLi4.append(selectEl);
 
-            // append new <div> to <ul>
-            document.getElementById("book-list").appendChild(bookDiv);
+            // append inner-li to inner-ul
+            innerUlEl.append(inLi1);
+            innerUlEl.append(inLi2);
+            innerUlEl.append(inLi3);
+            innerUlEl.append(inLi4);
+
+            // append img to li
+            bookLi.append(imgEl)
+
+            // append ul to li
+            bookLi.append(innerUlEl);
+
+            // append li to bookDiv
+            bookDiv.append(bookLi);
+
+             // append to container div
+             containerDiv.append(bookDiv);
+
+            document.getElementById("book-list").appendChild(containerDiv);
             $("#added-books").removeClass("remove");
             // add like event listener
             // TODO: make the like click function a named function, register the newly created <a> element to it, so that newly
             // created elements can get liked. Make the dashboard pretty and remove value from search field after user selects book
             
             // when form changes, update value in database
-            document.getElementById("book-list").addEventListener("change", sendValuesToServer, false);
 
 
 

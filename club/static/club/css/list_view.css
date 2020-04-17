@@ -1,0 +1,106 @@
+div.club {
+    overflow-x: auto;
+    overflow-y: hidden;
+    list-style: none;
+    margin-right: 40px;
+    display: block;
+    float: inline-start, left;
+    font-family: Arial, Helvetica, sans-serif;
+    height: fit-content;
+    width: 40%;
+    line-height: 100px;
+}
+
+div.reading {
+    background-color: indianred;
+}
+
+div.discussion {
+    background-color: mediumaquamarine;
+}
+
+img.ckub-image {
+    width: 125px;
+    display: inline-block;
+    vertical-align: middle;
+    float: left;
+}
+
+ul.inner-ul {
+    float:right;
+    list-style-position: inside;
+    line-height: 25px;
+    margin-top: 10px;
+    margin-left: 10px;
+    margin-right: 10px;
+    list-style-type: none;
+    width: 75%;
+}
+
+li.club {
+    height: 125px;
+}
+
+a.club-name {
+    text-transform: capitalize;
+    font-weight: bold;
+    font-family: inherit;
+    font-size: 1.5em;
+}
+
+a.club-name:hover, a.club-name:focus {
+    background-color: red;
+}
+
+a.club-name:active {
+    background-color: black;
+}
+
+span.current-book {
+    text-transform: capitalize;
+    font-family: inherit;
+    font-size: 0.875em;
+}
+
+.button {
+    width: 80px;
+    height: fit-content;
+    background: #4E9CAF;
+    vertical-align: middle;
+    padding: 10px;
+    text-align: center;
+    border-radius: 5px;
+    color: white;
+    font-weight: bold;
+    font-size: 1em;
+}
+
+li.inline {
+    display: inline;
+    float: left;
+}
+
+li.count {
+    overflow: auto;
+    margin-left: 110px;
+}
+
+span.count {
+    float: left;
+    padding-left: 110px;
+    padding-top: 7px;
+    padding-bottom: 7px;
+
+}
+
+span.total {
+    border-top-width: 3px;
+    border-bottom-width: 3px;
+}
+
+a.toggle {
+    overflow: auto;
+    position: absolute;
+    
+}
+

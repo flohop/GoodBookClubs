@@ -1,6 +1,7 @@
 body {
     width: 90%;
     margin: 0 auto;
+    font-family: Arial, Helvetica, sans-serif;
 }
 
 .logo {
@@ -13,7 +14,7 @@ body {
 
 }
 
-li {
+li.inline {
     display: inline;
     padding: 0.5em
 }

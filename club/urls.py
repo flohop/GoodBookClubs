@@ -5,6 +5,7 @@ app_name = "club"
 
 urlpatterns = [
     path('r/<int:id>/<slug:category_slug>/', views.reading_club_detail, name='reading_club_detail'),
+    path('r/<int:id>/<slug:category_slug>/update-page/', views.update_page, name="update_page"),
     path('d/<int:id>/<slug:category_slug>/', views.discussion_club_detail, name='discussion_club_detail'),
     path('create/', views.create_group, name='create_group'),
     path('edit/r/<int:id>/', views.edit_reading_club, name="edit_reading"),

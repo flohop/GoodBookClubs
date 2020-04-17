@@ -1,7 +1,21 @@
 {% extends "base.html" %}
 {% load static %}
+{% load js %}
 <!-- Beta java script code !-->
 {% block title %}{{ club.group_name }}{% endblock %}
+{% block css %}
+<style>
+    .hide {
+        visibility:hidden;
+    }
+    .remove {
+        visibility: hidden;
+        display: none;
+
+    }
+</style>
+<link rel="stylesheet" type="text/css" href="{% static 'club/css/reading_club_detail.css'  %}?20201303"/>
+{% endblock %}
 
 {% block content %}
 
@@ -11,7 +25,22 @@
                 }
         </script>
 
-        <p>Please read with us: {{ club.group_name }}</p>
+        <p>Please read with us: {{ club.group_name }}  {% if club.is_admin %}
+        <!-- Option to change the group settings -->
+        <span class="admin-edit"><a href="{% url 'club:edit_reading' id=club.id %}">(Edit)</a></span></p>
+
+    {% if club.is_admin %}
+        <div class="slidecontainer">
+            <input type="range" min="1" max="{{ club.current_book.book_page_number }}"
+                   value="{{ club.current_book_current_page }}" class="slider" id="bookProgress">
+        </div>
+        <div class="slidervalue">
+            Club reading goal, page
+            <span id="current-page">0</span>
+
+        </div>
+
+    {% endif %}
         {% load thumbnail %}
         {% thumbnail club.current_book.book_cover_image  "300" as im %}
             <a href="{{ club.current_book.get_absolute_url }}">
@@ -19,31 +48,54 @@
             </a>
         {% endthumbnail %}
 
-        {% if club.is_admin %}
-        <!-- Option to change the group settings -->
-        <p><a href="{% url 'club:edit_reading' id=club.id %}">Edit</a> group with id {{ club.id }}</p>
+        <!-- book infos -->
+        <ul class="book-info">
+            <li class="book title">{{ club.current_book.book_name}}</li>
+            <li class="book author">{{ club.current_book.book_author }}</li>
+            <li class="book description">{{ club.current_book.book_description }}</li>
+        </ul>
+
+        <div class="book-settings">
+
 
         {% endif %}
 
-        <div class="likes">
+        <div class="like-icon">
             <span class="count">
-                <span class="total likes">{{ like_balance }}</span>
-                like{{ like_balance|pluralize }}
+                    <span class="total">{{ like_balance }}</span>
+
+                    <span class="can-not-like{% if can_like %} remove{% else %}{% endif %}">
+                       <i class="far fa-heart"></i>
+                    </span>
             </span>
-            <a href="#" data-id="{{ book.id }}" data-action="{% if  user_liked_book %}un{% endif %}like"
-               class="like toggle button">
-                {% if not user_liked_book %}
-                    Like
-                {% else %}
-                    Unlike
-                {% endif %}
-            </a>
+
+                <a href="#" data-id="{{ book.id }}" data-action="{% if user_liked_book %}un{% endif %}like"
+                class="like button{% if can_like %}{% else %} remove{%endif%}" id="like-link">
+                    <span class="like-icon">
+                    {% if not user_liked_book %}
+                        <i class="far fa-heart"></i>
+                    {% else %}
+                        <i class="fas fa-heart"></i>
+                    {% endif %}
+                     </span>
+                </a>
+        </div>
+
+        <div class="select-status">
+            <select id="book-status" class="book-status">
+                <option value="reading" class="status">Currently reading</option>
+                <option value="read" class="status">Read</option>
+                <option value="want-to-read" class="status">Want to read</option>
+                <option value="blank" selected="selected"></option>
+            </select>
         </div>
 
          <div class="member-count">
             <span class="count-members">{{ club.member_count }}</span> Member{{ club.member_count|pluralize }}
             <a href="#" data-id="{{ club.id }}" data-group_type="discussion" data-action="{% if club.is_member %}leave{% else %}join{% endif %}"
                 class="join-toggle button">{% if club.is_member %}Leave{% else %}Join{% endif %}</a>
+        </div>
+
         </div>
 
         <div class="card-body">
@@ -80,4 +132,140 @@
 <script src="{% static 'club/toggle_member.js' %}"></script>
 <script src="{% static 'book/toggle_like.js' %}"></script>
 
+<script>
+var slider = document.getElementById("bookProgress");
+var output = document.getElementById("current-page");
+output.innerHTML = slider.value;
+
+// update the current slider value
+slider.oninput = function() {
+    output.innerHTML = this.value;
+}
+$(slider).change(function(e) {
+
+    var allData = {'club_id': {{ club.id }},
+                    'page_count': this.value
+                    }
+
+    $.ajax({
+    type: "POST",
+    dataType: 'json',
+    contentType: "application/json; charset=utf-8",
+    url: "update-page/",
+    data: JSON.stringify(allData),
+    success: function(data) {
+        if(data['status'] == 'ok'){
+
+            console.log("Updated current page");
+            }
+        else {
+            console.log("Something went wrong changing the current page");
+            }
+
+    }
+    });
+    console.log("Slider changed value");
+});
+</script>
+
 {% endblock %}
+
+{% block domready %}
+
+    // first, set the drop down value based on the users library
+    (function (){
+            bookStatus = {{ book.status | js }};
+            if(bookStatus == "\"read\""){
+                $("#book-status").val("read");
+            }
+            else if(bookStatus == "\"reading\""){
+                $("#book-status").val("reading");
+            }
+            else if(bookStatus == "\"want-to-read\""){
+                $("#book-status").val("want-to-read");
+            }
+            else {
+                $("#book-status").val("blank");
+            }
+
+    }())
+
+    // when user changes value in drop down list, change the value in the database
+    function sendValuesToServer(e) {
+        target = e.target;
+
+            value = target.value;
+            id = $(target).parent().prev().find("a").data("id")
+
+            $.post('{% url "book:change_status" %}',
+            {
+                    id : id,
+                    value: value
+            },
+            function(data){
+                if (data['status'] == 'OK')
+                    {
+                    console.log("Changed state of select element from html page");
+                    if(data['can_like'] == "True") {
+                        $('span.can-not-like').addClass("remove");
+                        $('#like-link').removeClass("remove");
+                    }
+                    else {
+                        $('span.can-not-like').removeClass("remove");
+                        $('#like-link').addClass("remove");
+                        }
+                }
+            }
+        );
+        
+    }
+
+    // register like button, so that it changes the like amount and the text
+    $('a.like').click(function(e){
+    console.log("Like got clicked");
+    e.preventDefault();
+    $.post('{% url "book:like" %}',
+        {
+            id: $(this).data('id'),
+            action: $(this).data('action')
+        },
+        function(data){
+        if (data['status'] == 'ok')
+            {
+                var bookId = data['id'];
+                var prevAction = data['prev_action']
+                var $clickedElement = $("[data-id=" + bookId + "]");
+
+                // toggle action
+                $clickedElement.data('action', prevAction == 'like' ?
+                                    'unlike': 'like');
+                // toggle link text
+                if(prevAction == 'like') {
+
+                    $("span.like-icon").replaceWith('<span class="like-icon"><i class="fas fa-heart"></i></span>')
+                }
+                else {
+                    $("span.like-icon").replaceWith('<span class="like-icon"><i class="far fa-heart"></i></span>')
+                // update total likes
+                }
+        
+                var prevLikes = parseInt($('span.total').text());
+                $('span.total').text(prevAction == 'like' ?
+                prevLikes + 1 : prevLikes - 1);
+            }
+        }
+        );
+    });
+
+    // register the join club button, so the user can join/leave the club
+    $('a.join-toggle').click(function(e) {
+        e.preventDefault();
+        // TODO: send ajax, add the user to the database, return success message and update the member count
+        // TODO: add icon instead if text 'join' 'leave'
+
+    });
+
+    document.getElementById("book-status").addEventListener("change", sendValuesToServer, false);
+
+{% endblock %}
+

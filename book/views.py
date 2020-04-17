@@ -242,8 +242,7 @@ def add_book(request):
     # create the book model, but first, see if this book already exists, and if yes, don't save it, but instead use
     # the old book model instance
     try:
-        book_instance = Book.objects.get(book_name=book_title, book_author=book_author) or \
-                        Book.objects.get(book_name=str(book_title).lower(), book_author=book_author)
+        book_instance = Book.objects.get(book_name=book_title, book_author=book_author)
         return JsonResponse({'status': 'already_exists', 'id': book_instance.id})
     except:
         # if book does not exist
@@ -271,14 +270,13 @@ def add_book(request):
                                             book_language=book_language_code,
                                             book_categories=" ".join(str(category) for category in book_categories))
 
-        # for TESTING, remove book from database immediately
-
         return_book_json = {
             'status': 'new_book',
             'title': str(book_instance.book_name).replace(" ", "-").replace("(", "").replace(")", ""),
             'id': str(book_instance.id),
             'url': str(book_instance.get_absolute_url()),
             'author': str(book_instance.book_author),
+            'cover': str(image_path),
         }
 
         return JsonResponse(return_book_json)
