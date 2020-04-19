@@ -13,6 +13,23 @@
         display: none;
 
     }
+
+    #progress {
+        background: #333;
+        border-radius: 13px;
+        height: 25px;
+        width: 80%;
+        padding: 3px;
+    }
+
+    #progress:after {
+        content: '';
+        display: block;
+        background: orange;
+        width: calc(({{ club.current_book_current_page}} / {{ club.current_book_page_count }}) * 100%);
+        height: 100%;
+        border-radius: 9px;
+    }
 </style>
 <link rel="stylesheet" type="text/css" href="{% static 'club/css/reading_club_detail.css'  %}?20201303"/>
 {% endblock %}
@@ -28,19 +45,28 @@
         <p>Please read with us: {{ club.group_name }}  {% if club.is_admin %}
         <!-- Option to change the group settings -->
         <span class="admin-edit"><a href="{% url 'club:edit_reading' id=club.id %}">(Edit)</a></span></p>
+        {% endif %}
 
-    {% if club.is_admin %}
-        <div class="slidecontainer">
-            <input type="range" min="1" max="{{ club.current_book.book_page_number }}"
-                   value="{{ club.current_book_current_page }}" class="slider" id="bookProgress">
-        </div>
+        {% if club.is_admin %}
+
+            <div class="slidecontainer">
+                <input type="range" min="1" max="{{ club.current_book.book_page_number }}"
+                       value="{{ club.current_book_current_page }}"
+                       class="slider selectable"
+                       id="bookProgress">
+            </div>
+
+        {% else %}
+            <div id="progress"></div>
+
+
+        {% endif %}
         <div class="slidervalue">
             Club reading goal, page
             <span id="current-page">0</span>
 
         </div>
 
-    {% endif %}
         {% load thumbnail %}
         {% thumbnail club.current_book.book_cover_image  "300" as im %}
             <a href="{{ club.current_book.get_absolute_url }}">
@@ -55,8 +81,41 @@
             <li class="book description">{{ club.current_book.book_description }}</li>
         </ul>
 
-        <div class="book-settings">
+        <div class="self-status">
+            <span class="user-status-icon" id="status-icon-span">
+            {% if user in club.current_goal_achieved.all %}
+                <i class="fa fa-check achieve-toggle reach-icon" data-action="reached" aria-hidden="true" ></i>
 
+            {% else %}
+                <i class="fa fa-times-circle achieve-toggle reach-icon" data-action="unreached" aria-hidden="true"></i>
+            {% endif %}
+            </span>
+            <span class="user-name" data-action="unreached" id="self-status-name-2">{{ user }}</span>
+
+        </div>
+
+
+        <div class="class-member-status">
+            <ul class="members">
+                {% for member in peers %}
+                    <li class="member">
+                        <div class="achieved-toggle">
+                        {% if member in club.current_goal_achieved.all %}
+                            <i class="fa fa-check achieve-toggle reached reach-icon" ></i>
+                        {% else %}
+                            <i class="fa fa-times-circle achieve-toggle unreached reach-icon"></i>
+                        {% endif %}
+
+                        <span class="user-name">{{ member }}</span>
+
+                        </div>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        {% if club.is_admin %}
+        <div class="book-settings"></div>
 
         {% endif %}
 
@@ -92,7 +151,7 @@
 
          <div class="member-count">
             <span class="count-members">{{ club.member_count }}</span> Member{{ club.member_count|pluralize }}
-            <a href="#" data-id="{{ club.id }}" data-group_type="discussion" data-action="{% if club.is_member %}leave{% else %}join{% endif %}"
+            <a href="#" data-id="{{ club.id }}" data-group_type="reading" data-action="{% if club.is_member %}leave{% else %}join{% endif %}"
                 class="join-toggle button">{% if club.is_member %}Leave{% else %}Join{% endif %}</a>
         </div>
 
@@ -131,41 +190,54 @@
 {%  block javascript %}
 <script src="{% static 'club/toggle_member.js' %}"></script>
 <script src="{% static 'book/toggle_like.js' %}"></script>
+<script src="{% static 'club/toggle_achieved.js' %}"></script>
 
 <script>
+
+
 var slider = document.getElementById("bookProgress");
 var output = document.getElementById("current-page");
-output.innerHTML = slider.value;
+output.innerText = "{{ club.current_book_current_page }}";
 
 // update the current slider value
 slider.oninput = function() {
     output.innerHTML = this.value;
 }
-$(slider).change(function(e) {
+if($('input.selectable').length > 0) {
+    // slider is selectable
+    slider.value = {{ club.current_book_current_page }}
+    $(slider).change(function(e) {
 
-    var allData = {'club_id': {{ club.id }},
-                    'page_count': this.value
+        var allData = {'club_id': {{ club.id }},
+                        'page_count': this.value
+                        }
+
+        $.ajax({
+        type: "POST",
+        dataType: 'json',
+        contentType: "application/json; charset=utf-8",
+        url: "update-page/",
+        data: JSON.stringify(allData),
+        success: function(data) {
+            if(data['status'] == 'ok'){
+                if(data['higher_goal'] == true) {
+
+                    console.log("Reaching for higher goal")
+                    $('.reach-icon').each(function() {
+                        $(this).replaceWith('<i class="fa fa-times-circle achieve-toggle reach-icon" data-action="reached" aria-hidden="true" ></i>');
+                    });
                     }
+                console.log("Updated current page");
+                }
+            else {
+                console.log("Something went wrong changing the current page");
+                }
 
-    $.ajax({
-    type: "POST",
-    dataType: 'json',
-    contentType: "application/json; charset=utf-8",
-    url: "update-page/",
-    data: JSON.stringify(allData),
-    success: function(data) {
-        if(data['status'] == 'ok'){
-
-            console.log("Updated current page");
-            }
-        else {
-            console.log("Something went wrong changing the current page");
-            }
-
-    }
+        }
+        });
+        console.log("Slider changed value");
     });
-    console.log("Slider changed value");
-});
+}
 </script>
 
 {% endblock %}
@@ -217,7 +289,6 @@ $(slider).change(function(e) {
                 }
             }
         );
-        
     }
 
     // register like button, so that it changes the like amount and the text
@@ -260,12 +331,44 @@ $(slider).change(function(e) {
     // register the join club button, so the user can join/leave the club
     $('a.join-toggle').click(function(e) {
         e.preventDefault();
+        console.log("I got called, to update member count");
         // TODO: send ajax, add the user to the database, return success message and update the member count
         // TODO: add icon instead if text 'join' 'leave'
 
     });
 
+
+    // when user clicks on his achieved icon, change the state and update the value in the database
+    function toggleAchieved(e) {
+    e.preventDefault();
+    userId = {{ user.id }};
+    action = $(this).find("i.achieve-toggle").data("action");
+    clubId = {{ club.id }};
+
+    $.post('{% url "club:toggle_achieve" %}',
+        {
+            'userId': userId,
+            'action': action,
+            'clubId': clubId
+
+        },
+        function(data) {
+            if (data.action == "reached") {
+                $('#status-icon-span').find("i.achieve-toggle").replaceWith('<i class="fa fa-times-circle achieve-toggle" data-action="unreached" aria-hidden="true" id="self-status-icon-2"></i>');
+                }
+            else {
+                $('#status-icon-span').find("i.achieve-toggle").replaceWith('<i class="fa fa-check achieve-toggle" data-action="reached" aria-hidden="true" id="self-status-icon"></i>');
+
+            }
+            }
+        );
+    }
+
     document.getElementById("book-status").addEventListener("change", sendValuesToServer, false);
+    document.getElementById("status-icon-span").addEventListener("click", toggleAchieved, false);
+
+
+
 
 {% endblock %}
 

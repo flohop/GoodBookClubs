@@ -6,8 +6,7 @@ function joinClub(e) {
 
     target = e.target; // the <a> element
     e.preventDefault();
-
-    $.post(toggle_view_url, 
+    $.post(toggle_view_url,
         {
             id:  $(this).data("id"),
             action: $(this).data("action"),

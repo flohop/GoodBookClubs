@@ -96,3 +96,9 @@ span.can-not-like {
     font-size: 1.5em;
     color: darkblue;
 }
+
+i.fa {
+    width: 20px;
+    height: 20px;
+    color: red;
+}

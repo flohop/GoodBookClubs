@@ -51,6 +51,14 @@ class ReadingGroup(BasicGroup):
     # current page
     current_book_current_page = models.IntegerField(null=True, blank=True, default=0)
 
+    # field for all the members that read to the current club goal for reading
+    current_goal_achieved = models.ManyToManyField(User, related_name="current_goal_achieved",
+                                                   blank=True)
+
+    # field for all members that have not yet reached the current club goal for reading
+    current_goal_reaching = models.ManyToManyField(User, related_name="current_goal_reaching",
+                                                   blank=True)
+
     def get_absolute_url(self):
         return reverse('club:reading_club_detail', args=[self.id, self.slug])
 

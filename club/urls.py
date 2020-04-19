@@ -17,6 +17,7 @@ urlpatterns = [
 
     path('list-view/', views.club_list_view, name='list_view'),
     path('create/response/', views.receive_json_data, name="receive_json"),
+    path('toggle-achieve/', views.toggle_achieve, name="toggle_achieve"),
     path('toggle/', views.toggle, name="toggle"),
     path('my_clubs/', views.my_clubs, name="club_selection"),
 

@@ -66,6 +66,12 @@ def reading_club_detail(request, id, category_slug):
     # add how many members the club has
     club.member_count = club.group_members.all().count()
 
+    # check if user is in the group
+    if request.user in club.group_members.all():
+        club.is_member = True
+    else:
+        club.is_member = False
+
     # add info, is the current user the group admin
     if club in request.user.reading_group_creator.all():
         club.is_admin = True
@@ -101,7 +107,11 @@ def reading_club_detail(request, id, category_slug):
     else:
         comment_form = ReadingCommentForm()
 
+    peers = club.group_members.exclude(id=user.id)
+
     return render(request, 'club/reading_club_detail.html', {'club': club,
+                                                             'user': user,
+                                                             'peers': peers,
                                                              'comments': comments,
                                                              'new_comment': new_comment,
                                                              'comment_form': comment_form,
@@ -240,6 +250,7 @@ def club_list_view(request):
     return render(request, 'club/list_view.html', {'all_clubs': all_clubs,
                                                    'user': user})
 
+
 @login_required
 def toggle(request):
     print("Toggle button activated")
@@ -265,9 +276,11 @@ def toggle(request):
             print("Leaving group")
             group.group_members.remove(user)
         elif action == "join":
+
             print("Joining group")
             user.save()
             group.save()
+            group.current_goal_reaching.add(user)
             group.group_members.add(user)
         return JsonResponse({'status': 'ok'})
     except Exception as e:
@@ -665,12 +678,47 @@ def delete_d_group(request, id):
 def update_page(request, id, category_slug):
     group = ReadingGroup.objects.get(id=id)
 
+    higher_goal = False
     try:
         data = json.loads(request.body.decode('utf-8'))
 
+        old_page = group.current_book_current_page
         group.current_book_current_page = data['page_count']
+        if int(old_page) < int(data['page_count']):
+            # if admin set new bigger reading goal, remove all members from the achieved group
+            group.current_goal_achieved.clear()
+
+            # add all members to reaching
+            for member in group.group_members.all():
+                group.current_goal_reaching.add(member)
+
+            higher_goal = True
+
         group.save()
 
-        return JsonResponse({"status": "ok"})
+        return JsonResponse({"status": "ok", 'higher_goal': higher_goal})
     except:
         return JsonResponse({"status": "ko"})
+
+
+def toggle_achieve(request):
+    if request.method == "POST":
+        data = request.POST
+        user_id = data['userId']
+        club_id = data['clubId']
+        action = data['action']
+
+        user = User.objects.get(id=user_id)
+        club = ReadingGroup.objects.get(id=club_id)
+
+        if action == "reached":
+            # add user to group of unreached people and remove user from people that reached goal
+            club.current_goal_achieved.remove(user)
+            club.current_goal_reaching.add(user)
+
+        else:
+            # add user to group of people trying to reach the goal and remove from group of people that reached the goal
+            club.current_goal_reaching.remove(user)
+            club.current_goal_achieved.add(user)
+
+        return JsonResponse({'status': 'ok', 'action': action})
