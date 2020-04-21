@@ -5,13 +5,16 @@ from .models import DiscussionComment, ReadingComment, DiscussionGroup, ReadingG
 class ReadingCommentForm(forms.ModelForm):
     class Meta:
         model = ReadingComment
-        fields = ('body',)
+        fields = ('body', )
+        widgets = {
+            'body': forms.Textarea(attrs={'placeholder': 'Add comment'})
+        }
 
 
 class DiscussionCommentForm(forms.ModelForm):
     class Meta:
         model = DiscussionComment
-        fields = ('body',)
+        fields = ('body', )
 
 
 class GroupForm(forms.ModelForm):

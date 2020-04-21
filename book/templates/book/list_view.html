@@ -58,7 +58,6 @@
             <li class="inner-li">
                 <span class="count">
                     <span class="total">{{ book.like_balance }}</span>
-                
                     <span class="can-not-like{% if book.can_like %} remove{% else %}{% endif %}"><i class="far fa-heart"></i></span>
 
 
@@ -72,6 +71,7 @@
                     {% endif %}
                      </span>
                 </a>
+                </span>
             </li>
 
             <li class="inner-li">    
@@ -136,7 +136,6 @@
 
     function sendValuesToServer(e) {
         target = e.target;
-        debugger;
         if($(target).hasClass("book-status")){
             value = target.value;
             id = $(target).parent().prev().find("a").data("id")

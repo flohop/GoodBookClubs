@@ -1,7 +1,21 @@
 
+/* Header */
+p.top-title {
+    font-size: 32px;
+    text-align: center;
+}
 
 .slidecontainer {
     width: 100%;
+}
+
+a.edit-link {
+    text-decoration: none;
+}
+
+span.underline {
+    text-decoration: underline;
+
 }
 
 .slider {
@@ -59,7 +73,14 @@ li.author {
 li.description {
     margin-top: 8px;
     font-size: 1.25em;
-    
+}
+
+li.members {
+    padding: 5px;
+}
+
+ul {
+    list-style-type: none;
 }
 
 ul.book-info {
@@ -67,16 +88,16 @@ ul.book-info {
     list-style-position: inside;
     line-height: 25px;
     height: fit-content;
-    list-style-type: none;
+    list-style-type: inherit;
     padding: 5px 5px 5px 5px;
     margin-left: 10p;
     margin-right: 10px;
-    width: 50%;
-    background-color: seagreen;
+    width: 45%;
+    background-color: yellowgreen;
 }
 
-span.admin-edit {
-    background-color: greenyellow;
+div.all-status {
+    display: inline-block
 }
 
 div.book-settings {
@@ -86,19 +107,165 @@ div.book-settings {
     margin-top: 10px;
 }
 
+div.like-icon {
+    display: inline-block;
+    margin-left: 118.65px;
+}
+
+span.count {
+    font-size: 2em;
+    vertical-align: middle;
+    font-weight: bold;
+}
+
+select.book-status {
+    width: 300px;
+    text-align: center;
+}
+
 span.like-icon {
-    font-size: 1.5em;
+    font-size: 48px;
     color: red;
     vertical-align: middle;
 }
 
 span.can-not-like {
-    font-size: 1.5em;
+    font-size: 48px;
+    vertical-align: middle;
     color: darkblue;
 }
 
+ul.members {
+    display: inline;
+}
+
 i.fa {
-    width: 20px;
-    height: 20px;
+    font-size: 1.2em;
+    border-radius: 20px;
+}
+
+i.fa:hover {
+    cursor: pointer;
+    
+}
+
+i.fa-times-circle {
+
     color: red;
+}
+
+i.fa-times-circle:hover {
+    background-color: lightcoral;
+}
+
+i.self-achieve-button-circle:active {
+    background-color: #8e3e3e;
+    box-shadow: 0 5px #666;
+    transform: translateY(2px);
+}
+
+i.fa-check {
+    color: green;
+}
+
+i.fa-check:hover {
+    background-color: lightseagreen;
+}
+
+i.self-achieve-button-cross:active {
+    background-color: #3e8e41;
+    box-shadow: 0 5px #666;
+    transform: translateY(2px);
+}
+
+span.user-name {
+    font-size: 24px;
+}
+
+div.all-status {
+    border: solid black;
+    border-width: 2px;
+}
+
+div.self-status {
+    border: solid black;
+    border-width: 0px 0px 5px 0px;
+    padding: 5px;
+}
+
+p.status-header {
+    font-size: 16px;
+    border: solid black;
+    border-width: 0px 0px 5px 0px;
+    margin: 2px 2px 16px 2px;
+}
+
+/* comment section */
+
+div.comment {
+    border-bottom: rgba(128, 128, 128, 0.5) solid;
+    border-bottom-width: 1px;
+    margin-top: 10px;
+}
+
+
+img.comment-profile-img {
+    float: left;
+    margin-right: 10px;
+    height: 45px;
+    width: 45px;
+    border-radius: 50px;
+}
+
+span.comment-created-on {
+    color: rgba(128, 128, 128, 0.5);
+}
+
+p.comment-user-name {
+    display: inline;
+}
+
+p.comment-body {
+    margin-left: 60px; /* image width + 10px */
+}
+
+textarea.textarea {
+    width: 100%;
+    line-height: 1em;
+    resize: none;
+    height: 25px;
+    font: inherit;
+    border: none;
+    height: fit-content;
+    border-bottom: black solid;
+    border-bottom-width: 5px;
+    border-radius: 5px;
+}
+
+button.btn {
+    height: 30px;
+    margin-top: 5px;
+    border-radius: 10px;
+    float: right;
+}
+
+button.btn-primary {
+    background-color: rgb(62, 62, 151);
+    color: white;
+}
+
+button.btn-primary:active {
+    background-color: #0d427e;
+    box-shadow: 0 5px #666;
+    transform: translateY(2px);
+}
+
+button.btn-cancel {
+    background-color: grey;
+    color: white;
+}
+
+label.control-label {
+    visibility: hidden;
+    display: none;
 }

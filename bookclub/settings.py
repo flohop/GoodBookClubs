@@ -52,8 +52,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django_extensions',
     'sorl.thumbnail',
-
-
+    'crispy_forms',
 ]
 
 MIDDLEWARE = [

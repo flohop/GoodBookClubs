@@ -3,8 +3,7 @@ from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import JsonResponse, HttpResponse
 from django.shortcuts import render, get_object_or_404, redirect
-from django.utils.safestring import mark_safe
-
+from datetime import date, datetime, timezone
 from .models import ReadingGroup, DiscussionGroup
 from itertools import chain
 from .forms import DiscussionCommentForm, ReadingCommentForm, GroupForm
@@ -42,6 +41,8 @@ def my_clubs(request):
         if club in my_admin_discussion_clubs:
             my_discussion_club = my_discussion_club.exclude(id=club.id)
 
+
+
     # return the two club to the template, for it to render it
     return render(request, 'club/selection_page.html', {'reading_clubs': my_reading_clubs,
                                                         'discussion_clubs': my_discussion_club,
@@ -55,7 +56,7 @@ def reading_club_detail(request, id, category_slug):
     book = club.current_book
     user = request.user
     profile = Profile.objects.get(user=user)
-    comments = club.reading_comments.filter(disabled=False)
+    comments = club.reading_comments.filter(disabled=False).order_by('-created_on')
     like_balance = club.current_book.likes.all().count()
     user_liked_book = False
 
@@ -91,6 +92,12 @@ def reading_club_detail(request, id, category_slug):
         status = '"blank"'
     book.status = status
 
+    # loop through comments and add the time since posted
+    today = datetime.now(timezone.utc)
+    for comment in comments:
+        difference = (today - comment.created_on).days
+        comment.difference = difference
+
     new_comment = None
     # Comment posted
     if request.method == "POST":
@@ -101,7 +108,7 @@ def reading_club_detail(request, id, category_slug):
             # assign values that the user doesnt input by himself
             new_comment.club = club
             new_comment.name = request.user
-
+            new_comment.profile = profile
             new_comment.save()
 
     else:
@@ -112,6 +119,7 @@ def reading_club_detail(request, id, category_slug):
     return render(request, 'club/reading_club_detail.html', {'club': club,
                                                              'user': user,
                                                              'peers': peers,
+                                                             'profile': profile,
                                                              'comments': comments,
                                                              'new_comment': new_comment,
                                                              'comment_form': comment_form,
@@ -126,6 +134,8 @@ def discussion_club_detail(request, id, category_slug):
                              id=id)
     comments = club.discussion_comments.filter(disabled=False)
     book = club.current_book
+    user = request.user
+    profile = Profile.objects.get(user=user)
     new_comment = None
     user_liked = False
 
@@ -162,6 +172,7 @@ def discussion_club_detail(request, id, category_slug):
 
             new_comment.club = club
             new_comment.name = request.user
+            new_comment.profile = profile
 
             new_comment.save()
     else:

@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% load static %}
 {% load js %}
+{% load crispy_forms_tags %}
 <!-- Beta java script code !-->
 {% block title %}{{ club.group_name }}{% endblock %}
 {% block css %}
@@ -42,10 +43,17 @@
                 }
         </script>
 
-        <p>Please read with us: {{ club.group_name }}  {% if club.is_admin %}
-        <!-- Option to change the group settings -->
-        <span class="admin-edit"><a href="{% url 'club:edit_reading' id=club.id %}">(Edit)</a></span></p>
+        <p class="top-title">{{ club.group_name }}  {% if club.is_admin %}
+        <span class="admin-edit"><a class="edit-link" href="{% url 'club:edit_reading' id=club.id %}">(<span class="underline">Edit</span>)</a></span></p>
         {% endif %}
+        </p>
+         <div class="member-count">
+                    <span class="count-members">{{ club.member_count }}</span> Member{{ club.member_count|pluralize }}
+                    <a href="#" data-id="{{ club.id }}" data-group_type="reading" data-action="{% if club.is_member %}leave{% else %}join{% endif %}"
+                        class="join-toggle button">{% if club.is_member %}Leave{% else %}Join{% endif %}</a>
+         </div>
+        <!-- Option to change the group settings -->
+
 
         {% if club.is_admin %}
 
@@ -79,40 +87,46 @@
             <li class="book title">{{ club.current_book.book_name}}</li>
             <li class="book author">{{ club.current_book.book_author }}</li>
             <li class="book description">{{ club.current_book.book_description }}</li>
+            <li class="book description">{{ club.id }}{{ club.slug }}</li>
+
         </ul>
 
-        <div class="self-status">
-            <span class="user-status-icon" id="status-icon-span">
-            {% if user in club.current_goal_achieved.all %}
-                <i class="fa fa-check achieve-toggle reach-icon" data-action="reached" aria-hidden="true" ></i>
+        <span class="all-status">
+            <p class="status-header">Reading goal status</p>
+            <div class="self-status">
+                <span class="user-status-icon" id="status-icon-span">
+                {% if user in club.current_goal_achieved.all %}
+                    <i class="fa fa-check achieve-toggle reach-icon self-achieve-button-cross " data-action="reached" aria-hidden="true" ></i>
 
-            {% else %}
-                <i class="fa fa-times-circle achieve-toggle reach-icon" data-action="unreached" aria-hidden="true"></i>
-            {% endif %}
+                {% else %}
+                    <i class="fa fa-times-circle achieve-toggle reach-icon self-achieve-button-circle" data-action="unreached" aria-hidden="true"></i>
+                {% endif %}
+                </span>
+                <span class="user-name" data-action="unreached" id="self-status-name-2">{{ user }}</span>
+
+            </div>
+
+
+            <span class="class-member-status">
+                <ul class="members">
+                    {% for member in peers %}
+                        <li class="member">
+                            <div class="achieved-toggle">
+                            {% if member in club.current_goal_achieved.all %}
+                                <i class="fa fa-check achieve-toggle reached reach-icon" ></i>
+                            {% else %}
+                                <i class="fa fa-times-circle achieve-toggle unreached reach-icon"></i>
+                            {% endif %}
+
+                            <span class="user-name">{{ member }}</span>
+
+                            </div>
+                        </li>
+                    {% endfor %}
+                </ul>
             </span>
-            <span class="user-name" data-action="unreached" id="self-status-name-2">{{ user }}</span>
-
-        </div>
-
-
-        <div class="class-member-status">
-            <ul class="members">
-                {% for member in peers %}
-                    <li class="member">
-                        <div class="achieved-toggle">
-                        {% if member in club.current_goal_achieved.all %}
-                            <i class="fa fa-check achieve-toggle reached reach-icon" ></i>
-                        {% else %}
-                            <i class="fa fa-times-circle achieve-toggle unreached reach-icon"></i>
-                        {% endif %}
-
-                        <span class="user-name">{{ member }}</span>
-
-                        </div>
-                    </li>
-                {% endfor %}
-            </ul>
-        </div>
+        
+        </span>
 
         {% if club.is_admin %}
         <div class="book-settings"></div>
@@ -149,11 +163,7 @@
             </select>
         </div>
 
-         <div class="member-count">
-            <span class="count-members">{{ club.member_count }}</span> Member{{ club.member_count|pluralize }}
-            <a href="#" data-id="{{ club.id }}" data-group_type="reading" data-action="{% if club.is_member %}leave{% else %}join{% endif %}"
-                class="join-toggle button">{% if club.is_member %}Leave{% else %}Join{% endif %}</a>
-        </div>
+
 
         </div>
 
@@ -161,24 +171,33 @@
             {% if  new_comment %}
 
             {% else %}
-                <h4>Add comment</h4>
-                <form method="post">
-                    {{ comment_form.as_p }}
+                <h4>Comments ({{ comments.count }}):</h4>
+
+                <form method="post" style="margin-top: 1.3em;">
+                    {{ comment_form | crispy }}
                     {% csrf_token %}
-                    <button type="submit" class="btn">Submit</button>
+                    <button type="submit" class="btn btn-primary btn-lg">Submit</button>
+                    <button class="btn btn-cancel">Cancel</button>
                 </form>
             {% endif %}
             </div>
 
+        <!-- Comments-->
+        <div class="comments" id="comments" style="padding: 10px;">
 
-        <h4>Comments:</h4>
         {% for comment in comments %}
-            <div class="comments" style="padding: 10px;">
-                <p>{{ comment.name }}</p>
-                <p>{{ comment.created_on }}</p>
-                <p>{{ comment.body }}</p>
-            </div>
-        {% endfor %}
+                <div class="comment">
+                    {% thumbnail  comment.profile.profile_picture "50x50" crop="center" as img %}
+                    <img src="{{ img.url }}" class="comment-profile-img" />
+                    {% endthumbnail %}
+
+                    <p class="comment-user-name">{{ comment.name }}</p>
+                    <span class="comment-created-on">{{ comment.difference }} day{{ comment.difference | pluralize }} ago</span>
+                    <p class="comment-body">{{ comment.body }}</p>
+                </div>
+           {% endfor %}
+
+        </div>
 
 <script>var toggle_view_url = "{% url 'club:toggle' %}"</script>
 <script>var like_toggle_url = "{% url 'book:like' %}"</script>
@@ -193,7 +212,6 @@
 <script src="{% static 'club/toggle_achieved.js' %}"></script>
 
 <script>
-
 
 var slider = document.getElementById("bookProgress");
 var output = document.getElementById("current-page");
@@ -223,6 +241,7 @@ if($('input.selectable').length > 0) {
                 if(data['higher_goal'] == true) {
 
                     console.log("Reaching for higher goal")
+
                     $('.reach-icon').each(function() {
                         $(this).replaceWith('<i class="fa fa-times-circle achieve-toggle reach-icon" data-action="reached" aria-hidden="true" ></i>');
                     });
@@ -261,6 +280,13 @@ if($('input.selectable').length > 0) {
             }
 
     }())
+
+
+    // when user clicks cancel on comment, prevent default and empty the textfield
+    $('.btn-cancel').click(function(e) {
+        e.preventDefault();
+        document.getElementById("id_body").value = "";
+    });
 
     // when user changes value in drop down list, change the value in the database
     function sendValuesToServer(e) {
@@ -337,6 +363,16 @@ if($('input.selectable').length > 0) {
 
     });
 
+    // auto expand comment input field
+    $("#id_body").on("keydown", function(e) {
+        var that = $(this);
+        if(that.scrollTop()) {
+            $(this).height(function(i, h) {
+                return h + 20;
+            })
+        }
+    })
+
 
     // when user clicks on his achieved icon, change the state and update the value in the database
     function toggleAchieved(e) {
@@ -354,10 +390,10 @@ if($('input.selectable').length > 0) {
         },
         function(data) {
             if (data.action == "reached") {
-                $('#status-icon-span').find("i.achieve-toggle").replaceWith('<i class="fa fa-times-circle achieve-toggle" data-action="unreached" aria-hidden="true" id="self-status-icon-2"></i>');
+                $('#status-icon-span').find("i.achieve-toggle").replaceWith('<i class="fa fa-times-circle achieve-toggle self-achieve-button-circle reach-icon" data-action="unreached" aria-hidden="true" id="self-status-icon-2"></i>');
                 }
             else {
-                $('#status-icon-span').find("i.achieve-toggle").replaceWith('<i class="fa fa-check achieve-toggle" data-action="reached" aria-hidden="true" id="self-status-icon"></i>');
+                $('#status-icon-span').find("i.achieve-toggle").replaceWith('<i class="fa fa-check achieve-toggle self-achieve-button-cross reach-icon" data-action="reached" aria-hidden="true" id="self-status-icon"></i>');
 
             }
             }

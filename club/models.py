@@ -1,10 +1,9 @@
 from django.db import models
-from django.db.models.signals import post_delete
 from django.template.defaultfilters import slugify
 from django.urls import reverse
 from django.contrib.auth.models import User
 from book.models import Book
-from book.utils import file_cleanup
+from account.models import Profile
 
 
 class BasicGroup(models.Model):
@@ -84,6 +83,7 @@ class RecommendationGroup(BasicGroup):
 
 class BaseComment(models.Model):
     name = models.ForeignKey(User, max_length=100, on_delete=models.CASCADE)  # add it automatically by getting the name form the current user
+    profile = models.ForeignKey(Profile, max_length=100, on_delete=models.CASCADE, default=1)
     body = models.TextField(max_length=5000)
     created_on = models.DateTimeField(auto_now_add=True)
     disabled = models.BooleanField(default=False)
@@ -105,6 +105,10 @@ class DiscussionComment(BaseComment):
         current_comment = DiscussionGroup.objects.get(id=self.id)
         current_comment.name = user.username
 
+    def set_profile(self, profile):
+        current_comment = DiscussionGroup.objects.get(id=self.id)
+        current_comment.profile = profile
+
 
 class ReadingComment(BaseComment):
     club = models.ForeignKey(ReadingGroup, on_delete=models.CASCADE, related_name='reading_comments')
@@ -112,6 +116,11 @@ class ReadingComment(BaseComment):
     def set_user(self, user):  # set the name of the commenter automatically
         current_comment = ReadingGroup.objects.get(id=self.id)
         current_comment.name = user.username
+
+    def set_profile(self, profile):
+        current_comment = ReadingGroup.objects.get(id=self.id)
+        current_comment.profile = profile
+
 
 
 

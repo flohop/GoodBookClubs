@@ -1,30 +1,216 @@
 {% extends "base.html" %}
 {% block title %}My clubs{% endblock %}
+{% load thumbnail %}
+{% load static %}
+{% block css %}
+<link href="{% static 'club/css/list_view.css' %}" rel="stylesheet" type="text/css" />
+{% endblock %}
 {% block content %}
     <a href="{% url 'club:create_group' %}">Create new Club</a>
 
     <div class="reading member">
-    {% for r_club in reading_clubs %}
-    <p>Reading club:<a href="{{ r_club.get_absolute_url }}">{{ r_club }}</a></p>
+    {% for club in reading_clubs %}
+
+    <div class="club container reading" id="container">
+        <li class="reading club">
+            {% thumbnail club.group_image "125x125" as im %}
+                <img src="{{ im.url }}" class="club-image">
+            {% endthumbnail %}
+
+            <ul class="inner-ul">
+                <li class="inner-li">
+                     <a class="club-name" href="{{ club.get_absolute_url }}">{{ club.group_name }}</a>
+                </li>
+
+                <li class="inner-li ">
+                     {% if club.current_book %}
+                    <span class="current-book">{{ club.current_book }}</span>
+                    {% else %}
+                    <span class="current-book">No current book</span>
+                    {% endif %}
+                </li>
+
+                <li class="inner-li">
+                     <a href="#" data-id="{{ club.id }}" data-action="leave"
+               data-group_type="reading"
+               class="leave button toggle">
+                Leave
+                    </a>
+                </li>
+
+                <li class="inner-li inline">
+                    <span class="count">
+                        <span class="total">{{ club.group_members.count }}</span>
+                        member{{ club.group_members.count | pluralize }}
+                    </span>
+                </li>
+            </ul>
+        </li>
+    </div>
     {% endfor %}
     </div>
 
     <div class="reading admin">
-        {% for r_club in reading_clubs_admin %}
-        <p>Admin reading club: <a href="{{ r_club.get_absolute_url }}">{{ r_club }}</a> ID: {{ r_club.id }}</p>
+        {% for club in reading_clubs_admin %}
+        <div class="club container reading" id="container-2">
+        <li  class="reading club">
+            {% thumbnail club.group_image "125x125" as im %}
+                <img src="{{ im.url }}" class="club-image">
+            {% endthumbnail %}
+
+            <ul class="inner-ul">
+                <li class="inner-li">
+                     <a class="club-name" href="{{ club.get_absolute_url }}">{{ club.group_name }}</a>
+                </li>
+
+                <li class="inner-li ">
+                     {% if club.current_book %}
+                    <span class="current-book">{{ club.current_book }}</span>
+                    {% else %}
+                    <span class="current-book">No current book</span>
+                    {% endif %}
+                </li>
+
+                <li class="inner-li">
+                     <a href="#" data-id="{{ club.id }}" data-action="leave"
+               data-group_type="reading"
+               class="leave button toggle">
+                Leave
+                    </a>
+                </li>
+
+                <li class="inner-li inline">
+                    <span class="count">
+                        <span class="total">{{ club.group_members.count }}</span>
+                        member{{ club.group_members.count | pluralize }}
+                    </span>
+                </li>
+
+
+
+            </ul>
+        </li>
+    </div>
         {% endfor %}
     </div>
 
+
     <div class="discussion member">
     {% for d_club in discussion_clubs %}
-        <p>Discussion club: <a href="{{ d_club.get_absolute_url }}">{{ d_club }}</a> ID: {{ d_club.id }} </p>
+         <div class="club container discussion" id="container-3">
+        <li class="discussion club">
+            {% thumbnail club.group_image "125x125" as im %}
+                <img src="{{ im.url }}" class="club-image">
+            {% endthumbnail %}
+
+            <ul class="inner-ul">
+                <li class="inner-li">
+                     <a class="club-name" href="{{ club.get_absolute_url }}">{{ club.group_name }}</a>
+                </li>
+
+                <li class="inner-li ">
+                     {% if club.current_book %}
+                    <span class="current-book">{{ club.current_book }}</span>
+                    {% else %}
+                    <span class="current-book">No current book</span>
+                    {% endif %}
+                </li>
+
+                <li class="inner-li">
+                     <a href="#" data-id="{{ club.id }}" data-action="leave"
+               data-group_type="discussion"
+               class="leave button toggle">
+                Leave
+                    </a>
+                </li>
+
+                <li class="inner-li inline">
+                    <span class="count">
+                        <span class="total">{{ club.group_members.count }}</span>
+                        member{{ club.group_members.count | pluralize }}
+                    </span>
+                </li>
+            </ul>
+        </li>
+    </div>
     {% endfor %}
     </div>
 
     <div class="discussion admin">
         {% for d_club in discussion_clubs_admin %}
-            <p>Admin discussion club: <a href="{{ d_club.get_absolute_url }}">{{ d_club }}</a> ID: {{ d_club.id }}</p>
+             <div class="club container discussion" id="container-4">
+        <li class="discussion club">
+            {% thumbnail club.group_image "125x125" as im %}
+                <img src="{{ im.url }}" class="club-image">
+            {% endthumbnail %}
+
+            <ul class="inner-ul">
+                <li class="inner-li">
+                     <a class="club-name" href="{{ club.get_absolute_url }}">{{ club.group_name }}</a>
+                </li>
+
+                <li class="inner-li ">
+                     {% if club.current_book %}
+                    <span class="current-book">{{ club.current_book }}</span>
+                    {% else %}
+                    <span class="current-book">No current book</span>
+                    {% endif %}
+                </li>
+
+                <li class="inner-li">
+                     <a href="#" data-id="{{ club.id }}" data-action="leave"
+               data-group_type="discussion"
+               class="leave button toggle">
+                Leave
+                    </a>
+                </li>
+
+                <li class="inner-li inline">
+                    <span class="count">
+                        <span class="total">{{ club.group_members.count }}</span>
+                        member{{ club.group_members.count | pluralize }}
+                    </span>
+                </li>
+            </ul>
+        </li>
+    </div>
         {% endfor %}
     </div>
 
 {% endblock %}
+
+{% block domready %}
+    $('div.club a.toggle').click(function(e){
+        e.preventDefault();
+        var target = e.target;
+        console.log(target);
+
+        var member_counter = $(target.parentNode).next().find("span.total");
+
+        $.post('{% url "club:toggle" %}',
+        {
+            id: $(target).data('id'),
+            action: $(target).data('action'),
+            group_type: $(target).data('group_type')
+        },
+        function(data){
+        if (data['status'] == 'ok') {
+            var previous_action = $(target).data('action');
+
+
+            // toggle data-action
+            $(target).data('action', previous_action == 'join' ? 'leave' : 'join');
+
+
+
+            // toggle link text
+            $(target).text(previous_action == 'join' ? 'Leave' : 'Join');
+
+            // update total members
+            var previous_members = parseInt($(member_counter).text());
+            $(member_counter).text(previous_action == 'join' ? previous_members + 1: previous_members -1);
+            }
+        });
+    });
+{% endblock %}
+

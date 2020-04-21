@@ -64,6 +64,7 @@ def all_books_view(request):
                                                             'current_books': current_books,
                                                             'want_to_read_books': want_to_read_books,
                                                             'books': books,
+                                                            'books_count': len(all_books[0]) + len(all_books[1]) + len(all_books[2]),
                                                             'book_data': book_data})
 
 

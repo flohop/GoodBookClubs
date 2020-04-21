@@ -9,7 +9,7 @@ div.book {
     font-family: Arial, Helvetica, sans-serif;
     background-color: lightsalmon;
     height: fit-content;
-    width: 40%;
+    width: 80%;
     line-height: 100px;
 }
 
@@ -22,7 +22,7 @@ img.book-cover {
 ul.inner-ul {
     float: left;
     line-height: 25px;
-    margin: 10px;
+    margin: 10px 0px 10px 10px;
     list-style-type: none;
     width: 75%;
 
@@ -65,13 +65,13 @@ span.count {
 
 
 span.like-icon {
-    font-size: 1.5em;
+    font-size: 48px;
     color: red;
     vertical-align: middle;
 }
 
 span.can-not-like {
-    font-size: 1.5em;
+    font-size: 48px;
     color: darkblue;
 }
 
