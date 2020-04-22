@@ -2,11 +2,18 @@
 {% load static %}
 {% block title %}Create group{% endblock %}
 
+{% block head %}
+{{ group_form.media }}
+{% endblock %}
+{% block css %}
+<link rel="stylesheet" type="text/css" href="{% static 'club/css/create_club.css' %}?20200417"/>
+{% endblock %}
+
 {% block content %}
     {% if new_group %}
 
     {% else %}
-    <form method="post" name="club-form" onsubmit="return validateForm()" id="club-form">
+    <form method="post" name="club-form" id="club-form" enctype="multipart/form-data">
         {% csrf_token %}
         {{ group_form.as_p }}
         <label for="group_type">Group Type: </label>
@@ -34,7 +41,7 @@
         </tbody>
         </table>
 
-        <button type="button" id="submit">Submit</button>
+        <button type="submit" id="submit">Submit</button>
     </form>
     {% endif %}
  <script>
@@ -48,5 +55,22 @@
 
 
 {% block domready %}
-
+function validateForm() {
+    var name = document.forms['club-form']['group_name'].value;
+    var description = document.forms['club-form']['group_description'].value;
+    var current_book_json = items.data[chosenBookIndex];
+    var type = document.forms['club-form']['group_type'].value;
+    if(name == "") {
+        alert("Please enter a name");
+        return false;
+    }
+    if (description == "") {
+        alert("Please enter a description");
+        return false;
+    }
+    if (current_book_json == "" && type == "reading_club"){
+        alert("Please select a book");
+        return false;
+    }
+}
 {% endblock %}

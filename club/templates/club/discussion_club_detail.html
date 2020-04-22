@@ -11,38 +11,41 @@
                 }
         </script>
 
+<!-- heading -->
+    <p class="top-title">{{ club.group_name }}{% if club.is_admin %}
+        <span class="admin-edit"><a href="{% url 'club:edit_discussion' id=club.id %}">Edit</a></span>
+        {% endif %}</p>
 
-    <p>{{ club.group_name }}</p>
+<!-- image -->
     {% load thumbnail %}
-    {% thumbnail club.current_book.book_cover_image "300" as im %}
-
-    <a href="{{ club.current_book.get_absolute_url }}" alt="current_book_cover">
-        <img src="{{ im.url }}" class="image-detail">
-    </a>
-    <br />
+    {% thumbnail club.group_image "300" as im %}
+        <img src="{{ im.url }}" class="club-image"/>
     {% endthumbnail %}
-    {{ club.is_admin }}
-     {% if club.is_admin %}
-        <!-- Option to change the group settings -->
-        <p><a href="{% url 'club:edit_discussion' id=club.id %}">Edit</a> group with id {{ club.id }}</p>
 
+<!--text next to image -->
+    <ul class="club-details">
+        <li class="club description">{{ club.group_description }}</li>
+        {% if club.current_book %}
+            <li class="club current-book"><a href="{{ club.current_book.get_absolute_url }}">{{ club.current_book.book_title }}</a></li>
+        {% else %}
+            <li class="club no-current-book">No current book</li>
         {% endif %}
+    </ul>
 
-    <div class="likes">
-        <span class="count">
-            <span class="total likes">{{ like_balance }}</span>
-            like{{ like_balance|pluralize }}
-        </span>
-        <a href="#" data-id="{{ book.id }}" data-action="{% if user_liked_book %}un{% endif %}like"
-           class="like toggle button" data-group_type="discussion">
-            {% if not user_liked_book %}
-                Like
-            {% else %}
-                Unlike
-            {% endif %}
-        </a>
-        <br />
-    </div>
+<!-- show all the members -->
+    <span class="all-member">
+        <p class="members-header">Members</p>
+        <ul class="members">
+            {% for member in all_members %}
+            <li class="member">
+                <span>{{ member }}</span>
+            </li>
+            {% endfor %}
+        </ul>
+    </span>
+
+<!-- join group -->
+
     <div class="member-count">
         <span class="count-members">{{ club.member_count }}</span> Member{{ club.member_count|pluralize }}
         <a href="#" data-id="{{ club.id }}" data-group_type="discussion" data-action="{% if club.is_member %}leave{% else %}join{% endif %}"
@@ -83,5 +86,4 @@
 
 {%  block javascript %}
 <script src="{% static 'club/toggle_member.js' %}"></script>
-<script src="{% static 'book/toggle_like.js' %}"></script>
 {% endblock %}

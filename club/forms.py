@@ -1,5 +1,6 @@
 from django import forms
 from .models import DiscussionComment, ReadingComment, DiscussionGroup, ReadingGroup
+from ajaximage.widgets import AjaxImageWidget
 
 
 class ReadingCommentForm(forms.ModelForm):
@@ -18,9 +19,12 @@ class DiscussionCommentForm(forms.ModelForm):
 
 
 class GroupForm(forms.ModelForm):
+    group_image = forms.URLField(widget=AjaxImageWidget(upload_to='images/group_pictures'))
+
     class Meta:
         model = ReadingGroup
-        fields = ('group_name', 'group_image', 'group_description', 'id')
+        fields = ('group_name', 'group_description', 'id')
         widget = {'id': forms.HiddenInput()}
+
 
 

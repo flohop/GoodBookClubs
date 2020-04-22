@@ -1,0 +1,54 @@
+div.like-icon {
+    display: inline-block;
+    margin-left: 50px;
+    width: 100%;
+}
+
+span.count {
+    font-size: 2em;
+    vertical-align: middle;
+    font-weight: bold;
+}
+
+span.like-icon {
+    font-size: 48px;
+    color: red;
+    vertical-align: middle;
+}
+
+span.can-not-like {
+    font-size: 48px;
+    vertical-align: middle;
+    color: darkblue;
+}
+
+i.fa {
+    font-size: 1.2em;
+    border-radius: 20px;
+}
+
+i.fa:hover {
+    cursor: pointer;
+
+}
+
+/* book infos */
+ul.inner-ul {
+    list-style: none;
+    margin-left: 10px;
+
+}
+
+span.details {
+   border: black solid;
+   border-width: 5px 0px 5px 0px;
+   display: inline-block;
+   width: 70%;
+   text-align: center;
+}
+
+img.image-detail {
+    float: left;
+    margin-right: 20px;
+}
+

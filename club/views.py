@@ -57,6 +57,11 @@ def reading_club_detail(request, id, category_slug):
     user = request.user
     profile = Profile.objects.get(user=user)
     comments = club.reading_comments.filter(disabled=False).order_by('-created_on')
+
+    if book is None:
+        book = Book.objects.get(id=125)
+        club.current_book = book
+
     like_balance = club.current_book.likes.all().count()
     user_liked_book = False
 
@@ -136,6 +141,7 @@ def discussion_club_detail(request, id, category_slug):
     book = club.current_book
     user = request.user
     profile = Profile.objects.get(user=user)
+    all_members = club.group_members.all()
     new_comment = None
     user_liked = False
 
@@ -181,6 +187,7 @@ def discussion_club_detail(request, id, category_slug):
     return render(request, 'club/discussion_club_detail.html', {'club': club,
                                                                 'comments': comments,
                                                                 'new_comment': new_comment,
+                                                                'all_members': all_members,
                                                                 'comment_form': comment_form,
                                                                 'like_balance': like_balance,
                                                                 'user_liked_book': user_liked,
@@ -201,6 +208,7 @@ def create_group(request):
                 new_reading_group = ReadingGroup()
                 new_reading_group.group_name = cd['group_name']
                 new_reading_group.is_private_group = cd['is_private_group']
+                breakpoint()
                 new_reading_group.group_image = cd['group_image']
                 new_reading_group.group_description = cd['group_description']
 
@@ -291,8 +299,9 @@ def toggle(request):
             print("Joining group")
             user.save()
             group.save()
-            group.current_goal_reaching.add(user)
-            group.group_members.add(user)
+            if group_type == 'reading':
+                group.current_goal_reaching.add(user)
+                group.group_members.add(user)
         return JsonResponse({'status': 'ok'})
     except Exception as e:
         print("ERROR:" + str(e))
@@ -303,6 +312,8 @@ def toggle(request):
 
 @login_required
 def receive_json_data(request):
+    # create the group from an ajax call
+    # TODO: add the creater of the group automatically as a member of the created group
     data = json.loads(request.body.decode('utf-8'))
 
     current_user = User.objects.get(id=request.user.id)
@@ -392,6 +403,8 @@ def receive_json_data(request):
                                                             group_image=group_image,
                                                             group_description=group_description,
                                                             group_creator=current_user)
+
+    group_instance.group_member.add(current_user)
 
     # redirect user to newly created page, by get the absolute url of the group_instance
     print("Created new objects, will now redirect")

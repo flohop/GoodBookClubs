@@ -1,28 +1,59 @@
 {% extends "base.html" %}
 {% load static %}
+{% load js %}
 {% block title %}{{ book.book_name }}{% endblock %}
 
-{% block content %}
-    <p>Title: {{ book.book_name }}</p>
-    <p>Author: {{ book.book_author }}</p>
-    <p>Description: {{ book.book_description }}</p>
-    <p>Language: {{ book.book_language }}</p>
-    <p>Categories: {{ book.book_categories }}</p>
-    <p>ISBN Number: {{ book.book_isbn_number }}</p>
-    <p>Number of pages: {{ book.book_page_number }}</p>
-    <p>Likes: <span class="total likes">{{ book.likes.all.count }}</span>
-    <a href="#" data-id="{{ book.id }}" data-action="{% if book.has_liked %}un{% endif %}like"
-       class="like toggle button">
-        {% if book.has_liked %}Unlike
-        {% else %}Like
-        {% endif %}</a>
-    </p>
+{% block css %}
+<link rel="stylesheet" type="text/css" href="{% static 'book/css/detail.css' %}?20200305" />
+{% endblock %}
 
-    {% load thumbnail %}
-    {% thumbnail book.book_cover_image "300" as im %}
+{% block content %}
+    <p class="book top-title">{{ book.book_name }}</p>
+    <p class="book author">{{ book.book_author }}</p>
+     {% load thumbnail %}
+    {% thumbnail book.book_cover_image "200" as im %}
     <img src="{{ im.url }}" class="image-detail">
     {% endthumbnail %}
 
+    <span class="book description">{{ book.book_description }}</span>
+    <br />
+    <span class="details">Details:</span>
+    <ul class="inner-ul">
+            <li class="language-code">Language: {{ book.book_language }}</li>
+            <li class="categories">Categories: {{ book.book_categories }}</li>
+            <li class="isbn">ISBN: {{ book.book_isbn_number }}</li>
+            <li class="pages">Length: {{ book.book_page_number }}pages</li>
+        </ul>
+
+
+    <div class="like-icon">
+            <span class="count">
+                    <span class="total">{{ like_balance }}</span>
+                    <span class="can-not-like{% if can_like %} remove{% else %}{% endif %}">
+                       <i class="far fa-heart"></i>
+                    </span>
+            </span>
+
+                <a href="#" data-id="{{ book.id }}" data-action="{% if liked_book %}un{% endif %}like"
+                class="like button{% if can_like %}{% else %} remove{%endif%}" id="like-link">
+                    <span class="like-icon">
+                    {% if not liked_book %}
+                        <i class="far fa-heart"></i>
+                    {% else %}
+                        <i class="fas fa-heart"></i>
+                    {% endif %}
+                     </span>
+                </a>
+        </div>
+
+        <div class="select-status">
+            <select id="book-status" class="book-status">
+                <option value="reading" class="status">Currently reading</option>
+                <option value="read" class="status">Read</option>
+                <option value="want-to-read" class="status">Want to read</option>
+                <option value="blank" selected="selected"></option>
+            </select>
+        </div>
 
     <div class="clubs">
         <div class="reading-clubs">
@@ -49,3 +80,103 @@
 {% block javascript %}
 <script src="{% static 'book/toggle_like.js' %}"></script>
 {% endblock  %}
+
+{% block domready %}
+
+    // first, set the drop down value based on the users library
+    (function (){
+            bookStatus = {{ book.status | js }};
+            if(bookStatus == "\"read\""){
+                $("#book-status").val("read");
+            }
+            else if(bookStatus == "\"reading\""){
+                $("#book-status").val("reading");
+            }
+            else if(bookStatus == "\"want-to-read\""){
+                $("#book-status").val("want-to-read");
+            }
+            else {
+                $("#book-status").val("blank");
+            }
+
+    }())
+
+
+    // when user clicks cancel on comment, prevent default and empty the textfield
+    $('.btn-cancel').click(function(e) {
+        e.preventDefault();
+        document.getElementById("id_body").value = "";
+    });
+
+    // when user changes value in drop down list, change the value in the database
+    function sendValuesToServer(e) {
+        target = e.target;
+
+            value = target.value;
+            id = $(target).parent().prev().find("a").data("id")
+
+            $.post('{% url "book:change_status" %}',
+            {
+                    id : id,
+                    value: value
+            },
+            function(data){
+                if (data['status'] == 'OK')
+                    {
+                    console.log("Changed state of select element from html page");
+                    if(data['can_like'] == "True") {
+                        $('span.can-not-like').addClass("remove");
+                        $('#like-link').removeClass("remove");
+                    }
+                    else {
+                        $('span.can-not-like').removeClass("remove");
+                        $('#like-link').addClass("remove");
+                        }
+                }
+            }
+        );
+    }
+
+    // register like button, so that it changes the like amount and the text
+    $('a.like').click(function(e){
+    console.log("Like got clicked");
+    e.preventDefault();
+    $.post('{% url "book:like" %}',
+        {
+            id: $(this).data('id'),
+            action: $(this).data('action')
+        },
+        function(data){
+        if (data['status'] == 'ok')
+            {
+                var bookId = data['id'];
+                var prevAction = data['prev_action']
+                var $clickedElement = $("[data-id=" + bookId + "]");
+
+                // toggle action
+                $clickedElement.data('action', prevAction == 'like' ?
+                                    'unlike': 'like');
+                // toggle link text
+                if(prevAction == 'like') {
+
+                    $("span.like-icon").replaceWith('<span class="like-icon"><i class="fas fa-heart"></i></span>')
+                }
+                else {
+                    $("span.like-icon").replaceWith('<span class="like-icon"><i class="far fa-heart"></i></span>')
+                // update total likes
+                }
+
+                var prevLikes = parseInt($('span.total').text());
+                $('span.total').text(prevAction == 'like' ?
+                prevLikes + 1 : prevLikes - 1);
+            }
+        }
+        );
+    });
+
+    document.getElementById("book-status").addEventListener("change", sendValuesToServer, false);
+
+
+
+
+{% endblock %}

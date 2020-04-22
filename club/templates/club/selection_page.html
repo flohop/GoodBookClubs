@@ -5,9 +5,12 @@
 {% block css %}
 <link href="{% static 'club/css/list_view.css' %}" rel="stylesheet" type="text/css" />
 {% endblock %}
-{% block content %}
-    <a href="{% url 'club:create_group' %}">Create new Club</a>
 
+
+{% block content %}
+    <p class="new-club">
+    <a href="{% url 'club:create_group' %}">Create new Club</a>
+    </p>
     <div class="reading member">
     {% for club in reading_clubs %}
 
@@ -49,6 +52,8 @@
     </div>
     {% endfor %}
     </div>
+
+    <p>Reading club admin</p>
 
     <div class="reading admin">
         {% for club in reading_clubs_admin %}
@@ -136,10 +141,11 @@
     {% endfor %}
     </div>
 
+    <p>Discussion club admin</p>
     <div class="discussion admin">
-        {% for d_club in discussion_clubs_admin %}
-             <div class="club container discussion" id="container-4">
-        <li class="discussion club">
+        {% for club in discussion_clubs_admin %}
+        <div class="club container discussion" id="container-4">
+        <li  class="discussion club">
             {% thumbnail club.group_image "125x125" as im %}
                 <img src="{{ im.url }}" class="club-image">
             {% endthumbnail %}
@@ -171,6 +177,9 @@
                         member{{ club.group_members.count | pluralize }}
                     </span>
                 </li>
+
+
+
             </ul>
         </li>
     </div>

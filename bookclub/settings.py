@@ -53,6 +53,7 @@ INSTALLED_APPS = [
     'django_extensions',
     'sorl.thumbnail',
     'crispy_forms',
+    'ajaximage',
 ]
 
 MIDDLEWARE = [
@@ -136,5 +137,5 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
-
+AJAXIMAGE_AUTH_TEST = lambda u: True
 STATIC_URL = '/static/'

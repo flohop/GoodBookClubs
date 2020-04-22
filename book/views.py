@@ -18,9 +18,9 @@ def all_books_view(request):
     user = User.objects.get(id=user_id)
     profile = Profile.objects.get(user=user)
 
-    read_books = profile.people_read_book.all()
-    current_books = profile.people_reading_book.all()
-    want_to_read_books = profile.people_want_to_read_book.all()
+    read_books = profile.people_read_book.all().exclude(id=125)  # exclude the default book
+    current_books = profile.people_reading_book.all().exclude(id=125)
+    want_to_read_books = profile.people_want_to_read_book.all().exclude(id=125)
     books = read_books | current_books | want_to_read_books
     # add attributes to all books
     all_books = [read_books, current_books, want_to_read_books]
@@ -70,6 +70,7 @@ def all_books_view(request):
 
 def book_detail_view(request, id, slug):
     book = Book.objects.get(id=id)
+    profile = Profile.objects.get(user=request.user)
 
     # add info, if user has liked the book
     has_liked = False
@@ -77,11 +78,31 @@ def book_detail_view(request, id, slug):
         has_liked = True
     book.has_liked = has_liked
 
+
+    can_like = False
+    if book in profile.people_read_book.all():
+        status = '"read"'
+        can_like = True
+    elif book in profile.people_reading_book.all():
+        status = '"reading"'
+        can_like = True
+    elif book in profile.people_want_to_read_book.all():
+        status = '"want-to-read"'
+    else:
+        status = '"blank"'
+    book.status = status
+
+    like_balance = book.likes.all().count()
+
     # add the info, what groups are currently reading this book
     book.reading_clubs = book.reading_group_book.all()
     book.discussion_clubs = book.discussion_group_book.all()
 
-    return render(request, 'book/book_detail.html', {'book': book})
+    return render(request, 'book/book_detail.html', {'book': book,
+                                                     'liked_book': has_liked,
+                                                     'like_balance': like_balance,
+                                                     'can_like': can_like,
+                                                     'status': status})
 
 
 @login_required
@@ -112,7 +133,7 @@ def book_search(request):
 
 @xframe_options_sameorigin
 def list_view(request):
-    books = Book.objects.all()
+    books = Book.objects.all().exclude(id=125)  # id=125 is the default book for RClubs with no book
 
     if request.user.is_authenticated:
         user = request.user
@@ -277,7 +298,7 @@ def add_book(request):
             'id': str(book_instance.id),
             'url': str(book_instance.get_absolute_url()),
             'author': str(book_instance.book_author),
-            'cover': str(image_path),
+            'cover': str(book_instance.book_cover_image),
         }
 
         return JsonResponse(return_book_json)

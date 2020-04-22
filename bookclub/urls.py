@@ -9,6 +9,7 @@ urlpatterns = [
     path('account/', include('account.urls')),
     path('clubs/', include('club.urls')),
     path('book/', include('book.urls')),
+    path('reverse/', include('ajaximage.urls')),
     path('', include('landing.urls')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

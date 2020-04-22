@@ -47,7 +47,7 @@
         <span class="admin-edit"><a class="edit-link" href="{% url 'club:edit_reading' id=club.id %}">(<span class="underline">Edit</span>)</a></span></p>
         {% endif %}
         </p>
-         <div class="member-count">
+        <div class="member-count">
                     <span class="count-members">{{ club.member_count }}</span> Member{{ club.member_count|pluralize }}
                     <a href="#" data-id="{{ club.id }}" data-group_type="reading" data-action="{% if club.is_member %}leave{% else %}join{% endif %}"
                         class="join-toggle button">{% if club.is_member %}Leave{% else %}Join{% endif %}</a>
@@ -87,7 +87,6 @@
             <li class="book title">{{ club.current_book.book_name}}</li>
             <li class="book author">{{ club.current_book.book_author }}</li>
             <li class="book description">{{ club.current_book.book_description }}</li>
-            <li class="book description">{{ club.id }}{{ club.slug }}</li>
 
         </ul>
 

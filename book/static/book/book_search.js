@@ -80,10 +80,10 @@ function onRowClicked(e) {
 function submitForm(e) {
     // get all the group infos and the book infos, send them to a view, create the book and the club there
     // and then redirect the user to his newly created club
-
+    e.preventDefault();
     console.log("Trying to submit group form")
 
-    if(document.getElementById("club-form").reportValidity()){
+    if(validateForm()){
         // get all the data from the form
         var groupName = document.forms['club-form']['group_name'].value;
         var groupDescription = document.forms['club-form']['group_description'].value;
@@ -98,7 +98,8 @@ function submitForm(e) {
 
 
         // save all values in a json object which will be send to the view via ajax
-        var allData = {"name": groupName,
+
+       var allData = {"name": groupName,
                         'description': groupDescription,
                         'image': groupImage,
                         'type': groupType,
@@ -140,10 +141,24 @@ function submitForm(e) {
 }
 
 function validateForm() {
+    debugger;
     var name = document.forms['club-form']['group_name'].value;
     var description = document.forms['club-form']['group_description'].value;
-    var current_book_json = items.data[chosenBookIndex];
     var type = document.forms['club-form']['group_type'].value;
+
+    try {
+        var current_book_json = items.data[chosenBookIndex];
+        }
+    catch(err) {
+        if(type == 'reading_club') {
+            alert("Please pick a book");
+            return false;
+        }
+        else {
+            return true;
+        }
+    }
+
     if(name == "") {
         alert("Please enter a name");
         return false;
@@ -156,11 +171,14 @@ function validateForm() {
         alert("Please select a book");
         return false;
     }
+    return true;
 }
 
+function prepareUpload(e) {
+    files = event.target.files
+}
 
-
-
+$('input[type=file]').on('change', prepareUpload);
 document.getElementById("button").addEventListener("click", bookSearch, false);
-document.getElementById("submit").addEventListener("click", submitForm, false);
+document.getElementById("club-form").addEventListener("submit", submitForm, false);
 });

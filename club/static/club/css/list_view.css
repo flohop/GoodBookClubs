@@ -2,12 +2,13 @@ div.club {
     overflow-x: auto;
     overflow-y: hidden;
     list-style: none;
+    margin-bottom: 40px;
     margin-right: 40px;
     display: block;
     float: inline-start, left;
     font-family: Arial, Helvetica, sans-serif;
     height: fit-content;
-    width: 40%;
+    width: 80%;
     line-height: 100px;
 }
 
@@ -19,7 +20,7 @@ div.discussion {
     background-color: mediumaquamarine;
 }
 
-img.ckub-image {
+img.club-image {
     width: 125px;
     display: inline-block;
     vertical-align: middle;
@@ -93,6 +94,8 @@ span.count {
 
 }
 
+
+
 span.total {
     border-top-width: 3px;
     border-bottom-width: 3px;
@@ -101,6 +104,6 @@ span.total {
 a.toggle {
     overflow: auto;
     position: absolute;
-    
+
 }
 
