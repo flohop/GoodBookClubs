@@ -1,14 +1,50 @@
-{% extends "base.html" %}    <link rel="import" href="localhost:8000/club/templates/club/list_view.html">
+{% extends "base.html" %}
+{% load static %}
+<link rel="import" href="localhost:8000/club/templates/club/list_view.html">
+{% block css %}
+<link rel="stylesheet" type="text/css" href="{% static 'account/css/tabs.css' %}">
+{% endblock %}
 
 
 {% block title %}Dashboard{% endblock %}
 
 {% block content %}
     <h1>Dashboard</h1>
-    <p id="welcome">Welcome to your dashboard</p>
 
+    <ul class="tab-list">
+        <li class="active tab"><a class="tab-control" href="#groups">Groups</a></li>
+        <li class="tab"><a class="tab-control" href="#books">Books</a></li>
+    </ul>
+    
+    <div class="tab-panel active" id="groups">
+        <iframe src="{% url 'club:list_view' %}" style="border: none;" width="1920" height="600" id="club-list-frame" name="club-list-frame"></iframe>
+    </div>
+    <div class="tab-panel" id="books">
+        <iframe src="{% url 'book:list_view' %}" style="border: none;" width="1920" height="600" id="book-list-frame" name="book-list-frame"></iframe>
+    </div>    
 
-    <iframe src="{% url 'book:list_view' %}" style="border: none;" width="1920" height="600" id="book-list-frame" name="book-list-frame"></iframe>
-    <iframe src="{% url 'club:list_view' %}" style="border: none;" width="1920" height="600" id="club-list-frame" name="club-list-frame"></iframe>
+{% endblock %}
+
+{% block domready %}
+$('.tab-list').each(function(){
+    var $this = $(this);
+    var $tab = $this.find('li.active');
+    var $link = $tab.find('a');
+    var $panel = $($link.attr('href'));
+
+    $this.on('click', '.tab-control', function(e) {
+        e.preventDefault();
+        var $link = $(this);
+        var id = this.hash;
+
+        if (id && !$link.is('.active')) {
+            $panel.removeClass('active');
+            $tab.removeClass('active');
+
+            $panel = $(id).addClass('active');
+            $tab = $link.parent().addClass('active');
+        }
+    });
+});
 
 {% endblock %}
