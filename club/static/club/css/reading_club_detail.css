@@ -3,6 +3,7 @@
 p.top-title {
     font-size: 32px;
     text-align: center;
+    text-decoration: underline;
 }
 
 .slidecontainer {
@@ -34,7 +35,7 @@ span.underline {
 }
 
 ul.book.info {
-    list-style: square;
+    list-style: none;
 }
 
 /* The slider handle */

@@ -167,24 +167,20 @@
         </div>
 
         <div class="card-body">
-            {% if  new_comment %}
-
-            {% else %}
-                <h4>Comments ({{ comments.count }}):</h4>
-
-                <form method="post" style="margin-top: 1.3em;">
-                    {{ comment_form | crispy }}
-                    {% csrf_token %}
-                    <button type="submit" class="btn btn-primary btn-lg">Submit</button>
-                    <button class="btn btn-cancel">Cancel</button>
-                </form>
-            {% endif %}
-            </div>
-
-        <!-- Comments-->
-        <div class="comments" id="comments" style="padding: 10px;">
-
-        {% for comment in comments %}
+        {% if  new_comment %}
+        <h4>Comments ({{ comments.count }}):</h4>
+        {% else %}
+            <h4>Comments ({{ comments.count }}):</h4>
+            <form method="post">
+                {{ comment_form | crispy }}
+                {% csrf_token %}
+                <button type="submit" class="btn btn-primary btn-lg">Submit</button>
+                <button class="btn btn-cancel">Cancel</button>
+            </form>
+        {% endif %}
+        </div>
+    <div class="comments" id="comments" style="padding: 10px;">
+    {% for comment in comments %}
                 <div class="comment">
                     {% thumbnail  comment.profile.profile_picture "50x50" crop="center" as img %}
                     <img src="{{ img.url }}" class="comment-profile-img" />
@@ -344,7 +340,7 @@ if($('input.selectable').length > 0) {
                     $("span.like-icon").replaceWith('<span class="like-icon"><i class="far fa-heart"></i></span>')
                 // update total likes
                 }
-        
+
                 var prevLikes = parseInt($('span.total').text());
                 $('span.total').text(prevAction == 'like' ?
                 prevLikes + 1 : prevLikes - 1);

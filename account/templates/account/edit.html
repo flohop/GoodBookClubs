@@ -1,14 +1,13 @@
 {% extends "base.html" %}
-
+{% load static %}
 {% block title %}Edit your account{% endblock %}
 
 {% block css %}
-
+<link rel="stylesheet" type="text/css" href="{% static 'css/account/edit.css' %}?20200204"/>
 {% endblock %}
 
 {% block content %}
     <h1>Edit your account</h1>
-    <p>You can edit your account using the following form:</p>
     <form action="." method="post" enctype="multipart/form-data">
         {{ user_form.as_p }}
         {{ profile_form.as_p }}

@@ -1,7 +1,11 @@
 {% extends "base.html" %}
 {% load static %}
+{% load crispy_forms_tags %}
 
 {% block title %}{{ club.group_name }}{% endblock %}
+{% block css %}
+<link rel="stylesheet" type="text/css" href="{% static 'club/css/discussion_club_detail.css' %}?20201303"/>
+{% endblock %}
 
 {% block content %}
     <!-- Block the form request from being send again, when page is reloaded !-->
@@ -22,16 +26,6 @@
         <img src="{{ im.url }}" class="club-image"/>
     {% endthumbnail %}
 
-<!--text next to image -->
-    <ul class="club-details">
-        <li class="club description">{{ club.group_description }}</li>
-        {% if club.current_book %}
-            <li class="club current-book"><a href="{{ club.current_book.get_absolute_url }}">{{ club.current_book.book_title }}</a></li>
-        {% else %}
-            <li class="club no-current-book">No current book</li>
-        {% endif %}
-    </ul>
-
 <!-- show all the members -->
     <span class="all-member">
         <p class="members-header">Members</p>
@@ -44,6 +38,20 @@
         </ul>
     </span>
 
+
+<!--text next to image -->
+    <ul class="club-details">
+        <li class="club description">{{ club.group_description }}</li>
+        {% if club.current_book %}
+            <li class="club current-book">Current book:
+            <a href="{{ club.current_book.get_absolute_url }}">{{ club.current_book }}</a>
+            by {{ club.current_book.book_author }}</li>
+        {% else %}
+            <li class="club no-current-book">No current book</li>
+        {% endif %}
+    </ul>
+
+
 <!-- join group -->
 
     <div class="member-count">
@@ -53,30 +61,34 @@
     </div>
 
 
-
+<!-- Comments -->
     <div class="card-body">
         {% if  new_comment %}
-
+        <h4>Comments ({{ comments.count }}):</h4>
         {% else %}
-            <h4>Add comment</h4>
+            <h4>Comments ({{ comments.count }}):</h4>
             <form method="post">
-                {{ comment_form.as_p }}
+                {{ comment_form | crispy }}
                 {% csrf_token %}
-                <button type="submit" class="btn">Submit</button>
+                <button type="submit" class="btn btn-primary btn-lg">Submit</button>
+                <button class="btn btn-cancel">Cancel</button>
             </form>
         {% endif %}
         </div>
-
-
-    <h4>Comments:</h4>
+    <div class="comments" id="comments" style="padding: 10px;">
     {% for comment in comments %}
-        <div class="comments" style="padding: 10px;">
-            <p>{{ comment.name }}</p>
-            <p>{{ comment.created_on }}</p>
-            <p>{{ comment.body }}</p>
+                <div class="comment">
+                    {% thumbnail  comment.profile.profile_picture "50x50" crop="center" as img %}
+                    <img src="{{ img.url }}" class="comment-profile-img" />
+                    {% endthumbnail %}
+
+                    <p class="comment-user-name">{{ comment.name }}</p>
+                    <span class="comment-created-on">{{ comment.difference }} day{{ comment.difference | pluralize }} ago</span>
+                    <p class="comment-body">{{ comment.body }}</p>
+                </div>
+           {% endfor %}
 
         </div>
-    {% endfor %}
 
 <!-- Load needed JavaScript variable-->
 <script>var toggle_view_url = "{% url 'club:toggle' %}"</script>
@@ -85,5 +97,16 @@
 {% endblock %}
 
 {%  block javascript %}
+<script>
+    // auto expand comment input field
+    $("#id_body").on("keydown", function(e) {
+        var that = $(this);
+        if(that.scrollTop()) {
+            $(this).height(function(i, h) {
+                return h + 20;
+            })
+        }
+    })
+</script>
 <script src="{% static 'club/toggle_member.js' %}"></script>
 {% endblock %}

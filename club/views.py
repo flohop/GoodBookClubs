@@ -137,7 +137,7 @@ def reading_club_detail(request, id, category_slug):
 def discussion_club_detail(request, id, category_slug):
     club = get_object_or_404(DiscussionGroup,
                              id=id)
-    comments = club.discussion_comments.filter(disabled=False)
+    comments = club.discussion_comments.filter(disabled=False).order_by('-created_on')
     book = club.current_book
     user = request.user
     profile = Profile.objects.get(user=user)
@@ -169,6 +169,13 @@ def discussion_club_detail(request, id, category_slug):
         club.is_admin = True
     else:
         club.is_admin = False
+
+
+    # loop through comments and add the time since posted
+    today = datetime.now(timezone.utc)
+    for comment in comments:
+        difference = (today - comment.created_on).days
+        comment.difference = difference
 
     # when comment is posted
     if request.method == 'POST':
@@ -415,11 +422,17 @@ def receive_json_data(request):
 @login_required
 def edit_reading_club(request, id):
     reading_club = get_object_or_404(ReadingGroup, id=id)
+    print("CLUB:", reading_club)
+    if reading_club is None:
+        reading_club = ReadingGroup.objects.get(id=125)  # if no book is selected show the default book
     user = User(id=request.user.id)
     name = reading_club.group_name
     description = reading_club.group_description
     image = reading_club.group_image
-    current_book = reading_club.current_book.book_name
+    if reading_club.current_book:
+        current_book = reading_club.current_book.book_name
+    else:
+        current_book = "No current book"
     id = reading_club.id
 
     # check if the caller is the admin of the group
@@ -472,6 +485,7 @@ def edit_discussion_club(request, id):
     else:
         return HttpResponse("You are not the admin of the group, so you can't edit the group")
 
+
 @login_required
 def receive_json_update_r_group(request, id):
     if request.method == 'POST':
@@ -501,6 +515,7 @@ def receive_json_update_r_group(request, id):
                 # warp field that may not be there up in try except block to make sure,
                 # if data is missing a default value is set in
                 if data.get("book") != 'None':
+
                     group_book = data.get("book").get("volumeInfo")
                     # extract data from the book
 
@@ -550,8 +565,8 @@ def receive_json_update_r_group(request, id):
                                                             book_language=book_language_code,
                                                             book_categories=book_categories)
 
-                        # update the instance
-                        new_group_data["current_book"] = book_instance
+                    # update the instance
+                    new_group_data["current_book"] = book_instance
 
                 for attr, value in new_group_data.items():
                     setattr(group_instance, attr, value)

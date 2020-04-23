@@ -1,0 +1,125 @@
+ul.club-details {
+    list-style: none;
+}
+
+img.club-image {
+    float: left;
+}
+
+/* all members */
+
+span.all-member {
+    float: right;
+    border: black solid;
+    text-align: center;
+    width: 100px;
+    height: 300px;
+    border-width: 5px;
+    overflow-y: scroll;
+}
+
+p.members-header {
+    text-decoration: underline;
+}
+
+ul.members {
+    list-style: none;
+    padding-left: 0px;
+   }
+
+.member-count {
+    float:left;
+    width: 100%;
+}
+
+/* Comment section */
+.card-body {
+    float:left;
+    width: 100%;
+}
+
+.comments {
+    float: left;
+    width: 100%;
+    }
+
+    div.comment {
+    border-bottom: rgba(128, 128, 128, 0.5) solid;
+    border-bottom-width: 1px;
+    margin-top: 10px;
+}
+
+
+img.comment-profile-img {
+    float: left;
+    margin-right: 10px;
+    height: 45px;
+    width: 45px;
+    border-radius: 50px;
+}
+
+span.comment-created-on {
+    color: rgba(128, 128, 128, 0.5);
+}
+
+p.comment-user-name {
+    display: inline;
+}
+
+p.top-title {
+    font-size: 32px;
+    text-align: center;
+    text-decoration: underline;
+}
+
+p.comment-body {
+    margin-left: 60px; /* image width + 10px */
+}
+
+textarea.textarea {
+    width: 100%;
+    line-height: 1em;
+    resize: none;
+    height: 25px;
+    font: inherit;
+    border: none;
+    height: fit-content;
+    border-bottom: black solid;
+    border-bottom-width: 5px;
+    border-radius: 5px;
+}
+
+button.btn {
+    height: 30px;
+    margin-top: 5px;
+    border-radius: 10px;
+    float: right;
+}
+
+button.btn-primary {
+    background-color: rgb(62, 62, 151);
+    color: white;
+}
+
+button.btn-primary:active {
+    background-color: #0d427e;
+    box-shadow: 0 5px #666;
+    transform: translateY(2px);
+}
+
+button.btn-cancel {
+    background-color: grey;
+    color: white;
+}
+
+label.control-label {
+    visibility: hidden;
+    display: none;
+}
+
+li.no-current-book {
+    margin-top: 20px;
+    }
+li.current-book {
+    margin-top: 20px;
+}

@@ -22,7 +22,7 @@
             <li class="language-code">Language: {{ book.book_language }}</li>
             <li class="categories">Categories: {{ book.book_categories }}</li>
             <li class="isbn">ISBN: {{ book.book_isbn_number }}</li>
-            <li class="pages">Length: {{ book.book_page_number }}pages</li>
+            <li class="pages">Pages: {{ book.book_page_number }}</li>
         </ul>
 
 
@@ -57,8 +57,9 @@
 
     <div class="clubs">
         <div class="reading-clubs">
+        <h4>Reading clubs (<a href="{% url 'club:create_group' %}">Created club</a>)</h4>
         {%  for r_club in book.reading_clubs %}
-            <p>Book is in: <a href="{{ r_club.get_absolute_url }}">{{ r_club }}</a></p>
+            <p><a href="{{ r_club.get_absolute_url }}">{{ r_club }}</a></p>
         {% empty %}
         <p>No one reads this book</p>
         {% endfor %}
@@ -66,8 +67,9 @@
 
 
         <div class="discussion-clubs">
+        <h4>Discussion Clubs (<a href="{% url 'club:create_group' %}">Created club</a>)</h4>
         {% for d_club in book.discussion_clubs %}
-            <p>Book is in: <a href="{{ d_club.get_absolute_url }}">{{ d_club.group_name }}</a></p>
+            <a href="{{ d_club.get_absolute_url }}">{{ d_club.group_name }}</a>
         {% empty %}
             <p>No one discusses this book</p>
         {% endfor %}

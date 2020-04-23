@@ -1,6 +1,4 @@
 from django.shortcuts import render
-from django.http import HttpResponse
-from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from .forms import UserRegistrationForm, ProfileEditForm, UserEditForm
 from account.models import Profile
@@ -24,7 +22,6 @@ def register(request):
             # Save the user object
             new_user.save()
             Profile.objects.create(user=new_user)
-            print("Saved new user")
             return render(request,
                           'account/register_done.html',
                           {'new_user': new_user})
@@ -46,12 +43,10 @@ def edit_profile(request):
                                        data=request.POST,
                                        files=request.FILES)
         if user_form.is_valid() and profile_form.is_valid():
-            print("Forms are valid and new values are saved")
             user_form.save()
             profile_form.save()
             values_saved = True
     else:
-        print("New form rendered")
         user_form = UserEditForm(initial={'first_name': user.first_name,
                                           'last_name': user.last_name, 'email': user.email})
         profile_form = ProfileEditForm(initial={'profile_description': profile.profile_description,
