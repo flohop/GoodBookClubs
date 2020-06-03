@@ -1,0 +1,52 @@
+form {
+    width: 80%;
+    margin: 0 auto;
+}
+
+h1 {
+    padding-top: 20px;
+}
+
+.help-text {
+    margin: 0 30% 0 10%;
+    width: 80%;
+}
+
+span.helptext {
+    color: grey;
+    size: 0.5em;
+    display: block;
+    margin: 0 5% 0 4%;
+}
+
+label, input {
+    display: inline-block;
+}
+
+label {
+    width: 30%;
+    margin: 0 30% 0 4%;
+}
+
+input + input {
+    float: rigth;
+}
+
+form {
+    background-color: blanchedalmond;
+    padding-top: 1px;
+    padding-bottom: 1px;
+}
+
+input[type="submit"] {
+    padding: 15px 32px;
+    font-size: 16px;
+    position: absolute;
+    width: 70.5%;
+}
+
+div.help-links {
+    margin-top: 75px;
+    width: 80%;
+    margin-left: 10%;
+} 

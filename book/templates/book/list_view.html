@@ -14,12 +14,13 @@
 
     }
 </style>
-<link rel="stylesheet" type="text/css" href="{% static 'book/css/list_view.css' %}?20200417"/>
+<link rel="stylesheet" type="text/css" href="{% static 'book/css/list_view.css' %}?20200418"/>
 {% endblock %}
 {% block content %}
 
-<label for="search">New Book: </label>
-        <input type="text" placeholder="Book" id="search" value="Das Lied von Eis und Feuer 0" />
+
+<label for="search" class="new-book-label">Add Book: </label>
+        <input type="text" placeholder="Book title" id="search"/>
         <button type="button" id="button">Search</button>
         <br />
 

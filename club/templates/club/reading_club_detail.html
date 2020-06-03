@@ -76,7 +76,7 @@
         </div>
 
         {% load thumbnail %}
-        {% thumbnail club.current_book.book_cover_image  "300" as im %}
+        {% thumbnail club.current_book.book_cover_image  "175" as im %}
             <a href="{{ club.current_book.get_absolute_url }}">
                 <img src="{{ im.url }}" class="image-detail">
             </a>

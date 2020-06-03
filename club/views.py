@@ -55,7 +55,12 @@ def reading_club_detail(request, id, category_slug):
                              id=id,)
     book = club.current_book
     user = request.user
-    profile = Profile.objects.get(user=user)
+    try:
+        profile = Profile.objects.get(user=user)
+    except TypeError:
+        # if user is anonymous
+        user.username = "Guest"
+        pass
     comments = club.reading_comments.filter(disabled=False).order_by('-created_on')
 
     if book is None:
@@ -66,35 +71,52 @@ def reading_club_detail(request, id, category_slug):
     user_liked_book = False
 
     # check if the user liked the book
-    if user in club.current_book.likes.all():
-        user_liked_book = True
+    try:
+        if user in club.current_book.likes.all():
+            user_liked_book = True
+    except TypeError:
+        # if the user is anonymous
+        pass
 
     # add how many members the club has
     club.member_count = club.group_members.all().count()
 
     # check if user is in the group
-    if request.user in club.group_members.all():
-        club.is_member = True
-    else:
+    try:
+        if request.user in club.group_members.all():
+            club.is_member = True
+        else:
+            club.is_member = False
+    except TypeError:
+        # if the user is anonymous
         club.is_member = False
 
     # add info, is the current user the group admin
-    if club in request.user.reading_group_creator.all():
-        club.is_admin = True
-    else:
+    try:
+        if club in request.user.reading_group_creator.all():
+            club.is_admin = True
+        else:
+            club.is_admin = False
+    except TypeError and AttributeError:
+        # if the user is anonymous
         club.is_admin = False
 
     can_like = False
-    if book in profile.people_read_book.all():
-        status = '"read"'
-        can_like = True
-    elif book in profile.people_reading_book.all():
-        status = '"reading"'
-        can_like = True
-    elif book in profile.people_want_to_read_book.all():
-        status = '"want-to-read"'
-    else:
+    try:
         status = '"blank"'
+        if book in profile.people_read_book.all():
+            status = '"read"'
+            can_like = True
+        elif book in profile.people_reading_book.all():
+            status = '"reading"'
+            can_like = True
+        elif book in profile.people_want_to_read_book.all():
+            status = '"want-to-read"'
+
+    except TypeError and UnboundLocalError:
+        # if the user is anonymous
+        profile = None
+        pass
     book.status = status
 
     # loop through comments and add the time since posted
@@ -139,8 +161,11 @@ def discussion_club_detail(request, id, category_slug):
                              id=id)
     comments = club.discussion_comments.filter(disabled=False).order_by('-created_on')
     book = club.current_book
-    user = request.user
-    profile = Profile.objects.get(user=user)
+    try:
+        user = request.user
+        profile = Profile.objects.get(user=user)
+    except TypeError:
+        pass
     all_members = club.group_members.all()
     new_comment = None
     user_liked = False
@@ -165,11 +190,13 @@ def discussion_club_detail(request, id, category_slug):
         club.is_member = False
 
     # add info, is the current user the group admin
-    if club in request.user.discussion_group_creator.all():
-        club.is_admin = True
-    else:
+    try:
+        if club in request.user.discussion_group_creator.all():
+            club.is_admin = True
+        else:
+            club.is_admin = False
+    except AttributeError:
         club.is_admin = False
-
 
     # loop through comments and add the time since posted
     today = datetime.now(timezone.utc)
@@ -411,7 +438,7 @@ def receive_json_data(request):
                                                             group_description=group_description,
                                                             group_creator=current_user)
 
-    group_instance.group_member.add(current_user)
+    group_instance.group_members.add(current_user)
 
     # redirect user to newly created page, by get the absolute url of the group_instance
     print("Created new objects, will now redirect")

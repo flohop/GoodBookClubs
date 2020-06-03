@@ -3,7 +3,7 @@
 {% block title %}Edit your account{% endblock %}
 
 {% block css %}
-<link rel="stylesheet" type="text/css" href="{% static 'css/account/edit.css' %}?20200204"/>
+<link rel="stylesheet" type="text/css" href="{% static 'account/css/edit.css' %}?20200205"/>
 {% endblock %}
 
 {% block content %}
@@ -15,7 +15,7 @@
         <p><input type="submit" value="Save changes"></p>
         <p class="remove saved">Change saved</p>
         {% if values_saved %}
-        <p>Saved values</p>
+        <p class="saved">Saved values</p>
         {% endif %}
     </form>
 {% endblock %}

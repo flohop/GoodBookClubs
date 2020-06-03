@@ -147,7 +147,8 @@ function validateForm() {
     var type = document.forms['club-form']['group_type'].value;
 
     try {
-        var current_book_json = items.data[chosenBookIndex];
+        debugger;
+        var current_book_json = items[chosenBookIndex];
         }
     catch(err) {
         if(type == 'reading_club') {

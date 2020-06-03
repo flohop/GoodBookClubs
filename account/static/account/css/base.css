@@ -4,6 +4,13 @@ body {
     font-family: Arial, Helvetica, sans-serif;
 }
 
+#header {
+    background-color: lightgrey;
+    padding: 10px;
+
+
+    }
+
 .logo {
     background-color: red;
 }
@@ -14,7 +21,32 @@ body {
 
 }
 
+.top-item {
+    color: brown;
+}
+
+.top-item:hover {
+    color: lightgrey;
+    background-color: brown;
+    padding: 8px;
+    }
+
 li.inline-top {
     display: inline;
-    padding: 0.5em
+    padding: 0.5em;
+    color: brown;
+    text-decoration: none;
+}
+
+.warning {
+    color: black;
+    }
+
+/* Style login/logout/register */
+.account {
+    padding: 5px;
+    background-color: lightseagreen;
+    border: 2px solid lightseagreen;
+    border-radius: 5px;
+    text-decoration: none;
 }

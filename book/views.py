@@ -5,7 +5,6 @@ from django.http import JsonResponse, HttpResponse
 from django.views.decorators.http import require_POST
 from .models import Book
 import json
-from itertools import chain
 import urllib.request
 from account.views import Profile
 from django.views.decorators.clickjacking import xframe_options_sameorigin
@@ -16,6 +15,7 @@ def all_books_view(request):
     # get all the book associated with the user in the 3 categories and show them in the template
     user_id = request.user.id
     user = User.objects.get(id=user_id)
+
     profile = Profile.objects.get(user=user)
 
     read_books = profile.people_read_book.all().exclude(id=125)  # exclude the default book
@@ -70,26 +70,35 @@ def all_books_view(request):
 
 def book_detail_view(request, id, slug):
     book = Book.objects.get(id=id)
-    profile = Profile.objects.get(user=request.user)
-
-    # add info, if user has liked the book
-    has_liked = False
-    if request.user in book.likes.all():
-        has_liked = True
-    book.has_liked = has_liked
-
+    try:
+        profile = Profile.objects.get(user=request.user)
+        # add info, if user has liked the book
+        has_liked = False
+        if request.user in book.likes.all():
+            has_liked = True
+        book.has_liked = has_liked
+    except TypeError:
+        has_liked = False
+        book.has_liked = has_liked
+        pass
 
     can_like = False
-    if book in profile.people_read_book.all():
-        status = '"read"'
-        can_like = True
-    elif book in profile.people_reading_book.all():
-        status = '"reading"'
-        can_like = True
-    elif book in profile.people_want_to_read_book.all():
-        status = '"want-to-read"'
-    else:
+    try:
         status = '"blank"'
+        # if the user is logged in
+        if book in profile.people_read_book.all():
+            status = '"read"'
+            can_like = True
+        elif book in profile.people_reading_book.all():
+            status = '"reading"'
+            can_like = True
+        elif book in profile.people_want_to_read_book.all():
+            status = '"want-to-read"'
+    except UnboundLocalError:
+        status = '"blank'
+
+        pass
+
     book.status = status
 
     like_balance = book.likes.all().count()
@@ -104,25 +113,24 @@ def book_detail_view(request, id, slug):
                                                      'can_like': can_like,
                                                      'status': status})
 
-
 @login_required
 @require_POST
 def book_like(request):
-        book_id = request.POST.get("id")
-        action = request.POST.get('action')
-        if book_id and action:
-            try:
-                book = Book.objects.get(id=book_id)
-                if action == 'like':
-                    book.likes.add(request.user)
-                    prev_action = "like"
-                else:
-                    book.likes.remove(request.user)
-                    prev_action = "unlike"
-                return JsonResponse({'status': 'ok', "id": book_id, "prev_action": action})
-            except:
-                pass
-        return JsonResponse({'status': 'ko', "id": book_id})
+    book_id = request.POST.get("id")
+    action = request.POST.get('action')
+    if book_id and action:
+        try:
+            book = Book.objects.get(id=book_id)
+            if action == 'like':
+                book.likes.add(request.user)
+                prev_action = "like"
+            else:
+                book.likes.remove(request.user)
+                prev_action = "unlike"
+            return JsonResponse({'status': 'ok', "id": book_id, "prev_action": action})
+        except:
+            pass
+    return JsonResponse({'status': 'ko', "id": book_id})
 
 
 # test view
@@ -187,6 +195,7 @@ def list_view(request):
                                                    'book_data': book_data})
 
 
+@login_required
 def receive_json_data(request):
     # receive the data from the ajax post, for when the user chooses a book to base is group upon
     data = json.loads(request.body.decode('utf-8'))
@@ -199,7 +208,19 @@ def change_book_status(request):
     id = request.POST.get("id")
     status = request.POST.get("value")
     user = request.user
-    profile = Profile.objects.get(user=user)
+    try:
+        profile = Profile.objects.get(user=user)
+    except TypeError:
+        book = Book.objects.get(id=id)
+        # if the user is anonymous
+        can_like = "False"
+        if status == "read":
+            can_like = "True"
+        elif status == "reading":
+            can_like = "True"
+        response = {'status': "GUEST", 'can_like': can_like, "id": id, }
+        return HttpResponse(json.dumps(response), content_type="application/json")
+
 
     # get the DOM of this book by the id
     try:

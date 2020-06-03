@@ -3,39 +3,40 @@ div.club {
     overflow-y: hidden;
     list-style: none;
     margin-bottom: 40px;
-    margin-right: 40px;
     display: block;
     float: inline-start, left;
     font-family: Arial, Helvetica, sans-serif;
     height: fit-content;
     width: 80%;
     line-height: 100px;
+    background-color: indianred;
 }
 
-div.reading {
-    background-color: indianred;
+.reading.club {
+    width: 100%;
 }
 
 div.discussion {
     background-color: mediumaquamarine;
+    width: 100%
 }
 
 img.club-image {
-    width: 125px;
+    width: 115;
     display: inline-block;
     vertical-align: middle;
     float: left;
 }
 
 ul.inner-ul {
-    float:right;
+    float:left !important;
     list-style-position: inside;
     line-height: 25px;
     margin-top: 10px;
     margin-left: 10px;
     margin-right: 10px;
     list-style-type: none;
-    width: 75%;
+    width: 40%;
 }
 
 li.club {
@@ -93,9 +94,6 @@ span.count {
     padding-bottom: 7px;
 
 }
-
-
-
 span.total {
     border-top-width: 3px;
     border-bottom-width: 3px;
@@ -104,6 +102,33 @@ span.total {
 a.toggle {
     overflow: auto;
     position: absolute;
-
 }
 
+.reading-header {
+    background-color: grey;
+    text-align: center;
+    font-size: 2em;
+    }
+
+.discussion-header {
+    background-color: grey;
+    text-align: center;
+    font-size: 2em;
+}
+
+
+.add-club {
+    margin-left: 2%;
+    border-width: 2px;
+    border-radius: 18px;
+    border-style: solid;
+    background-color: indigo;
+    display: inline;
+    padding: 2px 4px 2px 4px;
+    
+    }
+
+.clean-link {
+    text-decoration: none;
+    color: white;
+}

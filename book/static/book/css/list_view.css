@@ -3,18 +3,17 @@ div.book {
     overflow-y: hidden;
     list-style: none;
     margin-bottom: 40px;
-    margin-right: 40px;
     display: block;
     float: inline-start, left;
     font-family: Arial, Helvetica, sans-serif;
     background-color: lightsalmon;
     height: fit-content;
-    width: 80%;
+    width: 100% !important;
     line-height: 100px;
 }
 
 img.book-cover {
-    width: 125px;
+    width: 115px;
     display: inline-block;
     vertical-align: middle;
     float: left;
@@ -78,6 +77,10 @@ span.can-not-like {
 select.book-status {
     margin-top: 10px;
 }
+
+.new-book-label {
+    margin-left: 2%;
+    }
 
 
 

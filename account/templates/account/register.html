@@ -1,10 +1,14 @@
 {% extends "base.html" %}
+{% load static %}
 
 {% block title %}Create an account{% endblock %}
+{% block css%}
+<link rel="stylesheet" type="text/css" href="{% static 'account/css/register.css' %}?20170302" />
+{% endblock %}
 
 {% block content %}
-  <h1>Create an account</h1>
-  <p>Please, sign up using the following form:</p>
+  <h1 class="help-text">Create an account</h1>
+  <p class="help-text">Please, sign up using the following form:</p>
   <form action="." method="post">
     {{ user_form.as_p }}
     {% csrf_token %}

@@ -1,11 +1,9 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>BookClub</title>
-</head>
-<body>
-<p>Welcome to my book club</p>
+{% extends "base.html" %}
+{% load static %}
+{% block title %}BookClub{% endblock %}
 
-</body>
-</html>
+{% block content %}
+<p>Welcome to the GoodBookClub</p>
+<a href="{% url 'account:dashboard' %}">View as guest</a>
+
+{% endblock %}

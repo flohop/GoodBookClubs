@@ -125,7 +125,6 @@
             function(data){
                 if (data['status'] == 'OK')
                     {
-                    console.log("Changed state of select element from html page");
                     if(data['can_like'] == "True") {
                         $('span.can-not-like').addClass("remove");
                         $('#like-link').removeClass("remove");
@@ -135,6 +134,18 @@
                         $('#like-link').addClass("remove");
                         }
                 }
+                else if(data['status'] == "GUEST")
+                    debugger;
+                    {
+                    if(data['can_like'] == "True") {
+                        $('span.can-not-like').addClass("remove");
+                        $('#like-link').removeClass("remove");
+                    }
+                    else {
+                        $('span.can-not-like').removeClass("remove");
+                        $('#like-link').addClass("remove");
+                        }
+                    }
             }
         );
     }
@@ -149,6 +160,11 @@
             action: $(this).data('action')
         },
         function(data){
+        debugger;
+        if (data['status'] == 'GUEST')
+            {
+            console.log("GUEST tried to like book");
+            }
         if (data['status'] == 'ok')
             {
                 var bookId = data['id'];
@@ -177,8 +193,5 @@
     });
 
     document.getElementById("book-status").addEventListener("change", sendValuesToServer, false);
-
-
-
 
 {% endblock %}
