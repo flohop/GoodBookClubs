@@ -4,27 +4,21 @@
 {% block title %}{{ book.book_name }}{% endblock %}
 
 {% block css %}
-<link rel="stylesheet" type="text/css" href="{% static 'book/css/detail.css' %}?20200305" />
+<link rel="stylesheet" type="text/css" href="{% static 'book/css/detail.css' %}?20200306" />
 {% endblock %}
 
 {% block content %}
-    <p class="book top-title">{{ book.book_name }}</p>
-    <p class="book author">{{ book.book_author }}</p>
+
      {% load thumbnail %}
     {% thumbnail book.book_cover_image "200" as im %}
     <img src="{{ im.url }}" class="image-detail">
     {% endthumbnail %}
-
+    <div>
+        <span class="book top-title">{{ book.book_name }}</span>
+        <span class="book author">{{ book.book_author }}</span>
+    </div>
     <span class="book description">{{ book.book_description }}</span>
     <br />
-    <span class="details">Details:</span>
-    <ul class="inner-ul">
-            <li class="language-code">Language: {{ book.book_language }}</li>
-            <li class="categories">Categories: {{ book.book_categories }}</li>
-            <li class="isbn">ISBN: {{ book.book_isbn_number }}</li>
-            <li class="pages">Pages: {{ book.book_page_number }}</li>
-        </ul>
-
 
     <div class="like-icon">
             <span class="count">
@@ -54,10 +48,24 @@
                 <option value="blank" selected="selected"></option>
             </select>
         </div>
+    
+    <div class="details">
+    <ul class="inner-ul">
+            <li class="language-code">Language: {{ book.book_language }}</li>
+            <li class="pages">Pages: {{ book.book_page_number }}</li>
+            <li class="categories">Categories: {{ book.book_categories }}</li>
+            <li class="isbn">ISBN: {{ book.book_isbn_number }}</li>
+
+        </ul>
+    </div>    
+
+    <p class="club-line">Clubs</p>
+
+    <hr>
 
     <div class="clubs">
         <div class="reading-clubs">
-        <h4>Reading clubs (<a href="{% url 'club:create_group' %}">Created club</a>)</h4>
+        <h4>Reading clubs (<a href="{% url 'club:create_group' %}">Create club</a>)</h4>
         {%  for r_club in book.reading_clubs %}
             <p><a href="{{ r_club.get_absolute_url }}">{{ r_club }}</a></p>
         {% empty %}
@@ -67,7 +75,7 @@
 
 
         <div class="discussion-clubs">
-        <h4>Discussion Clubs (<a href="{% url 'club:create_group' %}">Created club</a>)</h4>
+        <h4>Discussion Clubs (<a href="{% url 'club:create_group' %}">Create club</a>)</h4>
         {% for d_club in book.discussion_clubs %}
             <a href="{{ d_club.get_absolute_url }}">{{ d_club.group_name }}</a>
         {% empty %}

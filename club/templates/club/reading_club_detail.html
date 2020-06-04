@@ -90,43 +90,6 @@
 
         </ul>
 
-        <span class="all-status">
-            <p class="status-header">Reading goal status</p>
-            <div class="self-status">
-                <span class="user-status-icon" id="status-icon-span">
-                {% if user in club.current_goal_achieved.all %}
-                    <i class="fa fa-check achieve-toggle reach-icon self-achieve-button-cross " data-action="reached" aria-hidden="true" ></i>
-
-                {% else %}
-                    <i class="fa fa-times-circle achieve-toggle reach-icon self-achieve-button-circle" data-action="unreached" aria-hidden="true"></i>
-                {% endif %}
-                </span>
-                <span class="user-name" data-action="unreached" id="self-status-name-2">{{ user }}</span>
-
-            </div>
-
-
-            <span class="class-member-status">
-                <ul class="members">
-                    {% for member in peers %}
-                        <li class="member">
-                            <div class="achieved-toggle">
-                            {% if member in club.current_goal_achieved.all %}
-                                <i class="fa fa-check achieve-toggle reached reach-icon" ></i>
-                            {% else %}
-                                <i class="fa fa-times-circle achieve-toggle unreached reach-icon"></i>
-                            {% endif %}
-
-                            <span class="user-name">{{ member }}</span>
-
-                            </div>
-                        </li>
-                    {% endfor %}
-                </ul>
-            </span>
-        
-        </span>
-
         {% if club.is_admin %}
         <div class="book-settings"></div>
 
@@ -162,6 +125,43 @@
             </select>
         </div>
 
+        <div class="all-status">
+            <p class="status-header">Reading goal status</p>
+            <hr class="status-ruler">
+            <div class="self-status">
+                <span class="user-status-icon" id="status-icon-span">
+                {% if user in club.current_goal_achieved.all %}
+                    <i class="fa fa-check achieve-toggle reach-icon self-achieve-button-cross " data-action="reached" aria-hidden="true" ></i>
+
+                {% else %}
+                    <i class="fa fa-times-circle achieve-toggle reach-icon self-achieve-button-circle" data-action="unreached" aria-hidden="true"></i>
+                {% endif %}
+                </span>
+                <span class="user-name" data-action="unreached" id="self-status-name-2">{{ user }}</span>
+
+            </div>
+
+
+            <span class="class-member-status">
+                <ul class="members">
+                    {% for member in peers %}
+                        <li class="member">
+                            <div class="achieved-toggle">
+                            {% if member in club.current_goal_achieved.all %}
+                                <i class="fa fa-check achieve-toggle reached reach-icon" ></i>
+                            {% else %}
+                                <i class="fa fa-times-circle achieve-toggle unreached reach-icon"></i>
+                            {% endif %}
+
+                            <span class="user-name">{{ member }}</span>
+
+                            </div>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </span>
+
+        </div>
 
 
         </div>

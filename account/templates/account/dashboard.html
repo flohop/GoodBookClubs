@@ -3,6 +3,17 @@
 <link rel="import" href="localhost:8000/club/templates/club/list_view.html">
 {% block css %}
 <link rel="stylesheet" type="text/css" href="{% static 'account/css/tabs.css' %}">
+
+<style>
+    h1 {
+        padding-left: 2.8%;
+        text-align: center;
+        background: grey;
+    }
+
+</style>
+
+
 {% endblock %}
 
 
@@ -47,6 +58,11 @@ $('.tab-list').each(function(){
             $tab = $link.parent().addClass('active');
         }
     });
+});
+
+$('iframe').load( function() {
+    $('iframe').contents().find("head")
+      .append($("<style type='text/css'>  .all-clubs{width:80%;}  </style>"));
 });
 
 {% endblock %}

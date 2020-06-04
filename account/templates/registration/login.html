@@ -3,7 +3,18 @@
 
 {% block title %}Log-in{% endblock %}
 {% block css%}
-<link rel="stylesheet" type="text/css"  href="{% static 'account/css/register.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'account/css/edit.css'%}" />
+<style>
+    .help-link {
+        display: table;
+        background: none;
+        border: none;
+    }
+
+    input {
+        background: #fff0;
+    }
+</style>
 {% endblock %}
 
 {% block content %}
@@ -14,7 +25,6 @@
         Please try again.
     </p>
     {% else %}
-    <p class="help-text">Please use the following form to log-in:</p>
     {% endif %}
     <div class="login-form">
         <form action="{% url 'account:login' %}" method="post">

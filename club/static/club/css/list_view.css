@@ -22,7 +22,7 @@ div.discussion {
 }
 
 img.club-image {
-    width: 115;
+    width: 125px;
     display: inline-block;
     vertical-align: middle;
     float: left;
@@ -125,6 +125,8 @@ a.toggle {
     background-color: indigo;
     display: inline;
     padding: 2px 4px 2px 4px;
+    box-shadow: 0 3px #999;
+
     
     }
 
@@ -132,3 +134,14 @@ a.toggle {
     text-decoration: none;
     color: white;
 }
+
+.all-clubs {
+    width: 87%;
+    }
+
+/* button animation */
+.add-club:active {
+    background-color: green;
+    box-shadow: 0 1px #666;
+    transform: translateY(4px);
+    }

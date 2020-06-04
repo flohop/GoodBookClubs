@@ -4,7 +4,7 @@
 {% block title %}All clubs{% endblock %}
 {% block content %}
 {% block css %}
-<link rel="stylesheet" type="text/css" href="{% static 'club/css/list_view.css' %}?20200318"/>
+<link rel="stylesheet" type="text/css" href="{% static 'club/css/list_view.css' %}?20200317"/>
 
 <style>
     ul.inner-ul {
@@ -15,7 +15,7 @@
 
 
 <div class="add-club">
-    <a href="{% url 'club:create_group'%}" class="clean-link">Add Group</a>
+    <a href="{% url 'club:create_group'%}" class="clean-link add-button">Add Group</a>
 </div>
 
 <ul class="all-clubs">

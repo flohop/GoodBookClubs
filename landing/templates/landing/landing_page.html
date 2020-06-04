@@ -1,9 +1,51 @@
 {% extends "base.html" %}
 {% load static %}
+
 {% block title %}BookClub{% endblock %}
 
+
+{% block head %}
+<link rel="stylesheet" type="text/css" href="{% static 'book/css/landing.css' %}?20200418"/>
+{% endblock %}
+
 {% block content %}
-<p>Welcome to the GoodBookClub</p>
-<a href="{% url 'account:dashboard' %}">View as guest</a>
+<!-- <a href="{% url 'account:dashboard' %}">View as guest</a> -->
+<div class="page page-one" id="page1">
+
+
+    <div class="content-page1">
+        <span class="head-text">Readers come <br /><span class="together">together</span></span>
+        <a href="{% url 'account:register' %}" class="register account-btn">Register</a>
+        <a href="{% url 'account:login' %}" class="login account-btn">Login</a>
+        <a href="{% url 'account:dashboard' %}" class="dashboard account-btn">Guest</a>
+
+    </div>
+    <a href="#page2" class="hvr-hang">
+        <i class="fas fa-angle-double-down"></i>
+    </a>
+</div>
+
+<div class="page page-two" id="page2">
+
+    <span class="head-text">Read <span class="together">together</span></span>
+
+     <a href="#page3" class="hvr-hang">
+        <i class="fas fa-angle-double-down"></i>
+    </a>
+</div>
+
+<div class="page page-three" id="page3">
+    <span class="head-text">Discuss <span class="together">together</span></span>
+     <a href="#page4" class="hvr-hang">
+        <i class="fas fa-angle-double-down"></i>
+    </a>
+</div>
+
+<div class="page page-four" id="page4">
+    <span class="head-text">Learn <span class="together">together</span></span>
+     <a href="#page1" class="hvr-hang up">
+        <i class="fas fa-angle-double-up"></i>
+    </a>
+</div>
 
 {% endblock %}
