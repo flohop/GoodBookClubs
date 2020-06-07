@@ -18,16 +18,15 @@ body {
 
 a:not(.up):not(.account-btn){
     display: inline-block;
-    margin-top: 46%;
     margin-left: 50%;
-    color: black;
+    color: white;
 }
 
 a.up {
     display: inline-block;
-    margin-top: 45%;
+    margin-top: 12%;
     margin-left: 50%;
-    color: black;
+    color: white;
 }
 
 a:active,
@@ -50,35 +49,49 @@ input[type="file"] > input[type="button"]::-moz-focus-inner {
 }
 
 .page-one {
-    background: red;
+    background: #1E81CC;
     top: 0;
     }
 .page-two {
-    background: green;
+    background: #60A2D5;
     top: 100%;
 }
 
 .page-three {
-    background: violet;
+    background: #00619c;
     top: 200%;
 }
 
 .page-four {
-    background: blue;
+    background: #004a8d;
     top: 300%;
 }
 
 /* style the down/up button */
 .fa-angle-double-down {
     font-size: 3em;
-    margin-top: 44%;
     margin-left: 50%;
+    display: inline-block
+    color: black;
+}
+
+.hang-1 {
+    margin-top: 46%;
+}
+
+.hang-2 {
+    margin-top: 12%;
+}
+
+.hang-3 {
+  margin-top: 12%;
 }
 
 .fa-angle-double-up {
     font-size: 3em;
-    margin-top: 47%;
+    margin-top: 12%;
     margin-left: 50%
+    color: black;
     }
 
 /* hover  animations*/
@@ -167,13 +180,20 @@ input[type="file"] > input[type="button"]::-moz-focus-inner {
     position: absolute;
     margin-left: 10%;
     padding: 7px;
-    background-color: #222;
+    background-color: #FF474D;
     border: 1px solid #333;
     border-radius: 25px;
     text-decoration: none;
     text-align: center;
     width: 9%;
     color: white;
+    box-shadow: -1px 2px 1px 1px var(--box-shadow-color);
+    --box-shadow-color: #004173;
+
+}
+
+.account-btn:hover {
+        background: #CC393E;
 }
 .register.account-btn {
     margin-top: 0%;
@@ -181,15 +201,74 @@ input[type="file"] > input[type="button"]::-moz-focus-inner {
 }
 
 .login.account-btn {
-    margin-top: 3%
+    margin-top: -22%;
+    margin-left: 87%;
+    width: 10%;
     }
 
 .dashboard.account-btn {
     margin-top: 3%;
-    margin-left: 20.3%;
+    width: 19.3%;
 }
 
 .content-page1 {
     display:inline-block;
     margin-top: 0;
+}
+
+/* text under the heading */
+.under-text {
+    display: block;
+    margin-top: 18%;
+    margin-left: 10%;
+    margin-right: 56.2%;
+    font-size: 1.8em;
+    font-weight: bold;
+}
+
+img {
+    float: right;
+    margin-right: 8%;
+}
+
+/* images */
+.img-page-1 {
+    margin-top: 4%;
+    }
+
+.img-page-2 {
+    margin-top: -31%;
+}
+
+.img-page-3 {
+    margin-top: -29%;
+}
+
+
+.img-page-4 {
+    margin-top: -26%;
+
+}
+
+/* vector link */
+.img-link {
+    float:left;
+    margin-left: 65% !important;
+    font-size: 0.8em;
+    }
+
+.link-1 {
+    margin-top: -7%
+}
+
+.link-2 {
+    margin-top: -2%;
+}
+
+.link-3 {
+    margin-top: 0%;
+}
+
+.link-4 {
+    margin-top: -2%;
 }

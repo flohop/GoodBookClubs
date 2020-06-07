@@ -6,7 +6,9 @@
 {{ group_form.media }}
 {% endblock %}
 {% block css %}
-<link rel="stylesheet" type="text/css" href="{% static 'club/css/edit.css' %}?20200417"/>
+<!-- <link rel="stylesheet" type="text/css" href="{% static 'account/css/edit.css' %}?20200418"/> -->
+<link rel="stylesheet" type="text/css" href="{% static 'club/css/create_club.css' %}?20200418"/>
+
 {% endblock %}
 
 {% block content %}
@@ -24,8 +26,10 @@
         <br />
 
         <label for="search">Current Book: </label>
-        <input type="text" placeholder="Book" id="search" />
-        <button type="button" id="button">Search</button>
+        <input type="text" placeholder="Book title" id="search" />
+        <button type="button" id="button">
+            <i class="fas fa-search"></i>
+        </button>
         <br />
 
         <div id="results"></div>
@@ -69,7 +73,7 @@ function validateForm() {
         return false;
     }
     if (current_book_json == "" && type == "reading_club"){
-        alert("Please select a book123");
+        alert("Please select a book");
         return false;
     }
 }

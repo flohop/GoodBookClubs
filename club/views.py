@@ -21,7 +21,6 @@ from account.models import Profile
 def my_clubs(request):
     user_id = request.user.id
     my_user = User.objects.get(id=user_id)
-    my_profile = Profile.objects.get(user=my_user)
 
     # group i'm a member of
     my_reading_clubs = my_user.reading_group_members.all()
@@ -41,13 +40,12 @@ def my_clubs(request):
         if club in my_admin_discussion_clubs:
             my_discussion_club = my_discussion_club.exclude(id=club.id)
 
-
-
     # return the two club to the template, for it to render it
     return render(request, 'club/selection_page.html', {'reading_clubs': my_reading_clubs,
                                                         'discussion_clubs': my_discussion_club,
                                                         'reading_clubs_admin': my_admin_reading_clubs,
-                                                        'discussion_clubs_admin': my_admin_discussion_clubs})
+                                                        'discussion_clubs_admin': my_admin_discussion_clubs,
+                                                        'section': 'clubs'})
 
 
 def reading_club_detail(request, id, category_slug):

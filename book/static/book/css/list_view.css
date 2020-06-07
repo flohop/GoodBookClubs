@@ -6,9 +6,9 @@ div.book {
     display: block;
     float: inline-start, left;
     font-family: Arial, Helvetica, sans-serif;
-    background-color: lightsalmon;
+    background-color: #1e81cc;
     height: fit-content;
-    width: 100% !important;
+    width: 89.5% !important;
     line-height: 100px;
 }
 
@@ -30,19 +30,21 @@ ul.inner-ul {
 
 a.book-title {
     text-transform: capitalize;
+    color: white;
     font-weight: bold;
     font-family: inherit;
     font-size: 1.5em;
+    outline: none;
 }
 
 
 
 a.book-title:hover, a.book-title:focus  {
-    background-color: red;
+    background-color: #ff474d;
 }
 
 a.book-title:active {
-    background-color: black;
+      transform: translateY(4px);
 }
 
 
@@ -59,19 +61,15 @@ span.count {
     margin: 10px;
 }
 
-
-
-
-
 span.like-icon {
     font-size: 48px;
-    color: red;
+    color: #ff474d;
     vertical-align: middle;
 }
 
 span.can-not-like {
     font-size: 48px;
-    color: darkblue;
+    color: #0B3280;
 }
 
 select.book-status {
@@ -82,5 +80,13 @@ select.book-status {
     margin-left: 2%;
     }
 
+#button {
+    border-width: 9px;
+    border-radius: 8px;
+    border-style: solid;
+    border-color: #1e81cc;
+    background-color: #1e81cc;
+    color: white;
+}
 
 

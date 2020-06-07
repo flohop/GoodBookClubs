@@ -6,10 +6,10 @@
 
 {% block head %}
 <link rel="stylesheet" type="text/css" href="{% static 'book/css/landing.css' %}?20200418"/>
+
 {% endblock %}
 
 {% block content %}
-<!-- <a href="{% url 'account:dashboard' %}">View as guest</a> -->
 <div class="page page-one" id="page1">
 
 
@@ -17,10 +17,14 @@
         <span class="head-text">Readers come <br /><span class="together">together</span></span>
         <a href="{% url 'account:register' %}" class="register account-btn">Register</a>
         <a href="{% url 'account:login' %}" class="login account-btn">Login</a>
-        <a href="{% url 'account:dashboard' %}" class="dashboard account-btn">Guest</a>
-
+        <a href="{% url 'account:dashboard' %}" class="dashboard account-btn">Visit</a>
     </div>
-    <a href="#page2" class="hvr-hang">
+
+    <img src="{% static 'landing/images/read_together.png' %}" width="750" class="img-page-1">
+    <a href='https://www.freepik.com/free-photos-vectors/book' class="img-link link-1" target="_blank">
+        Book vector created by pikisuperstar - www.freepik.com</a>
+
+    <a href="#page2" class="hvr-hang hang-1">
         <i class="fas fa-angle-double-down"></i>
     </a>
 </div>
@@ -28,24 +32,34 @@
 <div class="page page-two" id="page2">
 
     <span class="head-text">Read <span class="together">together</span></span>
-
-     <a href="#page3" class="hvr-hang">
+    <span class="under-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Porta lorem mollis aliquam ut porttitor leo a diam sollicitudin. A iaculis at erat pellentesque adipiscing. Nunc consequat interdum varius sit. Amet cursus sit amet dictum. Hac habitasse platea dictumst quisque sagittis purus sit amet volutpat.</span>
+    <img src="{% static 'landing/images/anti_gravity.png' %}" width="750" class="img-page-2">
+    <a href='https://www.freepik.com/free-photos-vectors/background' class="img-link link-2" target="_blank">
+        Background vector created by freepik - www.freepik.com</a>
+    <a href="#page3" class="hvr-hang hang-2">
         <i class="fas fa-angle-double-down"></i>
     </a>
 </div>
 
 <div class="page page-three" id="page3">
     <span class="head-text">Discuss <span class="together">together</span></span>
-     <a href="#page4" class="hvr-hang">
+    <span class="under-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Porta lorem mollis aliquam ut porttitor leo a diam sollicitudin. A iaculis at erat pellentesque adipiscing. Nunc consequat interdum varius sit. Amet cursus sit amet dictum. Hac habitasse platea dictumst quisque sagittis purus sit amet volutpat.</span>
+    <img src="{% static 'landing/images/talk_together.png' %}" width="750" class="img-page-3">
+    <a href="http://www.freepik.com" class="img-link link-3" target="_blank">Designed by rawpixel.com / Freepik</a>
+     <a href="#page4" class="hvr-hang hang-3">
         <i class="fas fa-angle-double-down"></i>
     </a>
 </div>
 
 <div class="page page-four" id="page4">
     <span class="head-text">Learn <span class="together">together</span></span>
+    <span class="under-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Porta lorem mollis aliquam ut porttitor leo a diam sollicitudin. A iaculis at erat pellentesque adipiscing. Nunc consequat interdum varius sit. Amet cursus sit amet dictum. Hac habitasse platea dictumst quisque sagittis purus sit amet volutpat.</span>
+    <img src="{% static 'landing/images/learn_together.png' %}" width="750" class="img-page-4">
+    <a href="http://www.freepik.com" class="img-link link-4 target="_blank">Designed by rawpixel.com / Freepik</a>
      <a href="#page1" class="hvr-hang up">
         <i class="fas fa-angle-double-up"></i>
     </a>
 </div>
 
 {% endblock %}
+

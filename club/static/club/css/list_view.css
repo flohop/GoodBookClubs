@@ -9,7 +9,8 @@ div.club {
     height: fit-content;
     width: 80%;
     line-height: 100px;
-    background-color: indianred;
+    background-color: #1e81cc;
+    color: white;
 }
 
 .reading.club {
@@ -17,7 +18,7 @@ div.club {
 }
 
 div.discussion {
-    background-color: mediumaquamarine;
+    background-color: #60A2D5;
     width: 100%
 }
 
@@ -48,14 +49,12 @@ a.club-name {
     font-weight: bold;
     font-family: inherit;
     font-size: 1.5em;
+    color: white;
+    outline: none;
 }
 
 a.club-name:hover, a.club-name:focus {
-    background-color: red;
-}
-
-a.club-name:active {
-    background-color: black;
+    background-color: #ff474d;
 }
 
 span.current-book {
@@ -67,7 +66,7 @@ span.current-book {
 .button {
     width: 80px;
     height: fit-content;
-    background: #4E9CAF;
+    background-color: #ff474d;
     vertical-align: middle;
     padding: 10px;
     text-align: center;
@@ -75,6 +74,15 @@ span.current-book {
     color: white;
     font-weight: bold;
     font-size: 1em;
+}
+
+.button:hover {
+    background-color: #cc393e;
+}
+
+.button:active {
+      transform: translateY(4px);
+
 }
 
 li.inline {
@@ -102,18 +110,32 @@ span.total {
 a.toggle {
     overflow: auto;
     position: absolute;
+    outline: none;
+
 }
 
+a.toggle:active {
+      transform: translateY(4px);
+}
+
+
+
 .reading-header {
-    background-color: grey;
+    background-color: #ff474d;
     text-align: center;
     font-size: 2em;
+    padding: 5px 0px 5px 0px;
+    color: white;
+    font-weight: bold;
     }
 
 .discussion-header {
-    background-color: grey;
+    background-color: #ff474d;
     text-align: center;
     font-size: 2em;
+    padding: 5px 0px 5px 0px;
+    color: white;
+    font-weight: bold
 }
 
 
@@ -122,13 +144,17 @@ a.toggle {
     border-width: 2px;
     border-radius: 18px;
     border-style: solid;
-    background-color: indigo;
+    background-color: #1e81cc;
     display: inline;
-    padding: 2px 4px 2px 4px;
+    padding: 4px 8px 4px 8px;
     box-shadow: 0 3px #999;
+    outline: none;
 
-    
     }
+
+.add-club:hover {
+    background-color: #176199;
+}
 
 .clean-link {
     text-decoration: none;
@@ -141,7 +167,16 @@ a.toggle {
 
 /* button animation */
 .add-club:active {
-    background-color: green;
     box-shadow: 0 1px #666;
     transform: translateY(4px);
     }
+
+/* icons */
+.club-icon {
+    margin-top: -0.3%;
+    position: absolute;
+    margin-left: 0.5%;
+}
+
+
+

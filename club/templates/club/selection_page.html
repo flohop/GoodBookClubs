@@ -8,10 +8,13 @@
 
 
 {% block content %}
-    <p class="new-club">
-    <a href="{% url 'club:create_group' %}">Create new Club</a>
-    </p>
+    <div class="add-club" style="margin-left:0%;">
+    <a href="{% url 'club:create_group' %}" class="clean-link">Create Club</a>
+    </div>
     <div class="reading member">
+     {% if reading_clubs %}
+            <p class="reading-header">Reading clubs</p>
+    {% endif %}
     {% for club in reading_clubs %}
 
     <div class="club container reading" id="container">
@@ -101,6 +104,9 @@
 
 
     <div class="discussion member">
+    {% if discussion_clubs %}
+            <p class="discussion-header">Discussion clubs</p>
+    {% endif %}
     {% for d_club in discussion_clubs %}
          <div class="club container discussion" id="container-3">
         <li class="discussion club">

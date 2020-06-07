@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% load static %}
 
-{% block title %}Log-in{% endblock %}
+{% block title %}Sign-in{% endblock %}
 {% block css%}
 <link rel="stylesheet" type="text/css" href="{% static 'account/css/edit.css'%}" />
 <style>
@@ -18,9 +18,9 @@
 {% endblock %}
 
 {% block content %}
-    <h1 class="help-text">Log-in</h1>
+    <h1 class="help-text">Sign-in</h1>
     {% if form.errors %}
-    <p>
+    <p class="error-text">
         Your username and password didn't match.
         Please try again.
     </p>
@@ -31,11 +31,11 @@
             {{ form.as_p }}
             {% csrf_token %}
             <input type="hidden" name="next" value="{{ next }}" />
-            <p><input type="submit" value="Log-in"></p>
+            <p><input type="submit" value="Sign-in"></p>
         </form>
         <div class="help-links">
-            <p class="help-link"><a href="{% url 'account:register' %}">Need an account?</a> </p>
-            <p class="help-link"><a href="{% url 'account:password_reset' %}">Forgotten your password?</a></p>
+            <p class="help-link"><a href="{% url 'account:register' %}" class="help-link">Need an account?</a> </p>
+            <p class="help-link"><a href="{% url 'account:password_reset' %}" class="help-link">Forgotten your password?</a></p>
         </div>
     </div>
 {% endblock %}

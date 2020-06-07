@@ -4,7 +4,7 @@
 {% block title %}All clubs{% endblock %}
 {% block content %}
 {% block css %}
-<link rel="stylesheet" type="text/css" href="{% static 'club/css/list_view.css' %}?20200317"/>
+<link rel="stylesheet" type="text/css" href="{% static 'club/css/list_view.css' %}?20200319"/>
 
 <style>
     ul.inner-ul {
@@ -15,7 +15,7 @@
 
 
 <div class="add-club">
-    <a href="{% url 'club:create_group'%}" class="clean-link add-button">Add Group</a>
+    <a href="{% url 'club:create_group'%}" class="clean-link">Create Club</a>
 </div>
 
 <ul class="all-clubs">
@@ -29,7 +29,13 @@
 
             <ul class="inner-ul">
                 <li class="inner-li">
-                     <a class="club-name" href="{{ club.get_absolute_url }}">{{ club.group_name }}</a>
+                     <a class="club-name" href="{{ club.get_absolute_url }}">{{ club.group_name }}
+                     {% if club.is_reading_club %}
+                         <img src="{% static 'account/images/reading_icon.svg' %}" class="club-icon" height="40">
+                     {% else %}
+                         <img src="{% static 'account/images/discussion_icon.svg' %}" class="club-icon" height="30">
+                     {% endif %}
+                     </a>
                 </li>
 
                 <li class="inner-li ">

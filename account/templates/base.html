@@ -26,25 +26,29 @@
 <body>
      <ul class="menu">
     <div id="header">
-        <span class="logo">BookClub</span>
+        <span class="logo">
+            <a href="{% url 'account:dashboard' %}" class="logo-link">
+                <img src="{% static 'landing/images/logo.png' %}" height="65px" class="logo-img">
+            </a>
+        </span>
         {% if request.user.is_authenticated %}
            
                 <li class="inline-top {% if section == 'dashboard' %}selected{% endif %}">
-                    <a href="{% url 'account:dashboard' %}" class="top-item">Dashboard</a>
+                    <a href="{% url 'account:dashboard' %}" class="top-item {% if section == 'dashboard' %}selected{% endif %}">Dashboard</a>
                 </li>
-                <li class="inline-top {% if section == 'images' %}selected{% endif %}">
-                    <a href="{% url 'book:all_books_view' %}" class="top-item">My books</a>
+                <li class="inline-top {% if section == 'books' %}selected{% endif %}">
+                    <a href="{% url 'book:all_books_view' %}" class="top-item {% if section == 'books' %}selected{% endif %}">My books</a>
                 </li>
-                <li class="inline-top {% if section == 'people' %}selected{% endif %}">
-                    <a href="{% url 'club:club_selection' %}" class="top-item">My Clubs</a>
+                <li class="inline-top {% if section == 'clubs' %}selected{% endif %}">
+                    <a href="{% url 'club:club_selection' %}" class="top-item {% if section == 'clubs' %}selected{% endif %}">My Clubs</a>
                 </li>
                 <li class="inline-top {% if section == 'profile' %}selected{% endif %}">
-                    <a href="{% url 'account:edit' %}" class="top-item">My Profile</a>
+                    <a href="{% url 'account:edit' %}" class="top-item {% if section == 'profile' %}selected{% endif %}">My Profile</a>
                 </li>
 
         {% else %}
             <li class="inline-top {% if section == 'dashboard' %}selected{% endif %}">
-                <a href="{% url 'account:dashboard' %}" class="top-item">Dashboard</a>
+                <a href="{% url 'account:dashboard' %}" class="top-item {% if section == 'dashboard' %}selected{% endif %}">Dashboard</a>
             </li>
             <li class="inline-top warning">
                 <span class="guest-warning">To properly use the page, please register or login</span>
@@ -71,6 +75,7 @@
         crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.1/dist/jquery.validate.js"></script>
+
 
 <script>
     var csrftoken = Cookies.get('csrftoken');

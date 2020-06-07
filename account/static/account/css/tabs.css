@@ -10,7 +10,8 @@
 
 .tab-control {
     text-decoration: none;
-    color: black
+    color: black;
+    outline: none;
 }
 
 li.tab {

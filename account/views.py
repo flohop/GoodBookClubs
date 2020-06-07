@@ -6,7 +6,7 @@ from account.models import Profile
 
 def dashboard(request):
     return render(request,
-                  'account/dashboard.html',)
+                  'account/dashboard.html', {'section': "dashboard"})
 
 
 def register(request):
@@ -49,10 +49,12 @@ def edit_profile(request):
         user_form = UserEditForm(initial={'first_name': user.first_name,
                                           'last_name': user.last_name, 'email': user.email})
         profile_form = ProfileEditForm(initial={'profile_description': profile.profile_description,
-                                                'profile_picture': profile.profile_picture})
+                                                'profile_picture': profile.profile_picture,
+                                                })
 
     return render(request,
                   'account/edit.html',
                   {'user_form': user_form,
                    'profile_form': profile_form,
-                   'values_saved': values_saved})
+                   'values_saved': values_saved,
+                   'section': 'profile'})
