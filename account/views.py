@@ -58,3 +58,8 @@ def edit_profile(request):
                    'profile_form': profile_form,
                    'values_saved': values_saved,
                    'section': 'profile'})
+
+
+def about(request):
+    return render(request, 'account/about.html',
+                  {'section': 'about'})

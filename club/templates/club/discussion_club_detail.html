@@ -4,7 +4,7 @@
 
 {% block title %}{{ club.group_name }}{% endblock %}
 {% block css %}
-<link rel="stylesheet" type="text/css" href="{% static 'club/css/discussion_club_detail.css' %}?20201303"/>
+<link rel="stylesheet" type="text/css" href="{% static 'club/css/discussion_club_detail.css' %}?20201304"/>
 {% endblock %}
 
 {% block content %}
@@ -17,8 +17,17 @@
 
 <!-- heading -->
     <p class="top-title">{{ club.group_name }}{% if club.is_admin %}
-        <span class="admin-edit"><a href="{% url 'club:edit_discussion' id=club.id %}">Edit</a></span>
+        <span class="admin-edit"><a href="{% url 'club:edit_discussion' id=club.id %}"
+                                    class="admin-edit">(Edit)</a></span>
         {% endif %}</p>
+
+<!-- join group -->
+
+    <div class="member-count">
+        <span class="count-members">{{ club.member_count }}</span> Member{{ club.member_count|pluralize }}
+        <a href="#" data-id="{{ club.id }}" data-group_type="discussion" data-action="{% if club.is_member %}leave{% else %}join{% endif %}"
+            class="join-toggle button">{% if club.is_member %}Leave{% else %}Join{% endif %}</a>
+    </div>
 
 <!-- image -->
     {% load thumbnail %}
@@ -41,10 +50,11 @@
 
 <!--text next to image -->
     <ul class="club-details">
-        <li class="club description">{{ club.group_description }}</li>
+        <li class="club description">"{{ club.group_description }}"</li>
         {% if club.current_book %}
-            <li class="club current-book">Current book:
-            <a href="{{ club.current_book.get_absolute_url }}">{{ club.current_book }}</a>
+            <li class="club current-book">
+                <i class="fas fa-angle-right"></i>
+                <a href="{{ club.current_book.get_absolute_url }}" class="book-link">{{ club.current_book }}</a>
             by {{ club.current_book.book_author }}</li>
         {% else %}
             <li class="club no-current-book">No current book</li>
@@ -52,13 +62,7 @@
     </ul>
 
 
-<!-- join group -->
 
-    <div class="member-count">
-        <span class="count-members">{{ club.member_count }}</span> Member{{ club.member_count|pluralize }}
-        <a href="#" data-id="{{ club.id }}" data-group_type="discussion" data-action="{% if club.is_member %}leave{% else %}join{% endif %}"
-            class="join-toggle button">{% if club.is_member %}Leave{% else %}Join{% endif %}</a>
-    </div>
 
 
 <!-- Comments -->

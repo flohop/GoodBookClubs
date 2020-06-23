@@ -65,9 +65,9 @@
 
     <div class="clubs">
         <div class="reading-clubs">
-        <h4>Reading clubs (<a href="{% url 'club:create_group' %}">Create club</a>)</h4>
+        <h4>Reading clubs <a href="{% url 'club:create_group' %}" class="create-club">Create club</a></h4>
         {%  for r_club in book.reading_clubs %}
-            <p><a href="{{ r_club.get_absolute_url }}">{{ r_club }}</a></p>
+            <p><a href="{{ r_club.get_absolute_url }}" class="club-link">{{ r_club }}</a></p>
         {% empty %}
         <p>No one reads this book</p>
         {% endfor %}
@@ -75,9 +75,9 @@
 
 
         <div class="discussion-clubs">
-        <h4>Discussion Clubs (<a href="{% url 'club:create_group' %}">Create club</a>)</h4>
+        <h4>Discussion Clubs <a href="{% url 'club:create_group' %}" class="create-club">Create club</a></h4>
         {% for d_club in book.discussion_clubs %}
-            <a href="{{ d_club.get_absolute_url }}">{{ d_club.group_name }}</a>
+            <a href="{{ d_club.get_absolute_url }}" class="club-link">{{ d_club.group_name }}</a>
         {% empty %}
             <p>No one discusses this book</p>
         {% endfor %}

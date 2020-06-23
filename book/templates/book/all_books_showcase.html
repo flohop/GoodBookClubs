@@ -9,12 +9,14 @@
     .remove {
         visibility: hidden;
         display: none;
-
     }
+
+
+
 </style>
 <link rel="stylesheet" type="text/css" href="{% static 'book/css/list_view.css' %}?2020020"/>
 <link rel="stylesheet" type="text/css" href="{% static 'book/css/add_book.css' %}?20200202"/>
-<link rel="stylesheet" type="text/css" href="{% static 'book/css/showcase.css' %}?20200204"/>
+<link rel="stylesheet" type="text/css" href="{% static 'book/css/showcase.css' %}?20200205"/>
 
 {% endblock %}
 {% block  title %}My books{% endblock %}
@@ -23,7 +25,16 @@
     <form id="search-field" action="#">
         <label for="search">Add book:</label>
         <input type="text" id="search" name="book-search" placeholder="Book title"/>
-        <button id="button" type="button">Search</button>
+        <button id="button" type="button">
+             <i class="fas fa-search"></i>
+        </button>
+        <!-- loading animation -->
+        <div class="lds-ellipsis remove" id="loading-animation">
+            <div></div><div></div><div></div><div></div>
+        </div>
+
+        <p id="book-added-info" class="remove">Success! Reload page to see it</p>
+
     </form>
     <div id="results"></div>
         <table id="results-table">
@@ -38,7 +49,7 @@
         </tbody>
         </table>
 
-    <p class="book-section-header">Finished books:</p>
+    <p class="book-section-header">Finished books</p>
     <ul class="all-books" id="finished-books-list">
     {% for book in read_books %}
         <div class="container" id="container">
@@ -94,7 +105,7 @@
 
 
     <br />
-    <p class="book-section-header">Current books:</p>
+    <p class="book-section-header">Current books</p>
     <ul class="all-books" id="current-books-list">
     {% for book in current_books %}
         <div class="container" id="container-2">
@@ -151,7 +162,7 @@
     </ul>
 
     <br />
-    <p class="book-section-header">Want to read books:</p>
+    <p class="book-section-header">Want to read books</p>
     <ul class="all-books" id="want-to-read-books-list">
     {% for book in want_to_read_books %}
         <div class="container" id="container-3">

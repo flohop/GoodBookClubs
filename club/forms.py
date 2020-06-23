@@ -1,5 +1,5 @@
 from django import forms
-from .models import DiscussionComment, ReadingComment, DiscussionGroup, ReadingGroup
+from .models import DiscussionComment, ReadingComment, ReadingGroup
 from ajaximage.widgets import AjaxImageWidget
 
 

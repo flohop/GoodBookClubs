@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}About{% endblock %}
+
+{% block css %}
+<link rel="stylesheet" type="text/css" href="{% static 'account/css/about.css' %}?20200202">
+{% endblock %}
+
+{% block content %}
+<div class="about-me">
+    <h1>About me</h1>
+    <p>Hello! I'm Florian Hoppe and I am the creator of this little website you're currently on.
+    I developed this site in my spare time, while simultaneously graduating from school.
+    I started coding around 4 years ago and haven't stopped since. About 2 years ago I
+    started with Python, the language in which this site is written.
+    I really enjoyed creating the goodbookclubs, because it allowed me to apply what I already knew,
+    and learn a bunch of cool new stuff. If you want to learn more about me,
+    check out my <a href="http://florianhoppe.pythonanywhere.com/" target="_blank">other website:</a>
+    </p>
+</div>
+
+<div class="about-site">
+    <h1>About this site</h1>
+    <p>This website is for everyone who likes books. You can share your progress on a book,
+        discuss certain books, or talk about a whole genre! You can add new books and create new clubs.
+        This site is a work in progress and I'm planning on adding new features over time.
+        If you want a feature, or find a bug that's annoying you, feel free to let me know,
+        I'd love to get your feedback. You can contact me under <span class="red">hoppe.florian2002@gmail.com</span>.</p>
+</div>
+
+<div class="about-data">
+    <h1 class="red">About your data</h1>
+    <p>If you've read the previous sections on this page, you have probably figured out by now,
+        that this is a one man project, created by an 18-year-old in the attic of his parents
+        . And I don't have any interest, or any use for your data. The only thing this website knows about you,
+        is your username, the clubs your're in, and the books you've read. I will not do anything with that data.
+        I wont sell it or give it to anyone! I am doing my best to protect the little data I have about you,
+        but because I'm not a professional, please don't enter any sensitive data on this site because I can't
+        guarantee to 100% that I will be able to protect it from any attacks.</p>
+</div>
+
+<div class="about-vector-art">
+    <h1 class="red">About the vector art</h1>
+    <p>The beautiful images you saw on the landing page and the logo of this website where not created by me,
+        I only changed the color on some of them. The folks at freepik.com & flaticon.com are kind enough to let me use these images
+        for free. Below I want to credit the creators of these works of art.</p>
+    <ul class="vector-art">
+        <li>Landing page 1: <a href='https://www.freepik.com/free-photos-vectors/book' target="_blank">Book vector created by pikisuperstar - www.freepik.com</a></li>
+        <li>Landing page 2: <a href='https://www.freepik.com/free-photos-vectors/background' target="_blank">Background vector created by freepik - www.freepik.com</a></li>
+        <li>Landing page 3: <a href="http://www.freepik.com" target="_blank">Designed by rawpixel.com / Freepik</a>
+        <li>Landing page 4: <a href="http://www.freepik.com" target="_blank">Designed by rawpixel.com / Freepik</a></li>
+        <li>Logo:<a href='https://www.freepik.com/free-photos-vectors/background' target="_blank">Created by by gstudioimagen - www.freepik.com</a></li>
+        <li>Discussion club icon: <a href="https://www.flaticon.com/authors/freepik" title="Freepik" target="_blank">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon" target="_blank">www.flaticon.com</a> </li>
+        <li>Reading club icon: <a href="https://smashicons.com/" title="Smashicons" target="_blank">Smashicons</a> from <a href="https://www.flaticon.com/" title="Flaticon" target="_blank">www.flaticon.com</a></li>
+    </ul>
+</div>
+
+{% endblock %}
+

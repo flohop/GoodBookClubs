@@ -12,14 +12,14 @@ span.count {
 
 span.like-icon {
     font-size: 48px;
-    color: red;
+    color: #ff473d;
     vertical-align: middle;
 }
 
 span.can-not-like {
     font-size: 48px;
     vertical-align: middle;
-    color: darkblue;
+    color: #0b3280;
 }
 
 i.fa {
@@ -35,6 +35,7 @@ i.fa:hover {
 /* book infos */
 ul.inner-ul {
     list-style: disc;
+    margin-left: -1.25%;
 
 }
 
@@ -54,6 +55,7 @@ img.image-detail {
 .book.author {
     display: block;
     margin-bottom: 1%;
+    font-size: 1.25em;
     }
 
 .book.author::before {
@@ -67,6 +69,9 @@ div.details {
 
 .club-line{
     margin-bottom: 0px;
+    font-size: 1.5em;
+    text-transform: capitalize;
+    font-weight: bold;
 }
 
 hr {
@@ -77,4 +82,41 @@ hr {
 .book-top-tile {
     font-weight: bold;
     font-size: 1.5em;
+}
+
+/* style the text */
+.book.top-title {
+    font-size: 2.5em;
+    font-weight: bold;
+}
+
+book.description {
+    letter-spacing: 0.02em;
+    font-size: 1.1em;
+}
+
+/* create club button */
+.create-club {
+    outline: 0;
+    color: white;
+    text-decoration: underline #ff474d;
+    border: 2px solid #ff474d;
+    border-radius: 11px;
+    background-color: #ff474d;
+}
+
+.create-club:active {
+    background-color: #cc393e;
+    transform: translateY(4px);
+    text-decoration: underline #cc393e;
+}
+
+h4 {
+    color: #1e81cc;
+    font-size: 1.25em;
+    text-decoration: underline;
+}
+
+.club-link {
+    color: #ff474d;
 }

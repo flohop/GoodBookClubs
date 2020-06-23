@@ -2,6 +2,13 @@ ul.club-details {
     list-style: none;
 }
 
+.club.description {
+    text-align: center;
+    font-size: 1.5em;
+    color: #ff474d;
+    font-style: italic;
+}
+
 img.club-image {
     float: left;
 }
@@ -10,16 +17,19 @@ img.club-image {
 
 span.all-member {
     float: right;
-    border: black solid;
+    border: #1e81cc solid;
     text-align: center;
     width: 100px;
     height: 300px;
     border-width: 5px;
+    border-radius: 8px;
     overflow-y: scroll;
 }
 
 p.members-header {
     text-decoration: underline;
+    font-weight: bold;
+    color: #1e81cc;
 }
 
 ul.members {
@@ -67,9 +77,16 @@ p.comment-user-name {
 }
 
 p.top-title {
-    font-size: 32px;
+    font-size: 2.25em;
     text-align: center;
     text-decoration: underline;
+    font-weight: bold;
+    color: #1e81cc;
+}
+
+.admin-edit {
+    color: #ff474d;
+    text-decoration: none;
 }
 
 p.comment-body {
@@ -84,7 +101,7 @@ textarea.textarea {
     font: inherit;
     border: none;
     height: fit-content;
-    border-bottom: black solid;
+    border-bottom: #1e81cc solid;
     border-bottom-width: 5px;
     border-radius: 5px;
 }
@@ -96,8 +113,12 @@ button.btn {
     float: right;
 }
 
+.admin-edit {
+    color: #1e81cc;
+}
+
 button.btn-primary {
-    background-color: rgb(62, 62, 151);
+    background-color: #1e81cc;
     color: white;
 }
 
@@ -119,7 +140,40 @@ label.control-label {
 
 li.no-current-book {
     margin-top: 20px;
+    font-size: 1.75em;
+    font-weight: bold
+
     }
 li.current-book {
     margin-top: 20px;
+    font-size: 2em;
+    float: left;
+    margin-left: 10px;
+    font-weight: bold;
+
+}
+
+.fas.fa-angle-right {
+    font-size: 1.5em;
+    float: left;
+    margin-top: -5px;
+    margin-left: 10px;
+}
+
+.book-link {
+    color: #1e81cc;
+    font-weight: bold;
+}
+
+/* join toggle */
+a.join-toggle {
+    border: 3px solid #1e81cc;
+    border-radius: 5px;
+    background-color: #1e81cc;
+    color: white;
+}
+
+.member-count {
+    margin-bottom: 5px;
+    font-weight: bold;
 }

@@ -4,6 +4,9 @@ var chosenBookIndex;
 var items;
 function bookSearch() {
 
+    // make the loading animation visible by removing the "invisible" class
+    document.getElementById("loading-animation").classList.remove("invisible-animation");
+
     var search = document.getElementById('search').value;
     document.getElementById('results').innerHTML = "";
     var results = document.getElementById('results');
@@ -16,6 +19,10 @@ function bookSearch() {
         dataType: "json",
 
         success: function(data) {
+
+            // if successful, remove the loading animation, by adding the "invisible" class to it
+            document.getElementById("loading-animation").classList.add("invisible-animation");
+
             items = data.items;
             count = 10
             if (10 >= data.items.length) {
@@ -47,7 +54,7 @@ function bookSearch() {
 
                 // create button which to click
                 var clickButton = document.createElement("BUTTON");
-                clickButton.innerText = "Select";
+                clickButton.innerHTML = '<i class="far fa-check-circle"></i>';
                 clickButton.type = "button";
                 clickButton.onclick = "#";
                 

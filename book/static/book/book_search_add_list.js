@@ -3,9 +3,15 @@ $(window).on('load', function() {
 var chosenBookIndex;
 function bookSearch() {
 
+
+
     var search = document.getElementById('search').value;
     search.innerHTML = "";
+
+    if(search.length > 0) {
+    document.getElementById("loading-animation").classList.remove("remove");
     document.getElementById('results').innerHTML = "";
+
     var results = document.getElementById('results');
     var tableBody =  document.getElementById('results-table').getElementsByTagName('tbody')[0];
     tableBody.innerHTML = "";
@@ -16,6 +22,8 @@ function bookSearch() {
         dataType: "json",
 
         success: function(data) {
+             // make the loading animation visible by removing the "remove" class
+            document.getElementById("loading-animation").classList.add("remove");
             items = data.items;
             $("#results-table").removeClass("remove");
             $("th .remove").removeClass("remove");
@@ -44,7 +52,7 @@ function bookSearch() {
 
                 // create button which to click
                 var clickButton = document.createElement("BUTTON");
-                clickButton.innerText = "Select";
+                clickButton.innerHTML = '<i class="far fa-check-circle"></i>';
                 clickButton.type = "button";
                 clickButton.onclick = "#";
 
@@ -57,6 +65,10 @@ function bookSearch() {
             $('tr.data-row').show();
     }
     });
+    }
+    else {
+        console.log("To short")
+    }
 }
 
 function likeBook(e) {
@@ -277,6 +289,7 @@ function onRowClicked(e) {
 
             document.getElementById("book-list").appendChild(containerDiv);
             $("#added-books").removeClass("remove");
+            document.getElementById("book-added-info").classList.remove("remove");
             // add like event listener
             // TODO: make the like click function a named function, register the newly created <a> element to it, so that newly
             // created elements can get liked. Make the dashboard pretty and remove value from search field after user selects book

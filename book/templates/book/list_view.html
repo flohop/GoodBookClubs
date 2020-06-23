@@ -1,6 +1,7 @@
 {% extends "base_slim.html" %}
 {% load js %}
 {% load thumbnail %}
+{% load el_pagination_tags %}
 {% load static %}
 {% block title %}All books{% endblock %}
 {% block css %}
@@ -14,14 +15,21 @@
 
     }
 </style>
-<link rel="stylesheet" type="text/css" href="{% static 'book/css/list_view.css' %}?20200429"/>
+<link rel="stylesheet" type="text/css" href="{% static 'book/css/list_view.css' %}?20200439"/>
 {% endblock %}
 {% block content %}
 
 
 <label for="search" class="new-book-label">Add Book: </label>
         <input type="text" placeholder="Book title" id="search"/>
-        <button type="button" id="button">Search</button>
+        <button type="button" id="button">
+            <i class="fas fa-search"></i>
+
+        </button>
+        <!-- loading animation -->
+        <div class="lds-ellipsis invisible-animation" id="loading-animation">
+            <div></div><div></div><div></div><div></div>
+        </div>
         <br />
 
         <div id="results"></div>
@@ -88,7 +96,29 @@
         </div>
     </div>
     {% endfor %}
+
+    <div class="pagination">
+    <span class="step-links">
+        {% if page_obj.has_previous %}
+            <a href="?page=1">&laquo; first</a>
+            <a href="?page={{ page_obj.previous_page_number }}">previous</a>
+        {% endif %}
+
+
+
+        {% if page_obj.has_next %}
+            <span class="current">
+                Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+            </span>
+            <a href="?page={{ page_obj.next_page_number }}" class="paginator">next</a>
+            <a href="?page={{ page_obj.paginator.num_pages }}" class="paginator">last &raquo;</a>
+        {% endif %}
+        </span>
+    </div>
 </ul>
+
+
+
 <!-- load variables for the external JavaScript file -->
 <script>
     var book_change_status_url = '{% url "book:change_status" %}';

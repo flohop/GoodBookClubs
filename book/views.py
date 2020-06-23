@@ -1,8 +1,11 @@
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.shortcuts import render
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse, HttpResponse
 from django.views.decorators.http import require_POST
+from django.views.generic import ListView
+
 from .models import Book
 import json
 import urllib.request
@@ -83,6 +86,10 @@ def book_detail_view(request, id, slug):
         book.has_liked = has_liked
         pass
 
+    # if the book has no description, add a text to show instead of
+    if not book.book_description:
+        book.book_description = ""
+
     can_like = False
     try:
         status = '"blank"'
@@ -112,7 +119,8 @@ def book_detail_view(request, id, slug):
                                                      'liked_book': has_liked,
                                                      'like_balance': like_balance,
                                                      'can_like': can_like,
-                                                     'status': status})
+                                                     'status': status,
+                                                     'section': 'books'})
 
 @login_required
 @require_POST
@@ -143,6 +151,7 @@ def book_search(request):
 @xframe_options_sameorigin
 def list_view(request):
     books = Book.objects.all().exclude(id=125)  # id=125 is the default book for RClubs with no book
+    paginator = Paginator(books, 25)
 
     if request.user.is_authenticated:
         user = request.user
@@ -191,7 +200,10 @@ def list_view(request):
         profile = "anonymous"
         book_data = {}
 
-    return render(request, 'book/list_view.html', {'books': books,
+    page_number = request.GET.get("page", 1)
+    page_obj = paginator.get_page(page_number)
+
+    return render(request, 'book/list_view.html', {'books': page_obj,
                                                    'user': profile,
                                                    'book_data': book_data})
 

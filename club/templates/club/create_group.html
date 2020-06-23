@@ -7,7 +7,13 @@
 {% endblock %}
 {% block css %}
 <!-- <link rel="stylesheet" type="text/css" href="{% static 'account/css/edit.css' %}?20200418"/> -->
-<link rel="stylesheet" type="text/css" href="{% static 'club/css/create_club.css' %}?20200418"/>
+<link rel="stylesheet" type="text/css" href="{% static 'club/css/create_club.css' %}?20200419"/>
+<style>
+    .invisible-animation {
+        display: none;
+    }
+
+</style>
 
 {% endblock %}
 
@@ -30,6 +36,12 @@
         <button type="button" id="button">
             <i class="fas fa-search"></i>
         </button>
+
+        <!-- loading animation -->
+        <div class="lds-ellipsis invisible-animation" id="loading-animation">
+            <div></div><div></div><div></div><div></div>
+        </div>
+
         <br />
 
         <div id="results"></div>

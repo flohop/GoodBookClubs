@@ -4,7 +4,7 @@
 {% block title %}All clubs{% endblock %}
 {% block content %}
 {% block css %}
-<link rel="stylesheet" type="text/css" href="{% static 'club/css/list_view.css' %}?20200319"/>
+<link rel="stylesheet" type="text/css" href="{% static 'club/css/list_view.css' %}?20200320"/>
 
 <style>
     ul.inner-ul {
@@ -72,6 +72,28 @@
     </div>
     {% endfor %}
 </ul>
+
+<hr/>
+
+<div class="pagination">
+    <span class="step-links">
+        {% if all_clubs.has_previous %}
+            <a href="?page=1">&laquo; first</a>
+            <a href="?page={{ all_clubs.previous_page_number }}">previous</a>
+        {% endif %}
+
+
+        {% if all_clubs.has_next %}
+            <span class="current">
+            Page {{ all_clubs.number }} of {{ all_clubs.paginator.num_pages }}.
+            </span>
+            <a href="?page={{ all_clubs.next_page_number }}" class="paginator">next</a>
+            <a href="?page={{ all_clubs.paginator.num_pages }}" class="paginator">last &raquo;</a>
+        {% endif %}
+    </span>
+</div>
+
+
 
 {% endblock %}
 

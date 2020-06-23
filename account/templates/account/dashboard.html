@@ -11,6 +11,8 @@
         background: grey;
     }
 
+
+
 </style>
 
 
@@ -32,9 +34,13 @@
     <div class="tab-panel" id="books">
         <iframe src="{% url 'book:list_view' %}" style="position: absolute; height: 100%; width: 100%; border: none"
                 id="book-list-frame" name="book-list-frame"></iframe>
-    </div>    
+    </div>
 
+<script src="{% static 'book/el_pagination' %}"></script>
+<script>$.endlessPaginate({paginateOnScroll: true});</script>
 {% endblock %}
+
+
 
 {% block domready %}
 $('.tab-list').each(function(){

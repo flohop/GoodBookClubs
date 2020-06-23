@@ -89,4 +89,21 @@ select.book-status {
     color: white;
 }
 
+#results-table {
+    margin-left: 2%;
+}
+
+
+.step-links {
+    margin-left: 40px;
+}
+
+hr {
+    margin-left: 39px;
+    color: #1e81cc;
+}
+
+.paginator {
+    color: #1e81cc;
+}
 

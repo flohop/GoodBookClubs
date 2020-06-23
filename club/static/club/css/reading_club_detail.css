@@ -5,6 +5,7 @@ p.top-title {
     text-align: center;
     text-decoration: underline;
     font-weight: bold;
+    color: #1e81cc;
 }
 
 .slidecontainer {
@@ -13,6 +14,7 @@ p.top-title {
 
 a.edit-link {
     text-decoration: none;
+    color: #ff474d;
 }
 
 span.underline {
@@ -35,6 +37,16 @@ span.underline {
     opacity: 1;
 }
 
+.slidervalue {
+    margin-top: -66px;
+    margin-bottom: 10px;
+    margin-left: 43%;
+    border: 3px solid #1e81cc;
+    display: table;
+    padding: 2px;
+    border-radius: 7px;
+}
+
 ul.book.info {
     list-style: none;
 }
@@ -51,12 +63,13 @@ ul.book.info {
 .slider::-moz-range-thumb {
     width: 25px;
     height: 25px;
-    background: #4CAF50;
+    background: #1e81cc;
     cursor: pointer;
 }
 
 img.image-detail {
     float: left;
+    margin-top: 3%;
 }
 
 li.title {
@@ -96,7 +109,8 @@ ul.book-info {
     margin-right: 10px;
     width: 80%;
     height: 257px;
-    background-color: yellowgreen;
+    background-color: none;
+    margin-top: 3%;
 }
 
 
@@ -126,14 +140,14 @@ select.book-status {
 
 span.like-icon {
     font-size: 48px;
-    color: red;
+    color: #ff474d;
     vertical-align: middle;
 }
 
 span.can-not-like {
     font-size: 48px;
     vertical-align: middle;
-    color: darkblue;
+    color: #ff474d;
 }
 
 ul.members {
@@ -151,8 +165,7 @@ i.fa:hover {
 }
 
 i.fa-times-circle {
-
-    color: red;
+    color: #cc393e;
 }
 
 i.fa-times-circle:hover {
@@ -191,7 +204,7 @@ div.all-status {
 }
 
 div.self-status {
-    border: solid black;
+    border: solid #1e81cc;
     border-width: 0px 0px 3px 0px;
     padding: 5px;
 }
@@ -247,7 +260,7 @@ textarea.textarea {
     font: inherit;
     border: none;
     height: fit-content;
-    border-bottom: black solid;
+    border-bottom: #1e81cc solid;
     border-bottom-width: 5px;
     border-radius: 5px;
 }
@@ -260,7 +273,7 @@ button.btn {
 }
 
 button.btn-primary {
-    background-color: rgb(62, 62, 151);
+    background-color: #1e81cc;
     color: white;
 }
 
@@ -284,3 +297,16 @@ label.control-label {
     overflow-y: auto;
     max-height: 117%;
     }
+
+
+/* join toggle */
+a.join-toggle {
+    border: 3px solid #1e81cc;
+    border-radius: 5px;
+    background-color: #1e81cc;
+    color: white;
+}
+
+.member-count {
+    margin-bottom: 5px;
+}

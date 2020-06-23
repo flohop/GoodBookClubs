@@ -133,3 +133,11 @@ li.inline-top {
 
 }
 
+/* cookie banner */
+.cc_b_cp {
+    display: none;
+}
+
+.light.cc_dialog button.cc_b_ok {
+    background-color: #1e81cc;
+}

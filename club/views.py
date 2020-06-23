@@ -1,6 +1,7 @@
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
+from django.core.paginator import Paginator
 from django.http import JsonResponse, HttpResponse
 from django.shortcuts import render, get_object_or_404, redirect
 from datetime import date, datetime, timezone
@@ -151,7 +152,8 @@ def reading_club_detail(request, id, category_slug):
                                                              'like_balance': like_balance,
                                                              'user_liked_book': user_liked_book,
                                                              'book': book,
-                                                             'can_like': can_like})
+                                                             'can_like': can_like,
+                                                             'section': 'clubs'})
 
 
 def discussion_club_detail(request, id, category_slug):
@@ -223,7 +225,8 @@ def discussion_club_detail(request, id, category_slug):
                                                                 'comment_form': comment_form,
                                                                 'like_balance': like_balance,
                                                                 'user_liked_book': user_liked,
-                                                                'book': book})
+                                                                'book': book,
+                                                                'section': 'clubs'})
 
 
 @login_required
@@ -274,7 +277,8 @@ def create_group(request):
         group_form = GroupForm()
 
     return render(request, 'club/create_group.html', {'new_group': new_group,
-                                                      'group_form': group_form})
+                                                      'group_form': group_form,
+                                                      'section': 'clubs'})
 
 
 @xframe_options_sameorigin
@@ -298,7 +302,11 @@ def club_list_view(request):
         except ObjectDoesNotExist:
             pass
 
-    return render(request, 'club/list_view.html', {'all_clubs': all_clubs,
+    paginator = Paginator(all_clubs, 25)
+    page_number = request.GET.get("page", 1)
+    page_obj = paginator.get_page(page_number)
+
+    return render(request, 'club/list_view.html', {'all_clubs': page_obj,
                                                    'user': user})
 
 
@@ -447,13 +455,13 @@ def receive_json_data(request):
 @login_required
 def edit_reading_club(request, id):
     reading_club = get_object_or_404(ReadingGroup, id=id)
-    print("CLUB:", reading_club)
+    # FIX: cant update the image, for now, just remove the option to change the image
     if reading_club is None:
         reading_club = ReadingGroup.objects.get(id=125)  # if no book is selected show the default book
     user = User(id=request.user.id)
     name = reading_club.group_name
     description = reading_club.group_description
-    image = reading_club.group_image
+    #image = reading_club.group_image
     if reading_club.current_book:
         current_book = reading_club.current_book.book_name
     else:
@@ -468,7 +476,7 @@ def edit_reading_club(request, id):
             # populate the form with the data from the group instance
             form = GroupForm(initial={'group_name': name,
                                       'group_description': description,
-                                      'group_image': image,
+                                      # 'group_image': image,
                                       'current_book': current_book,
                                       'id': id})
 
