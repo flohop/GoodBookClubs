@@ -10,7 +10,7 @@ from .models import Book
 import json
 import urllib.request
 from account.views import Profile
-from django.views.decorators.clickjacking import xframe_options_sameorigin
+from django.views.decorators.clickjacking import xframe_options_sameorigin, xframe_options_exempt
 
 
 @login_required
@@ -233,7 +233,6 @@ def change_book_status(request):
             can_like = "True"
         response = {'status': "GUEST", 'can_like': can_like, "id": id, }
         return HttpResponse(json.dumps(response), content_type="application/json")
-
 
     # get the DOM of this book by the id
     try:

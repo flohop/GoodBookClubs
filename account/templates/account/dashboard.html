@@ -26,7 +26,7 @@
         <li class="active tab"><a class="tab-control" href="#groups">Groups</a></li>
         <li class="tab"><a class="tab-control" href="#books">Books</a></li>
     </ul>
-    
+
     <div class="tab-panel active" id="groups">
         <iframe src="{% url 'club:list_view' %}" style="position: absolute; height: 100%; width: 100%; border: none"
                 id="club-list-frame" name="club-list-frame"></iframe>
@@ -36,8 +36,7 @@
                 id="book-list-frame" name="book-list-frame"></iframe>
     </div>
 
-<script src="{% static 'book/el_pagination' %}"></script>
-<script>$.endlessPaginate({paginateOnScroll: true});</script>
+
 {% endblock %}
 
 

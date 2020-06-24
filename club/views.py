@@ -12,7 +12,7 @@ import urllib.request
 import json
 from django.templatetags.static import static
 from django.urls import reverse
-from django.views.decorators.clickjacking import xframe_options_sameorigin
+from django.views.decorators.clickjacking import xframe_options_sameorigin, xframe_options_exempt
 from book.models import Book
 
 from account.models import Profile
@@ -280,7 +280,7 @@ def create_group(request):
                                                       'group_form': group_form,
                                                       'section': 'clubs'})
 
-
+@xframe_options_exempt
 @xframe_options_sameorigin
 def club_list_view(request):
     # show a list of all clubs, and let the user filter them to find one he want to join
