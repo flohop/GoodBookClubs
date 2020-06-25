@@ -5,6 +5,7 @@
 
 {% block content %}
 {% block css %}
+<meta http-equiv="Content-Security-Policy" content="default-src *; style-src * 'unsafe-inline'; script-src * 'unsafe-inline' 'unsafe-eval'; img-src * data: 'unsafe-inline'; connect-src * 'unsafe-inline'; frame-src *;">
 <link rel="stylesheet" type="text/css" href="{% static 'club/css/list_view.css' %}?20200320"/>
 
 
@@ -61,9 +62,6 @@
                         member{{ club.group_members.count | pluralize }}
                     </span>
                 </li>
-
-                
-
             </ul>
         </li>
     </div>

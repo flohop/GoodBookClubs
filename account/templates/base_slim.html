@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta http-equiv="Content-Security-Policy" content="default-src *; style-src * 'unsafe-inline'; script-src * 'unsafe-inline' 'unsafe-eval'; img-src * data: 'unsafe-inline'; connect-src * 'unsafe-inline'; frame-src *;">
     <title>{% block title %}{% endblock %}</title>
     <base target="_parent"> <!-- Open links in iframe window in the parent window !-->
     <link rel="stylesheet" type="text/css" href="{% static 'account/css/base_slim.css' %}"/>
@@ -9,6 +10,7 @@
      https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css
      https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"/>
 
+    <!-- Content security policy headers -->
 
 
 {% block css %}{% endblock %}
