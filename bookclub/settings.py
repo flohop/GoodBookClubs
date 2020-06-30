@@ -27,7 +27,6 @@ DEBUG_PROPAGATE_EXCEPTIONS = True
 # DEBUG = int(os.environ.get('DEBUG', default=1))
 ALLOWED_HOSTS = ['*']
 
-
 LOGIN_REDIRECT_URL = 'account:dashboard'
 LOGIN_URL = 'account:login'
 LOGOUT_URL = 'account:logout'
@@ -143,6 +142,13 @@ USE_L10N = True
 
 USE_TZ = True
 
+# Content Security Policy(experimental)
+CSP_DEFAULT_SRC = ("'self'", "*", )
+CSP_STYLE_SRC = ("'self'", "'unsafe-inline'", "*")
+CSP_SCRIPT_SRC = ("'self'", "'unsafe-inline'", "*")
+
+
+
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
@@ -155,3 +161,13 @@ import dj_database_url
 db_from_env = dj_database_url.config(conn_max_age=500)
 DATABASES['default'].update(db_from_env)
 
+# testing values
+CORS_REPLACE_HTTPS_REFERER      = False
+HOST_SCHEME                     = "http://"
+SECURE_PROXY_SSL_HEADER         = None
+SECURE_SSL_REDIRECT             = False
+SESSION_COOKIE_SECURE           = False
+CSRF_COOKIE_SECURE              = False
+SECURE_HSTS_SECONDS             = None
+SECURE_HSTS_INCLUDE_SUBDOMAINS  = False
+SECURE_FRAME_DENY               = False

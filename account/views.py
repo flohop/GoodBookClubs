@@ -63,3 +63,6 @@ def edit_profile(request):
 def about(request):
     return render(request, 'account/about.html',
                   {'section': 'about'})
+
+def test(request):
+    return render(request, 'account/test.html', {})
