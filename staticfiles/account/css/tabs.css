@@ -1,0 +1,40 @@
+.tab-panel {
+    display:none;
+}
+
+.tab-panel.active {
+    display:block;
+    background-color: coral;
+
+}
+
+.tab-control {
+    text-decoration: none;
+    color: black;
+    outline: none;
+}
+
+li.tab {
+    display: inline-block;
+    list-style-type: none;
+    text-transform: uppercase;
+    color: white;
+    letter-spacing: 0.2em;
+    border-bottom: 3px solid #e5e5e5;
+    background-color: #e5e5e5;
+
+}
+
+li.active {
+    background-color: grey;
+}
+
+li.tab:hover {
+    background-color: grey;
+    
+}
+
+ul.tab-list {
+    margin-left: 7px;
+    }
+

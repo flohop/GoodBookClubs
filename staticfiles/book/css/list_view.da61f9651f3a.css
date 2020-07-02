@@ -1,0 +1,109 @@
+div.book {
+    overflow-x: auto;
+    overflow-y: hidden;
+    list-style: none;
+    margin-bottom: 40px;
+    display: block;
+    float: inline-start, left;
+    font-family: Arial, Helvetica, sans-serif;
+    background-color: #1e81cc;
+    height: fit-content;
+    width: 89.5% !important;
+    line-height: 100px;
+}
+
+img.book-cover {
+    width: 125px;
+    display: inline-block;
+    vertical-align: middle;
+    float: left;
+}
+ul.inner-ul {
+    float: left;
+    line-height: 25px;
+    margin: 10px 0px 10px 10px;
+    list-style-type: none;
+    width: 75%;
+
+}
+
+
+a.book-title {
+    text-transform: capitalize;
+    color: white;
+    font-weight: bold;
+    font-family: inherit;
+    font-size: 1.5em;
+    outline: none;
+}
+
+
+
+a.book-title:hover, a.book-title:focus  {
+    background-color: #ff474d;
+}
+
+a.book-title:active {
+      transform: translateY(4px);
+}
+
+
+span.author {
+    text-transform: capitalize;
+    font-family: inherit;
+    font-size: 0.875em;    
+}
+
+span.count {
+    font-family: inherit;
+    font-size: 2em;
+    display: inline-block;
+    margin: 10px;
+}
+
+span.like-icon {
+    font-size: 48px;
+    color: #ff474d;
+    vertical-align: middle;
+}
+
+span.can-not-like {
+    font-size: 48px;
+    color: #0B3280;
+}
+
+select.book-status {
+    margin-top: 10px;
+}
+
+.new-book-label {
+    margin-left: 2%;
+    }
+
+#button {
+    border-width: 9px;
+    border-radius: 8px;
+    border-style: solid;
+    border-color: #1e81cc;
+    background-color: #1e81cc;
+    color: white;
+}
+
+#results-table {
+    margin-left: 2%;
+}
+
+
+.step-links {
+    margin-left: 40px;
+}
+
+hr {
+    margin-left: 39px;
+    color: #1e81cc;
+}
+
+.paginator {
+    color: #1e81cc;
+}
+

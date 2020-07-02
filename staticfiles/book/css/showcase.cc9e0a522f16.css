@@ -1,0 +1,121 @@
+.book-section-header {
+    margin-left: 2.3%;
+    background-color: #1e81cc;
+    text-align: center;
+    font-size: 2em;
+    margin-top: 0px;
+    margin-bottom: 50px;
+}
+
+#search-field {
+    margin: 1% 0% 1% 2.3%;
+}
+
+/* style the output table */
+#results-table {
+    background: white;
+}
+
+td {
+    background-color: white !important;
+}
+
+/* select book button */
+button[type="button"] {
+    background-color: #1e81cc;
+    border-radius: 30px;
+    color: white;
+    padding: 5px;
+}
+
+button#button {
+    border-width: 4px;
+}
+
+button[type="button"]:hover {
+    background-color: #0b3280;
+}
+
+button[type="button"]:active {
+    transform: translateY(2px);
+}
+
+
+/* loading animation */
+
+.invisible-animation {
+    display: none;
+}
+
+.lds-ellipsis {
+  display: inline-block;
+  position: relative;
+  width: 80px;
+  height: 80px;
+  margin-left: 1%;
+  margin-bottom: -2%;
+}
+.lds-ellipsis div {
+  position: absolute;
+  top: 33px;
+  width: 13px;
+  height: 13px;
+  border-radius: 50%;
+  background: #1e81cc;
+  animation-timing-function: cubic-bezier(0, 1, 1, 0);
+}
+.lds-ellipsis div:nth-child(1) {
+  left: 8px;
+  animation: lds-ellipsis1 0.6s infinite;
+}
+.lds-ellipsis div:nth-child(2) {
+  left: 8px;
+  animation: lds-ellipsis2 0.6s infinite;
+}
+.lds-ellipsis div:nth-child(3) {
+  left: 32px;
+  animation: lds-ellipsis2 0.6s infinite;
+}
+.lds-ellipsis div:nth-child(4) {
+  left: 56px;
+  animation: lds-ellipsis3 0.6s infinite;
+}
+@keyframes lds-ellipsis1 {
+  0% {
+    transform: scale(0);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+@keyframes lds-ellipsis3 {
+  0% {
+    transform: scale(1);
+  }
+  100% {
+    transform: scale(0);
+  }
+}
+@keyframes lds-ellipsis2 {
+  0% {
+    transform: translate(0, 0);
+  }
+  100% {
+    transform: translate(24px, 0);
+  }
+}
+
+/* success message */
+#book-added-info {
+    color: #ff474d;
+    text-decoration: underline;
+    font-weight: bold;
+}
+
+/* change header text color */
+.book-section-header {
+    color: white;
+    font-weight: bold;
+    width: 87.4%;
+    background-color: #ff474d;
+}

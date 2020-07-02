@@ -1,0 +1,193 @@
+div.club {
+    overflow-x: auto;
+    overflow-y: hidden;
+    list-style: none;
+    margin-bottom: 40px;
+    display: block;
+    float: inline-start, left;
+    font-family: Arial, Helvetica, sans-serif;
+    height: fit-content;
+    width: 80%;
+    line-height: 100px;
+    background-color: #1e81cc;
+    color: white;
+}
+
+.reading.club {
+    width: 100%;
+}
+
+div.discussion {
+    background-color: #60A2D5;
+    width: 100%
+}
+
+img.club-image {
+    width: 125px;
+    display: inline-block;
+    vertical-align: middle;
+    float: left;
+}
+
+ul.inner-ul {
+    float:left !important;
+    list-style-position: inside;
+    line-height: 25px;
+    margin-top: 10px;
+    margin-left: 10px;
+    margin-right: 10px;
+    list-style-type: none;
+    width: 40%;
+}
+
+li.club {
+    height: 125px;
+}
+
+a.club-name {
+    text-transform: capitalize;
+    font-weight: bold;
+    font-family: inherit;
+    font-size: 1.5em;
+    color: white;
+    outline: none;
+}
+
+a.club-name:hover, a.club-name:focus {
+    background-color: #ff474d;
+}
+
+span.current-book {
+    text-transform: capitalize;
+    font-family: inherit;
+    font-size: 0.875em;
+}
+
+.button {
+    width: 80px;
+    height: fit-content;
+    background-color: #ff474d;
+    vertical-align: middle;
+    padding: 10px;
+    text-align: center;
+    border-radius: 5px;
+    color: white;
+    font-weight: bold;
+    font-size: 1em;
+}
+
+.button:hover {
+    background-color: #cc393e;
+}
+
+.button:active {
+      transform: translateY(4px);
+
+}
+
+li.inline {
+    display: inline;
+    float: left;
+}
+
+li.count {
+    overflow: auto;
+    margin-left: 110px;
+}
+
+span.count {
+    float: left;
+    padding-left: 110px;
+    padding-top: 7px;
+    padding-bottom: 7px;
+
+}
+span.total {
+    border-top-width: 3px;
+    border-bottom-width: 3px;
+}
+
+a.toggle {
+    overflow: auto;
+    position: absolute;
+    outline: none;
+
+}
+
+a.toggle:active {
+      transform: translateY(4px);
+}
+
+
+
+.reading-header {
+    background-color: #ff474d;
+    text-align: center;
+    font-size: 2em;
+    padding: 5px 0px 5px 0px;
+    color: white;
+    font-weight: bold;
+    }
+
+.discussion-header {
+    background-color: #ff474d;
+    text-align: center;
+    font-size: 2em;
+    padding: 5px 0px 5px 0px;
+    color: white;
+    font-weight: bold
+}
+
+
+.add-club {
+    margin-left: 2%;
+    border-width: 2px;
+    border-radius: 18px;
+    border-style: solid;
+    background-color: #1e81cc;
+    display: inline;
+    padding: 4px 8px 4px 8px;
+    box-shadow: 0 3px #999;
+    outline: none;
+
+    }
+
+.add-club:hover {
+    background-color: #176199;
+}
+
+.clean-link {
+    text-decoration: none;
+    color: white;
+}
+
+.all-clubs {
+    width: 87%;
+    }
+
+/* button animation */
+.add-club:active {
+    box-shadow: 0 1px #666;
+    transform: translateY(4px);
+    }
+
+/* icons */
+.club-icon {
+    margin-top: -0.3%;
+    position: absolute;
+    margin-left: 0.5%;
+}
+
+
+.step-links {
+    margin-left: 40px;
+}
+
+hr {
+    margin-left: 39px;
+    color: #1e81cc;
+}
+
+.paginator {
+    color: #1e81cc;
+}

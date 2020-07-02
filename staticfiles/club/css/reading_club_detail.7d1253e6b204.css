@@ -1,0 +1,312 @@
+
+/* Header */
+p.top-title {
+    font-size: 32px;
+    text-align: center;
+    text-decoration: underline;
+    font-weight: bold;
+    color: #1e81cc;
+}
+
+.slidecontainer {
+    width: 100%;
+}
+
+a.edit-link {
+    text-decoration: none;
+    color: #ff474d;
+}
+
+span.underline {
+    text-decoration: underline;
+
+}
+
+.slider {
+    appearance: none;
+    width: 80%;
+    height: 25px;
+    background: #d3d3d3;
+    outline: none;
+    opacity: 0.7;
+    -webkit-transition: .2s;
+    transition: opcity .2s;
+}
+
+.slider:hover {
+    opacity: 1;
+}
+
+.slidervalue {
+    margin-top: -66px;
+    margin-bottom: 10px;
+    margin-left: 43%;
+    border: 3px solid #1e81cc;
+    display: table;
+    padding: 2px;
+    border-radius: 7px;
+}
+
+ul.book.info {
+    list-style: none;
+}
+
+/* The slider handle */
+.slider::-webkit-slider-thumb {
+    appearance: none;
+    width: 25px;
+    height: 25px;
+    background: #4CAF50;
+    cursor: pointer;
+}
+
+.slider::-moz-range-thumb {
+    width: 25px;
+    height: 25px;
+    background: #1e81cc;
+    cursor: pointer;
+}
+
+img.image-detail {
+    float: left;
+    margin-top: 3%;
+}
+
+li.title {
+    margin-top: 8px;
+    font-size: 2em;
+    font-weight: bold;
+    
+}
+
+li.author {
+    margin-top: 8px;
+    font-size: 1.3em;
+    font-style: italic;
+}
+
+li.description {
+    margin-top: 8px;
+    font-size: 1.25em;
+}
+
+li.members {
+    padding: 5px;
+}
+
+ul {
+    list-style-type: none;
+}
+
+ul.book-info {
+    float:left;
+    list-style-position: inside;
+    line-height: 25px;
+    height: fit-content;
+    list-style-type: inherit;
+    padding: 5px 5px 5px 5px;
+    margin-left: 10p;
+    margin-right: 10px;
+    width: 80%;
+    height: 257px;
+    background-color: none;
+    margin-top: 3%;
+}
+
+
+
+div.book-settings {
+    background-color: yellow;
+    display: inline-block;
+    width: 100%;
+    margin-top: 10px;
+}
+
+div.like-icon {
+    display: inline-block;
+    margin-left: 3%;
+}
+
+span.count {
+    font-size: 2em;
+    vertical-align: middle;
+    font-weight: bold;
+}
+
+select.book-status {
+    width: 175px;
+    text-align: center;
+}
+
+span.like-icon {
+    font-size: 48px;
+    color: #ff474d;
+    vertical-align: middle;
+}
+
+span.can-not-like {
+    font-size: 48px;
+    vertical-align: middle;
+    color: #ff474d;
+}
+
+ul.members {
+    display: inline;
+}
+
+i.fa {
+    font-size: 1.2em;
+    border-radius: 20px;
+}
+
+i.fa:hover {
+    cursor: pointer;
+    
+}
+
+i.fa-times-circle {
+    color: #cc393e;
+}
+
+i.fa-times-circle:hover {
+    background-color: lightcoral;
+}
+
+i.self-achieve-button-circle:active {
+    background-color: #8e3e3e;
+    box-shadow: 0 5px #666;
+    transform: translateY(2px);
+}
+
+i.fa-check {
+    color: green;
+}
+
+i.fa-check:hover {
+    background-color: lightseagreen;
+}
+
+i.self-achieve-button-cross:active {
+    background-color: #3e8e41;
+    box-shadow: 0 5px #666;
+    transform: translateY(2px);
+}
+
+span.user-name {
+    font-size: 24px;
+}
+
+div.all-status {
+    width: 90.8%;
+    display: inline-block;
+    margin-top: 2%;
+    margin-bottom: 2%;
+}
+
+div.self-status {
+    border: solid #1e81cc;
+    border-width: 0px 0px 3px 0px;
+    padding: 5px;
+}
+
+p.status-header {
+    font-size: 16px;
+    margin: 2px 2px 0px 2px;
+}
+
+/* comment section */
+
+div.comment {
+    border-bottom: rgba(128, 128, 128, 0.5) solid;
+    border-bottom-width: 1px;
+    margin-top: 10px;
+}
+
+h4 {
+    display: block;
+}
+
+.status-ruler {
+    color: grey;
+    margin-top: 0px;
+    }
+
+
+img.comment-profile-img {
+    float: left;
+    margin-right: 10px;
+    height: 45px;
+    width: 45px;
+    border-radius: 50px;
+}
+
+span.comment-created-on {
+    color: rgba(128, 128, 128, 0.5);
+}
+
+p.comment-user-name {
+    display: inline;
+}
+
+p.comment-body {
+    margin-left: 60px; /* image width + 10px */
+}
+
+textarea.textarea {
+    width: 100%;
+    line-height: 1em;
+    resize: none;
+    height: 25px;
+    font: inherit;
+    border: none;
+    height: fit-content;
+    border-bottom: #1e81cc solid;
+    border-bottom-width: 5px;
+    border-radius: 5px;
+}
+
+button.btn {
+    height: 30px;
+    margin-top: 5px;
+    border-radius: 10px;
+    float: right;
+}
+
+button.btn-primary {
+    background-color: #1e81cc;
+    color: white;
+}
+
+button.btn-primary:active {
+    background-color: #0d427e;
+    box-shadow: 0 5px #666;
+    transform: translateY(2px);
+}
+
+button.btn-cancel {
+    background-color: grey;
+    color: white;
+}
+
+label.control-label {
+    visibility: hidden;
+    display: none;
+}
+
+.book-description {
+    overflow-y: auto;
+    max-height: 117%;
+    }
+
+
+/* join toggle */
+a.join-toggle {
+    border: 3px solid #1e81cc;
+    border-radius: 5px;
+    background-color: #1e81cc;
+    color: white;
+}
+
+.member-count {
+    margin-bottom: 5px;
+}

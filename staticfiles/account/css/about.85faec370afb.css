@@ -1,0 +1,31 @@
+h1 {
+    text-decoration: underline;
+    color: #1e81cc;
+}
+
+h1.red {
+    color: #ff474d;
+}
+
+p {
+    font-weight: bold;
+    letter-spacing: .02em;
+}
+
+li {
+    color: #1e81cc;
+}
+
+.vector-art {
+    list-style-type: disc;
+    margin-left: -20px;
+    font-size: 1.25em;
+}
+
+a {
+    color: #ff474d;
+}
+
+.red {
+    color: #ff484d;
+}

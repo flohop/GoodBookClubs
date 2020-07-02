@@ -1,0 +1,122 @@
+div.like-icon {
+    display: inline-block;
+    margin-left: 50px;
+    width: 100%;
+}
+
+span.count {
+    font-size: 2em;
+    vertical-align: middle;
+    font-weight: bold;
+}
+
+span.like-icon {
+    font-size: 48px;
+    color: #ff473d;
+    vertical-align: middle;
+}
+
+span.can-not-like {
+    font-size: 48px;
+    vertical-align: middle;
+    color: #0b3280;
+}
+
+i.fa {
+    font-size: 1.2em;
+    border-radius: 20px;
+}
+
+i.fa:hover {
+    cursor: pointer;
+
+}
+
+/* book infos */
+ul.inner-ul {
+    list-style: disc;
+    margin-left: -1.25%;
+
+}
+
+span.details {
+   border: black solid;
+   border-width: 5px 0px 5px 0px;
+   display: inline-block;
+   width: 70%;
+   text-align: center;
+}
+
+img.image-detail {
+    float: left;
+    margin-right: 20px;
+}
+
+.book.author {
+    display: block;
+    margin-bottom: 1%;
+    font-size: 1.25em;
+    }
+
+.book.author::before {
+    content: "by "
+    }
+
+div.details {
+    list-style-type: inherit;
+    margin-top: 10px;
+}
+
+.club-line{
+    margin-bottom: 0px;
+    font-size: 1.5em;
+    text-transform: capitalize;
+    font-weight: bold;
+}
+
+hr {
+    color: #d8d8d8;
+    margin-top: 0px;
+}
+
+.book-top-tile {
+    font-weight: bold;
+    font-size: 1.5em;
+}
+
+/* style the text */
+.book.top-title {
+    font-size: 2.5em;
+    font-weight: bold;
+}
+
+book.description {
+    letter-spacing: 0.02em;
+    font-size: 1.1em;
+}
+
+/* create club button */
+.create-club {
+    outline: 0;
+    color: white;
+    text-decoration: underline #ff474d;
+    border: 2px solid #ff474d;
+    border-radius: 11px;
+    background-color: #ff474d;
+}
+
+.create-club:active {
+    background-color: #cc393e;
+    transform: translateY(4px);
+    text-decoration: underline #cc393e;
+}
+
+h4 {
+    color: #1e81cc;
+    font-size: 1.25em;
+    text-decoration: underline;
+}
+
+.club-link {
+    color: #ff474d;
+}

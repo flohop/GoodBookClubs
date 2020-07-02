@@ -1,0 +1,143 @@
+body {
+    width: 90%;
+    margin: 0 auto;
+    font-family: Arial, Helvetica, sans-serif;
+    overflow-x: hidden;
+}
+
+#header {
+    background-color: #1e81cc;
+    padding: 15px 10px 15px 10px;
+    margin-right: 0%;
+    font-size: 1.3em;
+    width: 112.6%;
+    margin-left: -8.05%;
+    margin-top: -1%;
+    height: 75px;
+
+
+    }
+
+#content {
+    margin-top: 2%;
+
+}
+
+/* remove the outline when clicking on these elements */
+a {
+    outline: 0;
+}
+
+a:hover a:active a:focus {
+    outline: 0;
+}
+
+input {
+    outline: 0;
+}
+
+input:hover input:active input:focus {
+    outline: 0;
+}
+
+button {
+    outline: 0;
+}
+
+button:hover button:active button:focus {
+    outline: 0;
+}
+
+
+/* logo */
+
+.logo {
+    margin-right: 2%;
+    margin-left: 1%;
+    float: left;
+}
+
+.logo-img {
+    float: left;
+    margin-left: 27px;
+    margin-right: 20px;
+}
+
+.logo-link {
+    outline: none;
+    border: none;
+}
+
+.user {
+    position: absolute;
+    right: 5%;
+
+}
+
+.guest-warning {
+    text-decoration: underline;
+}
+
+.top-item {
+    color: white;
+    text-decoration: none;
+    display: inline flow-root;
+
+}
+
+.top-item:hover {
+    color: white;
+    background-color: #60a2d5;
+    height: 59px;
+    }
+
+li.inline-top {
+    display: inline;
+    padding: 0.5em;
+    color: #ff474d;
+    text-decoration: none;
+    display: inline flow-root;
+    margin-top: 20px;
+}
+
+.warning {
+    color: black;
+    }
+
+/* Style login/logout/register */
+.account {
+    padding: 5px;
+    background-color: #ff474d;
+    border: 2px solid #ff474d;
+    border-radius: 5px;
+    color: white;
+    text-decoration: none;
+    display: inline flow-root;
+    margin-top: 21px;
+}
+
+.account:hover {
+    background-color: #CC393E;
+    border-color: #CC393E;
+}
+
+.selected {
+    background-color: #ff474d;
+    color: white;
+    height: 49px;
+}
+
+.selected:hover {
+    color: #1e81cc;
+    background-color: #ff474d;
+
+}
+
+/* cookie banner */
+.cc_b_cp {
+    display: none;
+}
+
+.light.cc_dialog button.cc_b_ok {
+    background-color: #1e81cc;
+}

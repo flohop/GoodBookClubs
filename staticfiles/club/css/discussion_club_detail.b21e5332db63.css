@@ -1,0 +1,179 @@
+ul.club-details {
+    list-style: none;
+}
+
+.club.description {
+    text-align: center;
+    font-size: 1.5em;
+    color: #ff474d;
+    font-style: italic;
+}
+
+img.club-image {
+    float: left;
+}
+
+/* all members */
+
+span.all-member {
+    float: right;
+    border: #1e81cc solid;
+    text-align: center;
+    width: 100px;
+    height: 300px;
+    border-width: 5px;
+    border-radius: 8px;
+    overflow-y: scroll;
+}
+
+p.members-header {
+    text-decoration: underline;
+    font-weight: bold;
+    color: #1e81cc;
+}
+
+ul.members {
+    list-style: none;
+    padding-left: 0px;
+   }
+
+.member-count {
+    float:left;
+    width: 100%;
+}
+
+/* Comment section */
+.card-body {
+    float:left;
+    width: 100%;
+}
+
+.comments {
+    float: left;
+    width: 100%;
+    }
+
+    div.comment {
+    border-bottom: rgba(128, 128, 128, 0.5) solid;
+    border-bottom-width: 1px;
+    margin-top: 10px;
+}
+
+
+img.comment-profile-img {
+    float: left;
+    margin-right: 10px;
+    height: 45px;
+    width: 45px;
+    border-radius: 50px;
+}
+
+span.comment-created-on {
+    color: rgba(128, 128, 128, 0.5);
+}
+
+p.comment-user-name {
+    display: inline;
+}
+
+p.top-title {
+    font-size: 2.25em;
+    text-align: center;
+    text-decoration: underline;
+    font-weight: bold;
+    color: #1e81cc;
+}
+
+.admin-edit {
+    color: #ff474d;
+    text-decoration: none;
+}
+
+p.comment-body {
+    margin-left: 60px; /* image width + 10px */
+}
+
+textarea.textarea {
+    width: 100%;
+    line-height: 1em;
+    resize: none;
+    height: 25px;
+    font: inherit;
+    border: none;
+    height: fit-content;
+    border-bottom: #1e81cc solid;
+    border-bottom-width: 5px;
+    border-radius: 5px;
+}
+
+button.btn {
+    height: 30px;
+    margin-top: 5px;
+    border-radius: 10px;
+    float: right;
+}
+
+.admin-edit {
+    color: #1e81cc;
+}
+
+button.btn-primary {
+    background-color: #1e81cc;
+    color: white;
+}
+
+button.btn-primary:active {
+    background-color: #0d427e;
+    box-shadow: 0 5px #666;
+    transform: translateY(2px);
+}
+
+button.btn-cancel {
+    background-color: grey;
+    color: white;
+}
+
+label.control-label {
+    visibility: hidden;
+    display: none;
+}
+
+li.no-current-book {
+    margin-top: 20px;
+    font-size: 1.75em;
+    font-weight: bold
+
+    }
+li.current-book {
+    margin-top: 20px;
+    font-size: 2em;
+    float: left;
+    margin-left: 10px;
+    font-weight: bold;
+
+}
+
+.fas.fa-angle-right {
+    font-size: 1.5em;
+    float: left;
+    margin-top: -5px;
+    margin-left: 10px;
+}
+
+.book-link {
+    color: #1e81cc;
+    font-weight: bold;
+}
+
+/* join toggle */
+a.join-toggle {
+    border: 3px solid #1e81cc;
+    border-radius: 5px;
+    background-color: #1e81cc;
+    color: white;
+}
+
+.member-count {
+    margin-bottom: 5px;
+    font-weight: bold;
+}
