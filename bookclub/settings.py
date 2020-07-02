@@ -19,7 +19,8 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '%hiton36@&j93m$pf(7ifw6$cagbfj=1x-&s$s#e(08r#s!&$7'
+with open('bookclub/secret_key.txt') as f:
+    SECRET_KEY = f.read().strip()
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
@@ -42,6 +43,8 @@ EMAIL_HOST_PASSWORD = "armorgames555"
 
 MEDIA_URL = '/images/'
 MEDIA_ROOT = os.path.join(BASE_DIR, '')  # not images, because i take that from the outer folder
+
+
 
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
@@ -143,7 +146,7 @@ USE_L10N = True
 USE_TZ = True
 
 # Content Security Policy(experimental)
-CSP_DEFAULT_SRC = ("'self'", "*", )
+CSP_DEFAULT_SRC = ("'self'", )
 CSP_STYLE_SRC = ("'self'", "'unsafe-inline'", "*")
 CSP_SCRIPT_SRC = ("'self'", "'unsafe-inline'", "*")
 
@@ -161,7 +164,7 @@ import dj_database_url
 db_from_env = dj_database_url.config(conn_max_age=500)
 DATABASES['default'].update(db_from_env)
 
-# testing values
+# production values
 CORS_REPLACE_HTTPS_REFERER      = False
 HOST_SCHEME                     = "http://"
 SECURE_PROXY_SSL_HEADER         = None

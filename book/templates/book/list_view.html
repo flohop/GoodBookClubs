@@ -56,7 +56,7 @@
             {% thumbnail book.book_cover_image "125x125" as im %}
                 <img src="{{ im.url }}" class="book-cover">
                 {% endthumbnail %}
-                
+
             <ul class="inner-ul">
             <li class="inner-li">
             <a href="{{ book.get_absolute_url }}" class="book-title">{{ book.book_name }}</a> 
@@ -135,9 +135,11 @@
     var changedStatusBooks;
     var books = {{  book_data | js }};
     // first, set the drop down value based on the users library
+
     (function (){
 
         changedStatusBooks = {};
+        console.log(books);
         var counter = {{ books.count }};
         for(i=0; i < counter; i++) {
             var currentBook = books[i];

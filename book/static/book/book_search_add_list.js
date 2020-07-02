@@ -71,6 +71,29 @@ function bookSearch() {
     }
 }
 
+// ajax functionality functions
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            // Does this cookie string begin with the name we want?
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+const csrftoken = getCookie('csrftoken');
+
+function csrfSafeMethod(method) {
+    // these HTTP methods do not require CSRF protection
+    return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+}
+
 function likeBook(e) {
     e.preventDefault()
     $.post(book_like_url,
@@ -114,6 +137,7 @@ function onRowClicked(e) {
 
     // assign value to global variable
     chosenBookIndex = rowItemIndex;
+    var token =  $('input[name="csrfToken"]').attr('value');
 
     // get the current book
     var current_book_json = items[chosenBookIndex];
@@ -125,6 +149,10 @@ function onRowClicked(e) {
     contentType: 'application/json;charset=utf-8',
     url: 'add-book/',
     data: JSON.stringify(current_book_json),
+    mode: 'same-origin',
+    headers: {
+                'X-CSRFToken': csrftoken
+            },
 
     // create the new row, append it to the list and add event listeners
     success: function(data) {
@@ -149,6 +177,7 @@ function onRowClicked(e) {
             // create book div
             var bookDiv = document.createElement("DIV");
             bookDiv.classList.add(title);
+            bookDiv.classList.add("book");
 
 
             // create li element

@@ -3,7 +3,6 @@
 <head>
 
     <meta charset="UTF-8">
-    <meta http-equiv="Content-Security-Policy" content="default-src *; style-src * 'unsafe-inline'; script-src * 'unsafe-inline' 'unsafe-eval'; img-src * data: 'unsafe-inline'; connect-src * 'unsafe-inline'; frame-src *;">
     <title>{% block title %}{% endblock %}</title>
     <link rel="stylesheet" type="text/css" href="{% static 'account/css/base.css' %}"/>
 
@@ -99,18 +98,6 @@
 <script src="{% static 'account/noframework.waypoints.min.js' %}"></script>
 <script src="{% static 'account/infinite.min.js' %}"></script>
 
-
-<!-- Cookie Consent by https://www.PrivacyPolicies.com -->
-<script type="text/javascript" src="//www.privacypolicies.com/public/cookie-consent/3.1.0/cookie-consent.js"></script>
-<script type="text/javascript">
-document.addEventListener('DOMContentLoaded', function () {
-cookieconsent.run({"notice_banner_type":"interstitial","consent_type":"express","palette":"light","language":"en"});
-});
-</script>
-
-
-<noscript>Cookie Consent by <a href="https://www.PrivacyPolicies.com/cookie-consent/">Privacy Policies</a></noscript>
-<!-- End Cookie Consent -->
 
 
 <script>

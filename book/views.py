@@ -303,7 +303,7 @@ def add_book(request):
         # if book does not exist
         # download the cover url, and store the path
         try:
-            image_path = "/home/flohop/PycharmProjects/bookclub_project/images/book_covers/" + \
+            image_path = "/home/flohop/PycharmProjects/bookclub_project/staticfiles/images/book_covers/" + \
                          str(book_title).lower().replace(" ", "_") + \
                          "_" + str(book_author).lower().replace(" ", "_") + ".jpeg"
 

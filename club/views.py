@@ -383,8 +383,14 @@ def receive_json_data(request):
             book_isbn = None
 
         book_page_count = group_book.get("pageCount")
-        book_cover_url = group_book.get("imageLinks").get("thumbnail")
-        book_language_code = group_book.get("language")
+        try:
+            book_cover_url = group_book.get("imageLinks").get("thumbnail")
+        except:
+            None
+        try:
+            book_language_code = group_book.get("language")
+        except TypeError:
+            book_language_code = None
         book_categories = group_book.get("categories")  # a list of all the categories this book belongs to
 
     # create the book model, but first, see if this book already exists, and if yes, don't save it, but instead use
@@ -393,12 +399,15 @@ def receive_json_data(request):
             book_instance = Book.objects.get(book_name=book_title, book_author=book_author)
         except:
             # if book does not exist
-            # download the cover url, and store the path
+            # download the cover url, and store the path, change path when uploading project
             image_path = "/home/flohop/PycharmProjects/bookclub_project/images/book_covers/" +\
                         str(book_title).lower().replace(" ", "_") +\
                          "_" + str(book_author).lower().replace(" ", "_") + ".jpeg"
+            try:
+                urllib.request.urlretrieve(book_cover_url, image_path)
+            except:
+                image_path = "/staticfiles/images/book_covers/no_cover.png"
 
-            urllib.request.urlretrieve(book_cover_url, image_path)
 
             try:
                 my_categories = " ".join(str(category) for category in book_categories)
@@ -415,11 +424,12 @@ def receive_json_data(request):
                                                 book_cover_image=image_path,
                                                 book_language=book_language_code,
                                                 book_categories=my_categories)
-    except AttributeError:
-        pass
+    except AttributeError as e:
+        print(str(e))
 
     # create the group and assign the book to it
     # first, check what kind of group to create, and then create that group
+
     if group_type == "reading_club":
         group_instance = ReadingGroup.objects.create(group_name=group_name,
                                                      is_private_group=group_is_private,

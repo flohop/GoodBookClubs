@@ -2,14 +2,9 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="Content-Security-Policy" content="default-src *; style-src * 'unsafe-inline'; script-src * 'unsafe-inline' 'unsafe-eval'; img-src * data: 'unsafe-inline'; connect-src * 'unsafe-inline'; frame-src *;">
     <title>{% block title %}{% endblock %}</title>
     <base target="_parent"> <!-- Open links in iframe window in the parent window !-->
     <link rel="stylesheet" type="text/css" href="{% static 'account/css/base_slim.css' %}"/>
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'
-     https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css
-     https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"/>
-
     <!-- Global site tag (gtag.js) - Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-151940591-1"></script>
     <script>
