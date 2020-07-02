@@ -7,39 +7,38 @@ verify_ssl = true
 pylint = "*"
 
 [packages]
-django = "*"
-gunicorn = "*"
-asgiref = "*"
-django-extensions = "*"
-astroid = "*"
-certifi = "*"
-chardet = "*"
-django-crispy-forms = "*"
-django-el-pagination = "*"
-django-extensions = "*"
-goodreads = "*"
-idna = "*"
-isort = "*"
-lazy-object-proxy = "*"
-mccabe = "*"
-nose = "*"
-Pillow = "*"
-pkg-resources = "*"
-psycopg2 = "*"
-pylint = "*"
-pytz = "*"
-rauth = "*"
-requests = "*"
-six = "*"
-sorl-thumbnail = "*"
-sqlparse = "*"
-typed-ast = "*"
-urllib3 = "*"
-wrapt = "*"
-xmltodict = "*"
-whitenoise = "*"
-dj-database-url = "*"
-uwsgi = "*"
-django-csp = "*"
+asgiref==3.2.7
+astroid==2.3.3
+certifi==2019.11.28
+chardet==3.0.4
+dj-database-url==0.5.0
+Django==3.0.5
+django-crispy-forms==1.9.0
+django-csp==3.6
+django-el-pagination==3.3.0
+django-extensions==2.2.8
+goodreads==0.3.2
+gunicorn==20.0.4
+idna==2.9
+isort==4.3.21
+lazy-object-proxy==1.4.3
+mccabe==0.6.1
+nose==1.3.7
+Pillow==7.0.0
+pkg-resources==0.0.0
+psycopg2==2.8.5
+pylint==2.4.4
+pytz==2019.3
+rauth==0.7.3
+requests==2.23.0
+six==1.14.0
+sorl-thumbnail==12.6.3
+sqlparse==0.3.1
+typed-ast==1.4.1
+urllib3==1.25.8
+whitenoise==5.1.0
+wrapt==1.11.2
+xmltodict==0.12.0
+
 [requires]
 python_version = "3.7"
