@@ -20,8 +20,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '%hiton36@&j93m$pf(7ifw6$cagbfj=1x-&s$s#e(08r#s!&$7'
-
+SECRET_KEY = '12345'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 # DEBUG = int(os.environ.get('DEBUG', default=1))
@@ -93,8 +92,8 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'bookclubdb',
-        'USER': 'flohop',
-        'PASSWORD': 'f1415926535',  # note: change to file when going into production
+        'USER': 'user',
+        'PASSWORD': '12345',  # note: change to file when going into production
         'HOST': 'localhost',
         'PORT': '',  # default value: 5432
     }
