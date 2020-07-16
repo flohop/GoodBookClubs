@@ -8,4 +8,4 @@
 <p>All images of the website you will see here are taken from local host, because I am currently working on deploying the website, but it's just not ready yet</p>
 
 
-
+(Docs/images/landing_page.png)
