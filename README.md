@@ -10,15 +10,18 @@
 
 <h4>Landing page</h4>
 <p>This is the main landing page, from here you can either explore the rest of the landing page, login, or create an account<p>
+ 
 ![Landing](Docs/images/landing_page.png)
  
  
 <h4>Dashboard</h4>
 <p>On your dashboard, you can look at clubs and books. Viewing clubs, you can join or leave them. Viewing books, you can change the status of the book(Want to read/Reading/Read), and like the book, if you are at least reading the book at the moment. To dynamically handle, who can like a book, I used AJAX in combination with JavaScript(to add or remove element classes), CSS(to change the look) and Django(to store the changes).</p>
+
 ![Dashboard](Docs/images/book_list_dashboard.png)
 
 <h4>Book details</h4>
 <p>By clicking on a book, you can explore the book deeper. You can see the author, a summary of the book, and other attributes</p>
+
 ![Book Detail](Docs/images/book_detail.png)
 
 <h4>Add books</h4>
@@ -33,19 +36,23 @@
 
 <h4>Creating Clubs</h4>
 <p>Creating clubs is as easy as adding books. Just click on "Create club", fill in the needed data and your're all set!</p>
+
 ![Club create](Docs/images/create_club_button.png)
 ![Club form](Docs/images/create_club_form.png)
 
 <h4>Club Details</h4>
 <p>Let's have a look at our new club. Here you can see all the other members and leave comments to share your opinion</p>
+
 ![Discussion Club](Docs/images/club_detail.png)
 
 <h4>Reading Clubs</h4>
 <p>Reading clubs are the second kind of clubs, they differ from the club we've just created in two ways. First you must have a current book, and second you can share your current progress. The group admin sets the goal and all the other members can share, if they've reached the goal.</p>
+
 ![Reading Club](Docs/images/reading_club_details.png)
 
 <h4>Your bookshelf</h4>
 <p>Here you have all your books in a single place. You can view them, like them, or do whatever you want with them</p>
+
 ![Bookshelf](Docs/images/book_shelf.png)
 
 
