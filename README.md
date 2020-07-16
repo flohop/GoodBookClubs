@@ -8,7 +8,7 @@
 <p>All images of the website you will see here are taken from local host, because I am currently working on deploying the website, but it's just not ready yet</p>
 
 
-<h4>Landing page</h4>
+<h2>Landing page</h2>
 <p>This is the main landing page, from here you can either explore the rest of the landing page, login, or create an account<p>
  
 ![Landing](Docs/images/landing_page.png)
