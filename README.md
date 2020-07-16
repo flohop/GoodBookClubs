@@ -4,12 +4,12 @@
 <hr/>
 
 <h4>Disclaimer:</h4>
-<p>This website is still under production, although all main features work, there are still some bugs, I am working on fixing</p>
-<p>All images of the website you will see here are taken from local host, because I am currently working on deploying the website, but it's just not ready yet</p>
+<p>This website is still under production, although all main features work, there are still some bugs, I am working on fixing.</p>
+<p>All images of the website you will see here are taken from local host, because I am currently working on deploying the website, but it's just not ready yet.</p>
 
 
 <h2>Landing page</h2>
-<p>This is the main landing page, from here you can either explore the rest of the landing page, login, or create an account<p>
+<p>This is the main landing page, from here you can either explore the rest of the landing page, login, or create an account.<p>
  
 ![Landing](Docs/images/landing_page.png)
  
@@ -20,7 +20,7 @@
 ![Dashboard](Docs/images/book_list_dashboard.png)
 
 <h2>Book details</h2>
-<p>By clicking on a book, you can explore the book deeper. You can see the author, a summary of the book, and other attributes</p>
+<p>By clicking on a book, you can explore the book deeper. You can see the author, a summary of the book, and other attributes.</p>
 
 ![Book Detail](Docs/images/book_detail.png)
 
@@ -41,7 +41,7 @@
 ![Club form](Docs/images/create_club_form.png)
 
 <h2>Club Details</h2>
-<p>Let's have a look at our new club. Here you can see all the other members and leave comments to share your opinion</p>
+<p>Let's have a look at our new club. Here you can see all the other members and leave comments to share your opinion.</p>
 
 ![Discussion Club](Docs/images/club_detail.png)
 
@@ -51,7 +51,7 @@
 ![Reading Club](Docs/images/reading_club_details.png)
 
 <h2>Your bookshelf</h2>
-<p>Here you have all your books in a single place. You can view them, like them, or do whatever you want with them</p>
+<p>Here you have all your books in a single place. You can view them, like them, or do whatever you want with them.</p>
 
 ![Bookshelf](Docs/images/book_shelf.png)
 
