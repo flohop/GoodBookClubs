@@ -9,7 +9,7 @@
 
 <h4>Disclaimer:</h4>
 <p>I am aware that this website looks pretty shitty tbh, I made this website to learn Django, not front-end dev. If you want to see a prettier site i made, check out <a href="https://www.piaweirather.de">this site i made for a friend</a> 
-<p>All images of the website you will see here are taken from local host, because I am currently working on deploying the website, but it's just not ready yet.</p>
+<p>All images of the website you will see here are taken from local host, because a server is to expensive for me.</p>
 
 
 <h2>Landing page</h2>
