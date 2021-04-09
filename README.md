@@ -59,8 +59,4 @@
 
 ![Bookshelf](Docs/images/book_shelf.png)
 
-
-<h2>The Future</h2>
-<p>What you've just seen is only the beginning. Currently I am working on deploying the website, which isn't as easy as I had originally thought, because this website has so many dependencies(Postgresql Databank, image uploads etc.). But I'm making progress. After that, I want to work on some new features, to improve my web skills.</p>
-
 <p>Thank you so much for taking the time, to read through my docs, I hope you are as excited about this as I am. Have a great day!</p>
