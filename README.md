@@ -6,7 +6,7 @@
 <hr/>
 
 <h4>Disclaimer:</h4>
-<p>I am aware that this website looks pretty shitty tbh, I made this website to learn Django, not front-end dev. If you want to see a prettier site i made, check out <a href="https://www.piaweirather.de">this site i made for a friend</a> or the <a href="https://play.google.com/store/apps/details?id=com.flohop.groupstatus">app I released</a>  
+<p>I am aware that this website looks pretty shitty tbh, I made this website to learn Django, not front-end dev. If you want to see a prettier site i made, check out the <a href="https://play.google.com/store/apps/details?id=com.flohop.groupstatus">app I released</a>  
 <p>All images of the website you will see here are taken from local host, because a server is too expensive for me.</p>
 
 
