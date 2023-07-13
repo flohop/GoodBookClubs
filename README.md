@@ -50,7 +50,7 @@
 <h2>Reading Clubs</h2>
 <p>Reading clubs are the second kind of clubs, they differ from the club we've just created in two ways. First you must have a current book, and second you can share your current progress. The group admin sets the goal and all the other members can share, if they've reached the goal.</p>
 
-![Reading Club](Docs/images/reading_club_details.png)
+![Reading Club](Docs/images/reading_club_detail.png)
 
 <h2>Your bookshelf</h2>
 <p>Here you have all your books in a single place. You can view them, like them, or do whatever you want with them.</p>
